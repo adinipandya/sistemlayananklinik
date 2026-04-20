@@ -65,10 +65,10 @@
     </li>
 
     <li>
-        <form action="{{ route('logout') }}" method="POST" onsubmit="return confirm('Anda yakin ingin logout?')">
+        <form action="{{ route('logout') }}" method="POST" onsubmit="return confirm('Anda yakin ingin keluar?')">
     @csrf
     <button class="w-full text-left px-4 py-2 text-white opacity-80 hover:bg-red-500 rounded transition">
-        Logout
+        Keluar
     </button>
 </form>
     </li>
