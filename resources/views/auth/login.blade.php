@@ -26,9 +26,14 @@
 
 <body class="min-h-screen flex items-center justify-center relative overflow-hidden">
 
-    <!-- BACKGROUND -->
-    <div class="absolute inset-0 bg-gradient-to-br from-blue-500 via-green-400 to-white"></div>
-    <div class="absolute inset-0 backdrop-blur-2xl opacity-70"></div>
+    <!-- BACKGROUND IMAGE -->
+<div class="absolute inset-0">
+    <img src="/images/poltek.png" 
+         class="w-full h-full object-cover">
+</div>
+
+<!-- BLUR + OVERLAY -->
+<div class="absolute inset-0 backdrop-blur-sm bg-white/40"></div>
 
     <!-- LOGIN CARD -->
     <div class="relative z-10 bg-white p-5 rounded-2xl shadow-2xl w-full max-w-md animate-popup">
