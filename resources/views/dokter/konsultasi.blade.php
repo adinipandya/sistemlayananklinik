@@ -68,4 +68,8 @@
 
 </div>
 
+<<<<<<< HEAD
 @endsection
+=======
+@endsection 
+>>>>>>> 5e7cb15 (views)
