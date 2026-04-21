@@ -52,6 +52,9 @@ Route::get('/dokter', [DokterController::class, 'dashboard']);
 Route::get('/dokter/jadwal', [DokterController::class, 'jadwal']);
 Route::get('/dokter/konsultasi', [DokterController::class, 'konsultasi']);
 Route::get('/dokter/pasien', [DokterController::class, 'pasien']);
+Route::get('/dokter/kelola', [DokterController::class, 'kelola']);
+Route::put('/dokter/{id}', [DokterController::class, 'update']);
+Route::delete('/dokter/{id}', [DokterController::class, 'destroy']);
 
 // PASIEN
 Route::get('/pasien', [PasienController::class, 'dashboard']);

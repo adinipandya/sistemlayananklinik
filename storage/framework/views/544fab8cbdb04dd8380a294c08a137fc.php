@@ -33,7 +33,7 @@
 
         <!-- LOGO -->
         <div class="flex items-center gap-3">
-            <img src="{{ asset('images/poltek.png') }}" class="w-8 h-8 object-contain">
+            <img src="<?php echo e(asset('images/poltek.png')); ?>" class="w-8 h-8 object-contain">
             <span class="font-semibold text-gray-700">
                 Klinik Polibatam
             </span>
@@ -54,9 +54,9 @@
             </div>
 
             <!-- LOGOUT -->
-            <form action="{{ route('logout') }}" method="POST"
+            <form action="<?php echo e(route('logout')); ?>" method="POST"
                   onsubmit="return confirm('Anda yakin ingin keluar?')">
-                @csrf
+                <?php echo csrf_field(); ?>
                 <button class="text-red-500 hover:text-red-700">
                     <i data-feather="log-out"></i>
                 </button>
@@ -79,7 +79,7 @@
             <li>
                 <a href="/dokter"
                    class="block px-4 py-2 rounded-lg
-                   {{ request()->is('dokter') ? 'bg-white/20 font-semibold' : 'hover:bg-white/10' }}">
+                   <?php echo e(request()->is('dokter') ? 'bg-white/20 font-semibold' : 'hover:bg-white/10'); ?>">
                     Dashboard
                 </a>
             </li>
@@ -87,7 +87,7 @@
             <li>
                 <a href="/dokter/jadwal"
                    class="block px-4 py-2 rounded-lg
-                   {{ request()->is('dokter/jadwal') ? 'bg-white/20 font-semibold' : 'hover:bg-white/10' }}">
+                   <?php echo e(request()->is('dokter/jadwal') ? 'bg-white/20 font-semibold' : 'hover:bg-white/10'); ?>">
                     Jadwal
                 </a>
             </li>
@@ -95,7 +95,7 @@
             <li>
                 <a href="/dokter/konsultasi"
                    class="block px-4 py-2 rounded-lg
-                   {{ request()->is('dokter/konsultasi') ? 'bg-white/20 font-semibold' : 'hover:bg-white/10' }}">
+                   <?php echo e(request()->is('dokter/konsultasi') ? 'bg-white/20 font-semibold' : 'hover:bg-white/10'); ?>">
                     Konsultasi
                 </a>
             </li>
@@ -103,7 +103,7 @@
             <li>
                 <a href="/dokter/kelola"
                    class="block px-4 py-2 rounded-lg
-                   {{ request()->is('dokter/kelola') ? 'bg-white/20 font-semibold' : 'hover:bg-white/10' }}">
+                   <?php echo e(request()->is('dokter/kelola') ? 'bg-white/20 font-semibold' : 'hover:bg-white/10'); ?>">
                     Rekam Medis
                 </a>
             </li>
@@ -114,7 +114,7 @@
 
     <!-- MAIN -->
     <main class="flex-1 p-6">
-        @yield('content')
+        <?php echo $__env->yieldContent('content'); ?>
     </main>
 
 </div>
@@ -126,4 +126,4 @@
 </script>
 
 </body>
-</html>
+</html><?php /**PATH /Users/ardiansyah/laravel/sistemlayananklinik/resources/views/layouts/dokter.blade.php ENDPATH**/ ?>

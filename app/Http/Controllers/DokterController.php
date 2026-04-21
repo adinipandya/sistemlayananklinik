@@ -25,4 +25,9 @@ class DokterController
     {
         return view('dokter.pasien_dokter');
     }
+
+    public function kelola()
+    {
+        return view('dokter.kelola_rekam');
+    }
 }
