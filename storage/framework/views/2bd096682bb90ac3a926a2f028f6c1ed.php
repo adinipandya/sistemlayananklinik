@@ -188,4 +188,4 @@
     </script>
 
 </body>
-</html>
+</html><?php /**PATH D:\laravel\sistemlayananklinik\sistemlayananklinik\resources\views/auth/login.blade.php ENDPATH**/ ?>

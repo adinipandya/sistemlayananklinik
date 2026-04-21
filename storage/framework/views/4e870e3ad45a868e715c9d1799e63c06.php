@@ -1,15 +1,15 @@
-@extends('layouts.admin')
 
-@section('content')
+
+<?php $__env->startSection('content'); ?>
 
 <h1 class="text-2xl font-bold mb-6 animate-fadeInUp">
-    Kelola Jadwal 📅
+    Kelola Pasien 👥
 </h1>
 
 <!-- BUTTON TAMBAH -->
 <div class="mb-6 animate-fadeInUp delay-1">
     <button class="bg-blue-500 text-white px-5 py-2 rounded-lg hover:bg-green-500 hover:scale-105 transition">
-        + Tambah Jadwal
+        + Tambah Pasien
     </button>
 </div>
 
@@ -20,11 +20,10 @@
         <thead>
             <tr class="border-b text-gray-600">
                 <th class="py-3">No</th>
-                <th>Tanggal</th>
-                <th>Jam</th>
-                <th>Dokter</th>
-                <th>Pasien</th>
-                <th>Status</th>
+                <th>Nama</th>
+                <th>Umur</th>
+                <th>Jenis Kelamin</th>
+                <th>No HP</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -34,15 +33,10 @@
             <!-- ROW -->
             <tr class="border-b hover:bg-blue-50 hover:scale-[1.01] transition">
                 <td class="py-3">1</td>
-                <td>2026-04-20</td>
-                <td>08:00</td>
-                <td>Dr. Andi</td>
                 <td>Ihsan</td>
-                <td>
-                    <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm animate-pulse">
-                        Menunggu
-                    </span>
-                </td>
+                <td>21</td>
+                <td>Laki-laki</td>
+                <td>08123456789</td>
                 <td class="space-x-2">
 
                     <button class="bg-yellow-400 text-white px-3 py-1 rounded hover:scale-105 transition">
@@ -60,15 +54,10 @@
             <!-- ROW -->
             <tr class="border-b hover:bg-blue-50 hover:scale-[1.01] transition">
                 <td class="py-3">2</td>
-                <td>2026-04-20</td>
-                <td>09:00</td>
-                <td>Dr. Siti</td>
                 <td>Ardi</td>
-                <td>
-                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
-                        Selesai
-                    </span>
-                </td>
+                <td>23</td>
+                <td>Laki-laki</td>
+                <td>08129876543</td>
                 <td class="space-x-2">
 
                     <button class="bg-yellow-400 text-white px-3 py-1 rounded hover:scale-105 transition">
@@ -88,4 +77,5 @@
 
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\laravel\sistemlayananklinik\sistemlayananklinik\resources\views/admin/pasien_admin.blade.php ENDPATH**/ ?>

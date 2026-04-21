@@ -168,4 +168,4 @@ document.getElementById("menuBtn").onclick = function() {
 </script>
 
 </body>
-</html>
+</html><?php /**PATH D:\laravel\sistemlayananklinik\sistemlayananklinik\resources\views/pages/home.blade.php ENDPATH**/ ?>
