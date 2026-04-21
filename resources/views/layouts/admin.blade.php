@@ -70,7 +70,8 @@
 <div class="flex min-h-screen pt-16">
 
     <!-- SIDEBAR -->
-    <aside class="w-64 bg-gradient-to-b from-purple-500 to-blue-500 text-white p-6 hidden md:block">
+    <aside class="w-64 bg-gradient-to-b from-blue-500 to-green-400 text-white p-6 hidden md:block">
+
 
         <h2 class="text-xl font-bold mb-8">Admin</h2>
 
