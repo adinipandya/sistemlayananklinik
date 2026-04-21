@@ -28,7 +28,7 @@
 
     <!-- BACKGROUND IMAGE -->
 <div class="absolute inset-0">
-    <img src="/images/poltek.png" 
+    <img src="/images/gedung.png" 
          class="w-full h-full object-cover">
 </div>
 
