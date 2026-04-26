@@ -53,8 +53,13 @@ Route::get('/dokter/jadwal', [DokterController::class, 'jadwal']);
 Route::get('/dokter/konsultasi', [DokterController::class, 'konsultasi']);
 Route::get('/dokter/pasien', [DokterController::class, 'pasien']);
 Route::get('/dokter/kelola', [DokterController::class, 'kelola']);
-Route::put('/dokter/{id}', [DokterController::class, 'update']);
-Route::delete('/dokter/{id}', [DokterController::class, 'destroy']);
+Route::put('/dokter/rekam_medis/{id}', function () {
+    return back()->with('success', 'Data berhasil diupdate');
+})->name('rekam_medis.update');
+
+Route::delete('/dokter/rekam-medis/{id}', function () {
+    return back()->with('success', 'Data berhasil dihapus');
+})->name('rekam_medis.destroy');
 
 // PASIEN
 Route::get('/pasien', [PasienController::class, 'dashboard']);

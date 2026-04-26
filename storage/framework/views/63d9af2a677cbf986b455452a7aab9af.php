@@ -2,108 +2,136 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin</title>
+    <title>Dashboard Admin</title>
 
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- ANIMASI -->
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+
     <style>
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
+        .card-hover {
+            transition: all 0.3s ease;
         }
-        to {
-            opacity: 1;
-            transform: translateY(0);
+        .card-hover:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.1);
         }
-    }
-
-    .animate-fadeInUp {
-        animation: fadeInUp 0.5s ease forwards;
-    }
-
-    .delay-1 { animation-delay: 0.1s; }
-    .delay-2 { animation-delay: 0.2s; }
-    .delay-3 { animation-delay: 0.3s; }
     </style>
-
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-50">
 
-<div class="flex">
+<!-- ================= NAVBAR ================= -->
+<header class="fixed top-0 left-0 w-full bg-white shadow border-b z-50">
+    <div class="flex items-center justify-between px-6 py-3">
+
+        <!-- LOGO -->
+        <div class="flex items-center gap-3">
+            <img src="<?php echo e(asset('images/poltek.png')); ?>" class="w-8 h-8 object-contain">
+            <span class="font-semibold text-gray-700">
+                Klinik Polibatam
+            </span>
+        </div>
+
+        <!-- ICON -->
+        <div class="flex items-center gap-6">
+
+            <!-- NOTIF -->
+            <div class="relative cursor-pointer hover:scale-110 transition">
+                <i data-feather="bell"></i>
+                <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">3</span>
+            </div>
+
+            <!-- USER -->
+            <div class="cursor-pointer hover:scale-110 transition">
+                <i data-feather="user"></i>
+            </div>
+
+            <!-- LOGOUT -->
+            <form action="<?php echo e(route('logout')); ?>" method="POST"
+                  onsubmit="return confirm('Anda yakin ingin keluar?')">
+                <?php echo csrf_field(); ?>
+                <button class="text-red-500 hover:text-red-700">
+                    <i data-feather="log-out"></i>
+                </button>
+            </form>
+
+        </div>
+    </div>
+</header>
+
+<!-- ================= CONTENT ================= -->
+<div class="flex min-h-screen pt-16">
 
     <!-- SIDEBAR -->
-    <div class="w-64 min-h-screen bg-gradient-to-b from-blue-600 to-green-400 text-white p-6">
+    <aside class="w-64 bg-gradient-to-b from-purple-500 to-blue-500 text-white p-6 hidden md:block">
 
-        <h2 class="text-2xl font-bold mb-8">Admin Panel</h2>
+        <h2 class="text-xl font-bold mb-8">Admin</h2>
 
-        <ul class="space-y-3">
+        <ul class="space-y-4">
 
             <li>
                 <a href="/admin"
-                   class="block px-4 py-2 rounded hover:bg-white/20 hover:pl-6 transition-all duration-300">
+                   class="block px-4 py-2 rounded-lg
+                   <?php echo e(request()->is('admin') ? 'bg-white/20 font-semibold' : 'hover:bg-white/10'); ?>">
                     Dashboard
                 </a>
             </li>
 
             <li>
                 <a href="/admin/dokter"
-                   class="block px-4 py-2 rounded hover:bg-white/20 hover:pl-6 transition-all duration-300">
-                    Dokter
+                   class="block px-4 py-2 rounded-lg
+                   <?php echo e(request()->is('admin/dokter') ? 'bg-white/20 font-semibold' : 'hover:bg-white/10'); ?>">
+                    Data Dokter
                 </a>
             </li>
 
             <li>
                 <a href="/admin/pasien"
-                   class="block px-4 py-2 rounded hover:bg-white/20 hover:pl-6 transition-all duration-300">
-                    Pasien
+                   class="block px-4 py-2 rounded-lg
+                   <?php echo e(request()->is('admin/pasien') ? 'bg-white/20 font-semibold' : 'hover:bg-white/10'); ?>">
+                    Data Pasien
                 </a>
             </li>
 
             <li>
                 <a href="/admin/jadwal"
-                   class="block px-4 py-2 rounded hover:bg-white/20 hover:pl-6 transition-all duration-300">
-                    Jadwal
+                   class="block px-4 py-2 rounded-lg
+                   <?php echo e(request()->is('admin/jadwal') ? 'bg-white/20 font-semibold' : 'hover:bg-white/10'); ?>">
+                    Jadwal Dokter
                 </a>
             </li>
 
             <li>
                 <a href="/admin/obat"
-                   class="block px-4 py-2 rounded hover:bg-white/20 hover:pl-6 transition-all duration-300">
-                    Obat
+                   class="block px-4 py-2 rounded-lg
+                   <?php echo e(request()->is('admin/obat') ? 'bg-white/20 font-semibold' : 'hover:bg-white/10'); ?>">
+                    Data Obat
                 </a>
-            </li>
-
-            <li>
-                <a href="/admin/resep"
-                   class="block px-4 py-2 rounded hover:bg-white/20 hover:pl-6 transition-all duration-300">
-                    Resep
-                </a>
-            </li>
-
-            <!-- LOGOUT -->
-            <li class="pt-6">
-                <form action="<?php echo e(route('logout')); ?>" method="POST" onsubmit="return confirm('Anda yakin ingin keluar?')">
-                    <?php echo csrf_field(); ?>
-                    <button class="w-full text-left px-4 py-2 rounded hover:bg-red-500 transition duration-300">
-                        Keluar
-                    </button>
-                </form>
             </li>
 
         </ul>
-    </div>
 
-    <!-- CONTENT -->
-    <div class="flex-1 p-8 animate-fadeInUp">
+    </aside>
+
+    <!-- MAIN -->
+    <main class="flex-1 p-6">
         <?php echo $__env->yieldContent('content'); ?>
-    </div>
+    </main>
 
 </div>
+
+<!-- SCRIPT -->
+<script>
+    AOS.init({ duration: 800, once: true });
+    feather.replace();
+</script>
 
 </body>
 </html><?php /**PATH /Users/ardiansyah/laravel/sistemlayananklinik/resources/views/layouts/admin.blade.php ENDPATH**/ ?>

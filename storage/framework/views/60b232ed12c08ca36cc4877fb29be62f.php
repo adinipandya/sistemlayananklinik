@@ -1,11 +1,12 @@
 <?php $__env->startSection('content'); ?>
 
-<h1 class="text-2xl font-bold mb-6 animate-fadeInUp">
+<h1 class="text-2xl font-bold mb-6" data-aos="fade-down">
     Jadwal Dokter 📅
 </h1>
 
 <!-- CARD -->
-<div class="bg-white p-6 rounded-xl shadow hover:shadow-2xl transition duration-300 animate-fadeInUp delay-1">
+<div data-aos="zoom-in"
+class="bg-white p-6 rounded-xl shadow hover:shadow-2xl transition duration-300">
 
     <h2 class="text-lg font-semibold mb-4">Jadwal Hari Ini</h2>
 
@@ -23,7 +24,8 @@
         <tbody>
 
             <!-- ROW -->
-            <tr class="border-b hover:bg-blue-50 hover:scale-[1.01] transition duration-200">
+            <tr data-aos="fade-up"
+            class="border-b hover:bg-blue-50 hover:scale-[1.01] transition duration-200">
                 <td class="py-3">08:00</td>
                 <td>Ihsan</td>
                 <td>Demam</td>
@@ -43,7 +45,8 @@
             </tr>
 
             <!-- ROW -->
-            <tr class="border-b hover:bg-green-50 hover:scale-[1.01] transition duration-200">
+            <tr data-aos="fade-up" data-aos-delay="150"
+            class="border-b hover:bg-green-50 hover:scale-[1.01] transition duration-200">
                 <td class="py-3">09:00</td>
                 <td>Ardi</td>
                 <td>Batuk</td>
@@ -60,7 +63,8 @@
             </tr>
 
             <!-- ROW -->
-            <tr class="hover:bg-blue-50 hover:scale-[1.01] transition duration-200">
+            <tr data-aos="fade-up" data-aos-delay="300"
+            class="hover:bg-blue-50 hover:scale-[1.01] transition duration-200">
                 <td class="py-3">10:00</td>
                 <td>Dini</td>
                 <td>Sakit Kepala</td>

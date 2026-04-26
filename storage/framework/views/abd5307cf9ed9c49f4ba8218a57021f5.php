@@ -1,12 +1,13 @@
 <?php $__env->startSection('content'); ?>
 
-<h1 class="text-2xl font-bold mb-6">
+<h1 class="text-2xl font-bold mb-6" data-aos="fade-down">
     Konsultasi Pasien 🩺
 </h1>
 
 
 <?php if(session('success')): ?>
-    <div class="bg-green-100 text-green-700 p-4 rounded-lg mb-6">
+    <div data-aos="fade-down"
+    class="bg-green-100 text-green-700 p-4 rounded-lg mb-6">
         <?php echo e(session('success')); ?>
 
     </div>
@@ -15,7 +16,8 @@
 <div class="grid grid-cols-2 gap-8">
 
     <!-- INFO PASIEN -->
-    <div class="bg-white p-6 rounded-xl shadow">
+    <div data-aos="fade-right"
+    class="bg-white p-6 rounded-xl shadow">
         <h2 class="text-lg font-semibold mb-4">Informasi Pasien</h2>
 
         <p><b>Nama:</b> Ihsan</p>
@@ -24,7 +26,8 @@
     </div>
 
     <!-- FORM REKAM MEDIS -->
-    <div class="bg-white p-6 rounded-xl shadow">
+    <div data-aos="fade-left"
+    class="bg-white p-6 rounded-xl shadow">
 
         <h2 class="text-lg font-semibold mb-4">Isi Rekam Medis</h2>
 
@@ -33,31 +36,31 @@
 
             <div class="mb-4">
                 <input type="text" name="nama" placeholder="Nama Pasien"
-                    class="w-full border p-3 rounded-lg">
+                    class="w-full border p-3 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none transition">
             </div>
 
             <div class="mb-4">
                 <input type="date" name="tanggal"
-                    class="w-full border p-3 rounded-lg">
+                    class="w-full border p-3 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none transition">
             </div>
 
             <div class="mb-4">
                 <input type="text" name="keluhan" placeholder="Keluhan"
-                    class="w-full border p-3 rounded-lg">
+                    class="w-full border p-3 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none transition">
             </div>
 
             <div class="mb-4">
                 <input type="text" name="diagnosis" placeholder="Diagnosis"
-                    class="w-full border p-3 rounded-lg">
+                    class="w-full border p-3 rounded-lg focus:ring-2 focus:ring-green-400 outline-none transition">
             </div>
 
             <div class="mb-4">
                 <textarea name="resep" placeholder="Resep Obat"
-                    class="w-full border p-3 rounded-lg"></textarea>
+                    class="w-full border p-3 rounded-lg focus:ring-2 focus:ring-green-400 outline-none transition"></textarea>
             </div>
 
             <button type="submit"
-                class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition">
+                class="w-full bg-gradient-to-r from-blue-500 to-green-400 text-white py-3 rounded-lg hover:scale-105 transition">
                 Simpan Rekam Medis
             </button>
 
