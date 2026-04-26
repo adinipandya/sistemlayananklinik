@@ -44,7 +44,7 @@
     </p>
 
     <form action="/register" method="POST" onsubmit="return validatePassword()">
-        @csrf
+        <?php echo csrf_field(); ?>
 
         <div class="mb-4">
             <label>Nama</label>
@@ -110,4 +110,4 @@ function validatePassword() {
 </script>
 
 </body>
-</html>
+</html><?php /**PATH /Users/ardiansyah/laravel/sistemlayananklinik/resources/views/auth/register.blade.php ENDPATH**/ ?>

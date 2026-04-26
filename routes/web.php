@@ -9,6 +9,11 @@ use App\Http\Controllers\PasienController;
 // HOME
 Route::get('/', [HomeController::class, 'index']);
 
+// REGISTER
+Route::get('/register', function () {
+    return view('auth.register');
+});
+
 // LOGIN
 Route::get('/login', function () {
     return view('auth.login');
