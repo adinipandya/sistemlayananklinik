@@ -58,5 +58,5 @@ Route::get('/pasien', [PasienController::class, 'dashboard']);
 Route::get('/pasien/booking', [PasienController::class, 'booking']);
 Route::get('/pasien/jadwal', [PasienController::class, 'jadwal']);
 Route::get('/pasien/profile', [PasienController::class, 'profile']);
-Route::get('/pasien/feedback', [PasienController::class, 'feedback']);
+Route::get('/pasien/riwayat', [PasienController::class, 'riwayat_konsultasi']);
 Route::get('/pasien/rekam-medis', [PasienController::class, 'rekam_medis']);

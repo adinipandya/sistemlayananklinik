@@ -35,4 +35,8 @@ class PasienController
     {
         return view('pasien.rekam_medis');
     }
+       public function riwayat_konsultasi()
+    {
+        return view('pasien.riwayat_konsultasi');
+    }
 }

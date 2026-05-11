@@ -1,6 +1,4 @@
-@extends('layouts.pasien')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 <h1 class="text-3xl font-bold mb-6" data-aos="fade-down">
     Booking Jadwal 🩺
@@ -102,4 +100,5 @@ function closePopup() {
 }
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.pasien', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\sistemlayananklinik\resources\views/pasien/booking.blade.php ENDPATH**/ ?>

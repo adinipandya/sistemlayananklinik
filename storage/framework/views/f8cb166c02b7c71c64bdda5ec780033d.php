@@ -235,4 +235,4 @@ document.getElementById("menuBtn").onclick = function() {
 </script>
 
 </body>
-</html>
+</html><?php /**PATH C:\laragon\www\sistemlayananklinik\resources\views/pages/home.blade.php ENDPATH**/ ?>
