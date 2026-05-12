@@ -61,7 +61,6 @@ Route::get('/dokter/kelola', [DokterController::class, 'kelola']);
 Route::put('/dokter/rekam_medis/{id}', function () {
     return back()->with('success', 'Data berhasil diupdate');
 })->name('rekam_medis.update');
-
 Route::delete('/dokter/rekam-medis/{id}', function () {
     return back()->with('success', 'Data berhasil dihapus');
 })->name('rekam_medis.destroy');

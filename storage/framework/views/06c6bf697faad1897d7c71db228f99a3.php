@@ -8,6 +8,7 @@
 
     <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
 
     <style>
         .card-hover {
@@ -22,11 +23,57 @@
 </head>
 
 <body class="bg-gray-50">
+    
+<!-- NAVBAR -->
+<header class="fixed top-0 left-0 w-full bg-white shadow border-b z-50">
+    <div class="flex items-center justify-between px-6 py-3">
+
+        <!-- LEFT -->
+        <div class="flex items-center gap-3">
+
+            <!-- HAMBURGER (MOBILE ONLY) -->
+            <button onclick="toggleSidebar()" class="md:hidden text-2xl mr-2">
+                ☰
+            </button>
+
+            <!-- LOGO (TETAP) -->
+            <img src="<?php echo e(asset('images/poltek.png')); ?>" class="w-8 h-8 object-contain">
+            <span class="font-semibold text-gray-700">
+                Klinik Polibatam
+            </span>
+        </div>
+
+        <!-- ICON -->
+        <div class="flex items-center gap-6">
+
+            <div class="relative cursor-pointer hover:scale-110 transition">
+                <i data-feather="bell"></i>
+                <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">2</span>
+            </div>
+
+            <div class="cursor-pointer hover:scale-110 transition">
+                <i data-feather="user"></i>
+            </div>
+
+            <form action="<?php echo e(route('logout')); ?>" method="POST"
+                  onsubmit="return confirm('Anda yakin ingin keluar?')">
+                <?php echo csrf_field(); ?>
+                <button class="text-red-500 hover:text-red-700">
+                    <i data-feather="log-out"></i>
+                </button>
+            </form>
+
+        </div>
+    </div>
+</header>
 
 <div class="flex min-h-screen">
 
     <!-- SIDEBAR -->
-    <aside class="w-64 bg-gradient-to-b from-blue-500 to-green-400 text-white p-6 hidden md:block">
+    <aside id="sidebar" onclick="event.stopPropagation()"
+    class="fixed top-0 bottom-0 left-0 w-64 bg-gradient-to-b from-blue-500 to-green-400 text-white p-6 pt-20
+    overflow-y-auto
+    transform -translate-x-full md:translate-x-0 transition-transform duration-300 z-40">
 
     <h2 class="text-xl font-bold mb-8">Pasien</h2>
 
@@ -64,21 +111,17 @@
         </a>
     </li>
 
-    <li>
-        <form action="<?php echo e(route('logout')); ?>" method="POST" onsubmit="return confirm('Anda yakin ingin keluar?')">
-    <?php echo csrf_field(); ?>
-    <button class="w-full text-left px-4 py-2 text-white opacity-80 hover:bg-red-500 rounded transition">
-        Keluar
-    </button>
-</form>
-    </li>
-
 </ul>
 
 </aside>
 
+    <!-- OVERLAY -->
+    <div id="overlay"
+    class="hidden fixed inset-0 bg-black/40 z-30"
+    onclick="toggleSidebar()"></div>
+
     <!-- MAIN -->
-    <main class="flex-1 p-6">
+    <main class="flex-1 p-6 md:ml-64 pt-20">
 
         <?php echo $__env->yieldContent('content'); ?>
 
@@ -87,10 +130,21 @@
 </div>
 
 <script>
-    AOS.init({
-        duration: 800,
-        once: true
-    });
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    sidebar.classList.toggle('-translate-x-full');
+    overlay.classList.toggle('hidden');
+}
+
+AOS.init({
+    duration: 700,
+    once: true,
+    easing: 'ease-in-out'
+});
+
+feather.replace();
 </script>
 
 </body>
