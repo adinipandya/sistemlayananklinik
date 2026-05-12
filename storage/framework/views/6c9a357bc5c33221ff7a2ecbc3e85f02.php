@@ -67,5 +67,10 @@
 
 </div>
 
+<<<<<<< HEAD
 <?php $__env->stopSection(); ?>
+=======
+<?php $__env->stopSection(); ?> 
+>>>>>>> 5e7cb15 (views)
+
 <?php echo $__env->make('layouts.dokter', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\laravel\sistemlayananklinik\sistemlayananklinik\resources\views/dokter/konsultasi.blade.php ENDPATH**/ ?>
