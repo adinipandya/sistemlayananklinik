@@ -17,6 +17,7 @@
                 transform: scale(1) translateY(0);
             }
         }
+
         .animate-popup {
             animation: popup 0.4s ease;
         }
@@ -36,52 +37,53 @@
 <!-- LOGIN CARD -->
 <div class="relative z-10 bg-white p-6 rounded-2xl shadow-2xl w-full max-w-md animate-popup">
 
-    <h1 class="text-3xl font-bold text-center mb-2">Masuk</h1>
+    <h1 class="text-3xl font-bold text-center mb-2">
+        Masuk
+    </h1>
+
     <p class="text-gray-500 text-center mb-6">
         Akses akun Anda untuk mulai menggunakan layanan kami.
     </p>
 
-    <form onsubmit="return handleLogin(event)" class="space-y-4">
+    {{-- ERROR --}}
+    @if(session('error'))
+        <div class="bg-red-100 text-red-700 p-3 rounded-lg mb-4">
+            {{ session('error') }}
+        </div>
+    @endif
+
+    {{-- FORM LOGIN --}}
+    <form action="/login" method="POST" class="space-y-4">
+        @csrf
 
         <!-- EMAIL -->
         <div>
-            <label class="font-semibold">Email</label>
-            <input type="email"
-            class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
-            placeholder="Masukkan email Anda">
+            <label class="font-semibold">
+                Email
+            </label>
+
+            <input 
+                type="email"
+                name="email"
+                class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+                placeholder="Masukkan email Anda"
+                required
+            >
         </div>
 
         <!-- PASSWORD -->
         <div>
-            <label class="font-semibold">Kata Sandi</label>
-            <input type="password"
-            class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
-            placeholder="Masukkan kata sandi Anda">
-        </div>
+            <label class="font-semibold">
+                Kata Sandi
+            </label>
 
-        <!-- ROLE -->
-        <div>
-            <label class="font-semibold">Tipe Pengguna</label>
-
-            <div class="flex gap-3 mt-2">
-                <button type="button" onclick="selectRole(this)"
-                class="role-btn px-4 py-2 bg-gray-200 rounded-lg transition">
-                    Pasien
-                </button>
-
-                <button type="button" onclick="selectRole(this)"
-                class="role-btn px-4 py-2 bg-gray-200 rounded-lg transition">
-                    Dokter
-                </button>
-
-                <button type="button" onclick="selectRole(this)"
-                class="role-btn px-4 py-2 bg-gray-200 rounded-lg transition">
-                    Admin
-                </button>
-            </div>
-
-            <input type="hidden" id="role">
-            <p class="text-sm text-gray-400 mt-1">Pilih peran Anda</p>
+            <input 
+                type="password"
+                name="password"
+                class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+                placeholder="Masukkan kata sandi Anda"
+                required
+            >
         </div>
 
         <!-- FORGOT -->
@@ -105,43 +107,8 @@
         </div>
 
     </form>
+
 </div>
-
-<!-- SCRIPT -->
-<script>
-function selectRole(el) {
-    document.querySelectorAll('.role-btn').forEach(btn => {
-        btn.classList.remove('bg-blue-500','text-white');
-        btn.classList.add('bg-gray-200');
-    });
-
-    el.classList.remove('bg-gray-200');
-    el.classList.add('bg-blue-500','text-white');
-
-    document.getElementById('role').value = el.innerText;
-}
-
-function handleLogin(e) {
-    e.preventDefault();
-
-    let role = document.getElementById('role').value;
-
-    if (!role) {
-        alert("Pilih role dulu!");
-        return false;
-    }
-
-    if (role === "Admin") {
-        window.location.href = "/admin";
-    } 
-    else if (role === "Dokter") {
-        window.location.href = "/dokter";
-    } 
-    else {
-        window.location.href = "/pasien";
-    }
-}
-</script>
 
 </body>
 </html>
