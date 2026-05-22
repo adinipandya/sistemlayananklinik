@@ -5,6 +5,8 @@
     <title>Register</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 
     <style>
         @keyframes popup {
@@ -103,6 +105,10 @@
                 placeholder="Masukkan kata sandi"
                 required
             >
+            <button type="button" onclick="togglePassword()"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
+                        <i id="eyeIcon" class="bi bi-eye"></i>
+                    </button>
         </div>
 
         <!-- KONFIRMASI -->
@@ -118,6 +124,10 @@
                 placeholder="Ulangi kata sandi"
                 required
             >
+            <button type="button" onclick="togglePassword()"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
+                        <i id="eyeIcon" class="bi bi-eye"></i>
+                    </button>
 
             <p id="errorPassword" class="text-red-500 text-sm mt-1 hidden">
                 Kata sandi tidak cocok
