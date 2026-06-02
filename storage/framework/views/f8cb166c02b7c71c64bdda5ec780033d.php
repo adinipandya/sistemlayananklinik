@@ -90,7 +90,6 @@
     </div>
 </section>
 
-// layanan
 <section id="layanan" class="py-16 px-6 text-center">
     <h2 class="text-3xl font-bold mb-10" data-aos="fade-up">Layanan Kami</h2>
 
@@ -117,7 +116,6 @@
     </div>
 </section>
 
-//  obat
 <section class="py-16 bg-gray-100">
 
     <div class="max-w-7xl mx-auto px-6">

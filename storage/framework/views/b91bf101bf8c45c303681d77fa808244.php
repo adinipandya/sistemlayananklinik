@@ -1,7 +1,7 @@
 <?php $__env->startSection('content'); ?>
 
 <h1 class="text-2xl font-bold mb-6 animate-fadeInUp">
-    Dashboard Admin 🛠️
+    Dashboard Admin 
 </h1>
 
 <!-- STAT CARDS -->

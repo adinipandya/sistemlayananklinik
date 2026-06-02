@@ -9,6 +9,11 @@ use App\Http\Controllers\PasienController;
 // HOME
 Route::get('/', [HomeController::class, 'index']);
 
+// REGISTER
+Route::get('/register', function () {
+    return view('auth.register');
+});
+
 // LOGIN
 Route::get('/login', function () {
     return view('auth.login');
@@ -52,6 +57,13 @@ Route::get('/dokter', [DokterController::class, 'dashboard']);
 Route::get('/dokter/jadwal', [DokterController::class, 'jadwal']);
 Route::get('/dokter/konsultasi', [DokterController::class, 'konsultasi']);
 Route::get('/dokter/pasien', [DokterController::class, 'pasien']);
+Route::get('/dokter/kelola', [DokterController::class, 'kelola']);
+Route::put('/dokter/rekam_medis/{id}', function () {
+    return back()->with('success', 'Data berhasil diupdate');
+})->name('rekam_medis.update');
+Route::delete('/dokter/rekam-medis/{id}', function () {
+    return back()->with('success', 'Data berhasil dihapus');
+})->name('rekam_medis.destroy');
 
 // PASIEN
 Route::get('/pasien', [PasienController::class, 'dashboard']);

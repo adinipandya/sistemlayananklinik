@@ -65,9 +65,9 @@
         <h2 class="font-bold text-lg mb-4">Informasi</h2>
 
         <ul class="space-y-2">
-            <li>✔ Pilih dokter sesuai kebutuhan</li>
-            <li>✔ Datang 10 menit sebelum jadwal</li>
-            <li>✔ Bawa kartu identitas</li>
+            <li>Pilih dokter sesuai kebutuhan</li>
+            <li>Datang 10 menit sebelum jadwal</li>
+            <li>Bawa kartu identitas</li>
         </ul>
 
     </div>
