@@ -2,22 +2,27 @@
 
 @section('content')
 
-<h1 class="text-2xl font-bold mb-6">Halo, Dokter 👋</h1>
+<h1 class="text-2xl font-bold mb-6" data-aos="fade-down">
+    Halo, Dokter 👋
+</h1>
 
 <!-- STAT CARDS -->
 <div class="grid grid-cols-3 gap-6 mb-8">
 
-    <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+    <div data-aos="fade-up"
+    class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
         <h2 class="text-gray-500 text-sm">Jadwal Hari Ini</h2>
         <p class="text-2xl font-bold mt-2">5</p>
     </div>
 
-    <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+    <div data-aos="fade-up" data-aos-delay="150"
+    class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
         <h2 class="text-gray-500 text-sm">Pasien Hari Ini</h2>
         <p class="text-2xl font-bold mt-2">12</p>
     </div>
 
-    <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+    <div data-aos="fade-up" data-aos-delay="300"
+    class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
         <h2 class="text-gray-500 text-sm">Konsultasi Aktif</h2>
         <p class="text-2xl font-bold mt-2">3</p>
     </div>
@@ -25,7 +30,8 @@
 </div>
 
 <!-- JADWAL HARI INI -->
-<div class="bg-white p-6 rounded-xl shadow mb-8">
+<div data-aos="zoom-in"
+class="bg-white p-6 rounded-xl shadow mb-8">
     <h2 class="text-lg font-semibold mb-4">Jadwal Hari Ini</h2>
 
     <table class="w-full text-left">
@@ -62,12 +68,14 @@
 <div class="grid grid-cols-2 gap-6">
 
     <a href="/dokter/konsultasi" 
-       class="bg-gradient-to-r from-blue-500 to-green-400 text-white p-6 rounded-xl shadow hover:scale-105 transition">
+       data-aos="fade-right"
+       class="bg-gradient-to-r from-blue-500 to-green-400 text-white p-6 rounded-xl shadow hover:shadow-lg transition">
         <h2 class="text-lg font-semibold">Mulai Konsultasi</h2>
         <p class="text-sm opacity-80">Lihat & tangani pasien</p>
     </a>
 
     <a href="/dokter/pasien" 
+       data-aos="fade-left"
        class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
         <h2 class="text-lg font-semibold">Data Pasien</h2>
         <p class="text-sm text-gray-500">Lihat semua pasien</p>

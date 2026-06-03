@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Pasien;
 
-class DokterController
+class DokterController extends Controller
 {
+    // ======================================================
+    // DASHBOARD DOKTER
+    // ======================================================
+
     public function dashboard()
     {
         return view('dokter.dashboard_dokter');
@@ -21,8 +26,34 @@ class DokterController
         return view('dokter.konsultasi');
     }
 
+    // ======================================================
+    // DATA PASIEN DOKTER
+    // ======================================================
+
     public function pasien()
     {
-        return view('dokter.pasien_dokter');
+        $pasiens = Pasien::all();
+
+        return view('dokter.pasien_dokter', compact('pasiens'));
+    }
+
+    // SEARCH PASIEN
+    public function searchPasien(Request $request)
+    {
+        $search = $request->search;
+
+        $pasiens = Pasien::where('nama', 'like', '%' . $search . '%')
+                    ->get();
+
+        return view('dokter.pasien_dokter', compact('pasiens'));
+    }
+
+    // ======================================================
+    // KELOLA REKAM MEDIS
+    // ======================================================
+
+    public function kelola()
+    {
+        return view('dokter.kelola_rekam');
     }
 }

@@ -2,74 +2,141 @@
 
 <?php $__env->startSection('content'); ?>
 
-<h1 class="text-2xl font-bold mb-6 animate-fadeInUp">
+<h1 class="text-2xl font-bold mb-6">
     Kelola Dokter 👨‍⚕️
 </h1>
 
-<!-- BUTTON TAMBAH -->
-<div class="mb-6 animate-fadeInUp delay-1">
-    <button class="bg-blue-500 text-white px-5 py-2 rounded-lg hover:bg-green-500 hover:scale-105 transition">
-        + Tambah Dokter
-    </button>
+
+<div class="bg-white p-6 rounded-xl shadow mb-6">
+
+    <form action="/admin/dokter/store" method="POST">
+
+        <?php echo csrf_field(); ?>
+
+        <div class="mb-4">
+            <input type="text"
+                   name="nama"
+                   placeholder="Nama Dokter"
+                   class="border p-2 w-full rounded"
+                   required>
+        </div>
+
+        <div class="mb-4">
+            <input type="text"
+                   name="spesialis"
+                   placeholder="Spesialis"
+                   class="border p-2 w-full rounded"
+                   required>
+        </div>
+
+        <div class="mb-4">
+            <input type="text"
+                   name="telepon"
+                   placeholder="No HP"
+                   class="border p-2 w-full rounded"
+                   required>
+        </div>
+
+        <button type="submit"
+                class="bg-blue-500 text-white px-5 py-2 rounded hover:bg-blue-600 transition">
+            + Tambah Dokter
+        </button>
+
+    </form>
+
 </div>
 
-<!-- TABLE -->
-<div class="bg-white p-6 rounded-xl shadow animate-fadeInUp delay-2">
 
-    <table class="w-full text-left">
+<div class="bg-white p-6 rounded-xl shadow">
+
+    <table class="w-full text-left border">
+
         <thead>
-            <tr class="border-b text-gray-600">
-                <th class="py-3">No</th>
-                <th>Nama</th>
-                <th>Spesialis</th>
-                <th>No HP</th>
-                <th>Aksi</th>
+            <tr class="border-b bg-gray-100">
+                <th class="p-3">No</th>
+                <th class="p-3">Nama</th>
+                <th class="p-3">Spesialis</th>
+                <th class="p-3">Telepon</th>
+                <th class="p-3">Aksi</th>
             </tr>
         </thead>
 
         <tbody>
 
-            <!-- ROW -->
-            <tr class="border-b hover:bg-blue-50 hover:scale-[1.01] transition">
-                <td class="py-3">1</td>
-                <td>Dr. Ardi</td>
-                <td>Umum</td>
-                <td>08123456789</td>
-                <td class="space-x-2">
+            <?php $__currentLoopData = $dokters; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dokter): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
-                    <button class="bg-yellow-400 text-white px-3 py-1 rounded hover:scale-105 transition">
-                        Edit
-                    </button>
+            <tr class="border-b">
 
-                    <button onclick="return confirm('Yakin hapus?')"
-                        class="bg-red-500 text-white px-3 py-1 rounded hover:scale-105 transition">
+                <form action="/admin/dokter/update/<?php echo e($dokter->id); ?>"
+                      method="POST">
+
+                    <?php echo csrf_field(); ?>
+                    <?php echo method_field('PUT'); ?>
+
+                    <td class="p-3">
+                        <?php echo e($loop->iteration); ?>
+
+                    </td>
+
+                    <td class="p-3">
+                        <input type="text"
+                               name="nama"
+                               value="<?php echo e($dokter->nama); ?>"
+                               class="border p-1 rounded w-full"
+                               required>
+                    </td>
+
+                    <td class="p-3">
+                        <input type="text"
+                               name="spesialis"
+                               value="<?php echo e($dokter->spesialis); ?>"
+                               class="border p-1 rounded w-full"
+                               required>
+                    </td>
+
+                    <td class="p-3">
+                        <input type="text"
+                               name="telepon"
+                               value="<?php echo e($dokter->telepon); ?>"
+                               class="border p-1 rounded w-full"
+                               required>
+                    </td>
+
+                    <td class="p-3">
+
+                        <div class="flex items-center gap-2">
+
+                            <button type="submit"
+                                    class="bg-yellow-400 text-white px-4 py-2 rounded h-10 hover:bg-yellow-500 transition">
+                                Edit
+                            </button>
+
+                </form>
+
+                <form action="/admin/dokter/delete/<?php echo e($dokter->id); ?>"
+                      method="POST">
+
+                    <?php echo csrf_field(); ?>
+                    <?php echo method_field('DELETE'); ?>
+
+                    <button type="submit"
+                            onclick="return confirm('Yakin hapus?')"
+                            class="bg-red-500 text-white px-4 py-2 rounded h-10 hover:bg-red-600 transition">
                         Hapus
                     </button>
 
-                </td>
+                </form>
+
+                        </div>
+
+                    </td>
+
             </tr>
 
-            <!-- ROW -->
-            <tr class="border-b hover:bg-blue-50 hover:scale-[1.01] transition">
-                <td class="py-3">2</td>
-                <td>Dr. Dini</td>
-                <td>Gigi</td>
-                <td>08129876543</td>
-                <td class="space-x-2">
-
-                    <button class="bg-yellow-400 text-white px-3 py-1 rounded hover:scale-105 transition">
-                        Edit
-                    </button>
-
-                    <button onclick="return confirm('Yakin hapus?')"
-                        class="bg-red-500 text-white px-3 py-1 rounded hover:scale-105 transition">
-                        Hapus
-                    </button>
-
-                </td>
-            </tr>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
         </tbody>
+
     </table>
 
 </div>
