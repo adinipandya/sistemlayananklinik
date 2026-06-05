@@ -1,7 +1,8 @@
 <?php $__env->startSection('content'); ?>
 
 <h1 class="text-3xl font-bold mb-6" data-aos="fade-down">
-    Halo, Pasien 👋
+        Selamat Datang, <?php echo e(Auth::user()->name); ?>
+
 </h1>
 
 <div class="grid md:grid-cols-3 gap-6">

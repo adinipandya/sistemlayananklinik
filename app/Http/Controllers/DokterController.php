@@ -3,7 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+<<<<<<< HEAD
 use App\Models\Pasien;
+=======
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Illuminate\Support\Facades\Storage;
+>>>>>>> 3bb6fc0cac8f0c805b4843d76809dfa72c1b61d3
 
 class DokterController extends Controller
 {
@@ -26,6 +32,7 @@ class DokterController extends Controller
         return view('dokter.konsultasi');
     }
 
+<<<<<<< HEAD
     // ======================================================
     // DATA PASIEN DOKTER
     // ======================================================
@@ -52,8 +59,93 @@ class DokterController extends Controller
     // KELOLA REKAM MEDIS
     // ======================================================
 
+=======
+>>>>>>> 3bb6fc0cac8f0c805b4843d76809dfa72c1b61d3
     public function kelola()
     {
         return view('dokter.kelola_rekam');
     }
+<<<<<<< HEAD
+=======
+
+    public function profile()
+    {
+        return view('dokter.profile');
+    }
+
+    public function password()
+    {
+        return view('dokter.password');
+    }
+
+    public function updateProfile(Request $request)
+{
+    $user = Auth::user();
+
+    $request->validate([
+        'name' => 'required',
+        'email' => 'required|email',
+        'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+    ]);
+
+    if ($request->hasFile('photo')) {
+
+        if ($user->photo) {
+
+            Storage::disk('public')
+                ->delete($user->photo);
+        }
+
+        $user->photo =
+            $request->file('photo')
+                ->store('profile', 'public');
+    }
+
+    $user->name = $request->name;
+    $user->email = $request->email;
+
+    $user->save();
+
+    return back()->with(
+        'success',
+        'Profil berhasil diperbarui'
+    );
+}
+
+public function datapasien(Request $request)
+{
+    $search = $request->search;
+
+    $pasien = User::where('role', 'patient')
+        ->when($search, function ($query) use ($search) {
+            $query->where('name', 'like', "%{$search}%");
+        })
+        ->get();
+
+    return view('dokter.data_pasien', compact(
+        'pasien',
+        'search'
+    ));
+}
+
+public function deletePhoto()
+{
+    $user = Auth::user();
+
+    if ($user->photo) {
+
+        Storage::disk('public')
+            ->delete($user->photo);
+
+        $user->photo = null;
+
+        $user->save();
+    }
+
+    return back()->with(
+        'success',
+        'Foto profil berhasil dihapus'
+    );
+}
+>>>>>>> 3bb6fc0cac8f0c805b4843d76809dfa72c1b61d3
 }
