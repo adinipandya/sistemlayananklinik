@@ -73,8 +73,14 @@ Route::get('/admin/resep', [AdminController::class, 'resep']);
 Route::get('/dokter', [DokterController::class, 'dashboard']);
 Route::get('/dokter/jadwal', [DokterController::class, 'jadwal']);
 Route::get('/dokter/konsultasi', [DokterController::class, 'konsultasi']);
-Route::get('/dokter/pasien', [DokterController::class, 'pasien']);
+Route::get('/dokter/pasien', [DokterController::class, 'datapasien']);
 Route::get('/dokter/kelola', [DokterController::class, 'kelola']);
+Route::get('/dokter/data_pasien', [DokterController::class, 'datapasien']);
+Route::get('/dokter/profile', [DokterController::class, 'profile']);
+Route::get('/dokter/password', [DokterController::class, 'password']);
+Route::get('/dokter/profile', [DokterController::class, 'profile']);
+Route::post('/dokter/profile', [DokterController::class, 'updateProfile']);
+Route::get('/dokter/password', [DokterController::class, 'password']);
 Route::put('/dokter/rekam_medis/{id}', function () {
     return back()->with('success', 'Data berhasil diupdate');
 })->name('rekam_medis.update');
@@ -83,6 +89,43 @@ Route::delete('/dokter/rekam-medis/{id}', function () {
     return back()->with('success', 'Data berhasil dihapus');
 })->name('rekam_medis.destroy');
 
+Route::get('/dokter/profile', function () {
+    return view('dokter.profile');
+});
+
+Route::get('/dokter/pengaturan', function () {
+    return view('dokter.pengaturan');
+});
+
+Route::get('/dokter/password', function () {
+    return view('dokter.password');
+});
+
+Route::post(
+    '/dokter/profile/delete-photo',
+    [DokterController::class, 'deletePhoto']
+);
+
+Route::get('/dokter/rekam-medis/detail', function () {
+    return view('dokter.detail_rekam');
+});
+
+Route::get('/dokter/rekam-medis/edit', function () {
+    return view('dokter.edit_rekam');
+});
+
+Route::get('/dokter/rekam-medis/print', function () {
+    return view('dokter.print_rekam');
+});
+
+Route::post('/dokter/jadwal/batal/{id}', function () {
+
+    return back()->with(
+        'success',
+        'Konsultasi berhasil dibatalkan'
+    );
+
+})->name('jadwal.batal');
 
 /* PASIEN */
 

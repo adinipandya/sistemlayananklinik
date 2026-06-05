@@ -1,152 +1,335 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Dokter</title>
 
-    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- AOS -->
-    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
-    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-
-    <!-- Icons -->
     <script src="https://unpkg.com/feather-icons"></script>
-
-    <style>
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        .card-hover:hover {
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: 0 15px 25px rgba(0,0,0,0.1);
-        }
-    </style>
 </head>
 
-<body class="bg-gray-50">
+<body class="bg-slate-100">
 
-<!-- ================= NAVBAR ================= -->
-<header class="fixed top-0 left-0 w-full bg-white shadow border-b z-50">
-    <div class="flex items-center justify-between px-6 py-3">
+    <!-- HEADER -->
+    <header class="fixed top-0 left-0 right-0 h-16 bg-white border-b border-slate-200 z-50">
 
-        <!-- LEFT -->
-        <div class="flex items-center gap-3">
+        <div class="h-full px-6 flex items-center justify-between">
 
-            <!-- HAMBURGER (MOBILE ONLY) -->
-            <button onclick="toggleSidebar()" class="md:hidden text-2xl mr-2">
-                ☰
-            </button>
+            <!-- KIRI -->
+            <div class="flex items-center gap-4">
 
-            <!-- LOGO (TETAP) -->
-            <img src="{{ asset('images/poltek.png') }}" class="w-8 h-8 object-contain">
-            <span class="font-semibold text-gray-700">
-                Klinik Polibatam
-            </span>
-        </div>
-
-        <!-- ICON -->
-        <div class="flex items-center gap-6">
-
-            <div class="relative cursor-pointer hover:scale-110 transition">
-                <i data-feather="bell"></i>
-                <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">2</span>
-            </div>
-
-            <div class="cursor-pointer hover:scale-110 transition">
-                <i data-feather="user"></i>
-            </div>
-
-            <form action="{{ route('logout') }}" method="POST"
-                  onsubmit="return confirm('Anda yakin ingin keluar?')">
-                @csrf
-                <button class="text-red-500 hover:text-red-700">
-                    <i data-feather="log-out"></i>
+                <button onclick="toggleSidebar()" class="md:hidden text-slate-600">
+                    ☰
                 </button>
-            </form>
+
+                <img src="{{ asset('images/poltek.png') }}" class="w-8 h-8 object-contain">
+
+                <div>
+                    <h1 class="font-bold text-blue-600">
+                        Klinik Polibatam
+                    </h1>
+
+                    <p class="text-xs text-slate-500">
+                        Sistem Layanan Klinik
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- KANAN -->
+            <div class="flex items-center gap-5">
+
+                <!-- NOTIFIKASI -->
+                <div class="relative">
+
+                    <button id="notifButton" onclick="toggleNotifMenu()"
+                        class="relative text-slate-600 hover:text-blue-600">
+
+                        <i data-feather="bell"></i>
+
+                        <span class="absolute -top-2 -right-2
+            bg-red-500 text-white text-[10px]
+            px-1 rounded-full">
+
+                            2
+
+                        </span>
+
+                    </button>
+
+                    <div id="notifMenu"
+                        class="hidden absolute right-0 mt-3 w-72 bg-white rounded-xl shadow-lg border overflow-hidden">
+
+                        <div class="px-4 py-3 border-b font-semibold">
+                            Notifikasi
+                        </div>
+
+                        <div class="p-4 text-sm border-b hover:bg-slate-50">
+                            Pasien Ihsan menunggu konsultasi.
+                        </div>
+
+                        <div class="p-4 text-sm hover:bg-slate-50">
+                            Rekam medis berhasil diperbarui.
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- PROFILE -->
+                <div class="relative">
+
+                    <button id="profileButton" onclick="toggleProfileMenu()" class="flex items-center gap-3">
+
+                        <div class="text-right">
+
+                            <p class="font-medium text-slate-700">
+                                {{ Auth::user()->name }}
+                            </p>
+
+                            <p class="text-xs text-slate-500">
+                                Dokter
+                            </p>
+
+                        </div>
+
+                        <div
+                            class="w-10 h-10 rounded-full overflow-hidden bg-blue-100 flex items-center justify-center">
+
+                            @if(Auth::user()->photo)
+
+                            <img src="{{ asset('storage/' . Auth::user()->photo) }}" alt="Profile"
+                                class="w-full h-full object-cover">
+
+                            @else
+
+                            <i data-feather="user" class="text-blue-600"></i>
+
+                            @endif
+
+                        </div>
+
+                        <i data-feather="chevron-down" class="w-4 h-4 text-slate-500"></i>
+
+                    </button>
+
+                    <div id="profileMenu"
+                        class="hidden absolute right-0 mt-3 w-60 bg-white rounded-xl shadow-lg border overflow-hidden">
+
+                        <div class="p-4 border-b">
+
+                            <h4 class="font-semibold">
+                                {{ Auth::user()->name }}
+                            </h4>
+
+                            <p class="text-sm text-slate-500">
+                                Dokter Klinik Polibatam
+                            </p>
+
+                        </div>
+
+                        <a href="/dokter/profile" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50">
+
+                            <i data-feather="user" class="w-4 h-4"></i>
+                            <span>Profil Saya</span>
+
+                        </a>
+
+                        <a href="/dokter/password" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50">
+
+                            <i data-feather="lock" class="w-4 h-4"></i>
+                            <span>Ubah Password</span>
+
+                        </a>
+
+                        <hr>
+
+                        <form action="{{ route('logout') }}" method="POST">
+
+                            @csrf
+
+                            <button class="w-full flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50">
+
+                                <i data-feather="log-out" class="w-4 h-4"></i>
+                                <span>Logout</span>
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+    </header>
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="fixed top-16 left-0 bottom-0
+w-64 bg-white border-r border-slate-200
+transform -translate-x-full md:translate-x-0
+transition-transform duration-300 z-40">
+
+        <div class="h-full flex flex-col p-5">
+
+            <div class="mb-8">
+
+                <h2 class="text-lg font-bold text-blue-600">
+                    Portal Dokter
+                </h2>
+
+                <p class="text-sm text-slate-500">
+                    Klinik Polibatam
+                </p>
+
+            </div>
+
+            <nav class="space-y-2">
+
+                <a href="/dokter" class="flex items-center gap-3 px-4 py-3 rounded-lg
+                {{ request()->is('dokter')
+                    ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600 font-semibold'
+                    : 'text-slate-700 hover:bg-slate-100' }}">
+
+                    <i data-feather="home"></i>
+                    Dashboard
+
+                </a>
+
+                <a href="/dokter/data_pasien" class="flex items-center gap-3 px-4 py-3 rounded-xl
+                {{ request()->is('dokter/data_pasien')
+                    ? 'bg-blue-50 text-blue-600 font-semibold border-l-4 border-blue-600'
+                    : 'hover:bg-slate-100 text-slate-700' }}">
+
+                    <i data-feather="users"></i>
+                    Data Pasien
+
+                </a>
+
+                <a href="/dokter/jadwal" class="flex items-center gap-3 px-4 py-3 rounded-lg
+                {{ request()->is('dokter/jadwal')
+                    ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600 font-semibold'
+                    : 'text-slate-700 hover:bg-slate-100' }}">
+
+                    <i data-feather="calendar"></i>
+                    Jadwal Praktik
+
+                </a>
+
+                <a href="/dokter/konsultasi" class="flex items-center gap-3 px-4 py-3 rounded-lg
+                {{ request()->is('dokter/konsultasi')
+                    ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600 font-semibold'
+                    : 'text-slate-700 hover:bg-slate-100' }}">
+
+                    <i data-feather="message-circle"></i>
+                    Konsultasi
+
+                </a>
+
+                <a href="/dokter/kelola" class="flex items-center gap-3 px-4 py-3 rounded-lg
+                {{ request()->is('dokter/kelola')
+                    ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600 font-semibold'
+                    : 'text-slate-700 hover:bg-slate-100' }}">
+
+                    <i data-feather="file-text"></i>
+                    Rekam Medis
+
+                </a>
+
+            </nav>
+
 
         </div>
+
+    </aside>
+
+    <!-- OVERLAY MOBILE -->
+    <div id="overlay" class="hidden fixed inset-0 bg-black/40 z-30" onclick="toggleSidebar()"></div>
+
+    <!-- CONTENT -->
+    <div class="pt-16 md:ml-64 min-h-screen">
+
+        <main class="p-8">
+
+            @yield('content')
+
+        </main>
+
     </div>
-</header>
 
-<!-- ================= SIDEBAR ================= -->
-<aside id="sidebar" onclick="event.stopPropagation()"
-class="fixed top-0 bottom-0 left-0 w-64 bg-gradient-to-b from-blue-500 to-green-400 text-white p-6 pt-20
-overflow-y-auto
-transform -translate-x-full md:translate-x-0 transition-transform duration-300 z-40">
+    <script>
+        function toggleSidebar() {
 
-    <h2 class="text-xl font-bold mb-8">Dokter</h2>
+            const sidebar =
+                document.getElementById('sidebar');
 
-    <ul class="space-y-4">
+            const overlay =
+                document.getElementById('overlay');
 
-        <li>
-            <a href="/dokter"
-               class="block px-4 py-2 rounded-lg
-               {{ request()->is('dokter') ? 'bg-white/20 font-semibold' : 'hover:bg-white/10' }}">
-                Dashboard
-            </a>
-        </li>
+            sidebar.classList.toggle('-translate-x-full');
 
-        <li>
-            <a href="/dokter/jadwal"
-               class="block px-4 py-2 rounded-lg
-               {{ request()->is('dokter/jadwal') ? 'bg-white/20 font-semibold' : 'hover:bg-white/10' }}">
-                Jadwal
-            </a>
-        </li>
+            overlay.classList.toggle('hidden');
 
-        <li>
-            <a href="/dokter/konsultasi"
-               class="block px-4 py-2 rounded-lg
-               {{ request()->is('dokter/konsultasi') ? 'bg-white/20 font-semibold' : 'hover:bg-white/10' }}">
-                Konsultasi
-            </a>
-        </li>
 
-        <li>
-            <a href="/dokter/kelola"
-               class="block px-4 py-2 rounded-lg
-               {{ request()->is('dokter/kelola') ? 'bg-white/20 font-semibold' : 'hover:bg-white/10' }}">
-                Rekam Medis
-            </a>
-        </li>
+        }
 
-    </ul>
-</aside>
+        function toggleNotifMenu() {
 
-<!-- OVERLAY -->
-<div id="overlay"
-class="hidden fixed inset-0 bg-black/40 z-30"
-onclick="toggleSidebar()"></div>
+            document
+                .getElementById('notifMenu')
+                .classList.toggle('hidden');
 
-<!-- ================= CONTENT ================= -->
-<div class="flex min-h-screen pt-16">
+        }
 
-    <!-- MAIN -->
-    <main class="flex-1 p-6 md:ml-64">
-        @yield('content')
-    </main>
+        function toggleProfileMenu() {
 
-</div>
+            document
+                .getElementById('profileMenu')
+                .classList.toggle('hidden');
 
-<!-- SCRIPT -->
-<script>
-function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay');
+            feather.replace();
+        }
 
-    sidebar.classList.toggle('-translate-x-full');
-    overlay.classList.toggle('hidden');
-}
+        document.addEventListener('click', function (event) {
 
-AOS.init({
-    duration: 700,
-    once: true,
-    easing: 'ease-in-out'
-});
-feather.replace();
-</script>
+            // PROFILE
+            const profileMenu =
+                document.getElementById('profileMenu');
+
+            const profileButton =
+                document.getElementById('profileButton');
+
+            if (
+                profileMenu &&
+                !profileMenu.contains(event.target) &&
+                !profileButton.contains(event.target)
+            ) {
+                profileMenu.classList.add('hidden');
+            }
+
+            // NOTIF
+            const notifMenu =
+                document.getElementById('notifMenu');
+
+            const notifButton =
+                document.getElementById('notifButton');
+
+            if (
+                notifMenu &&
+                !notifMenu.contains(event.target) &&
+                !notifButton.contains(event.target)
+            ) {
+                notifMenu.classList.add('hidden');
+            }
+
+        });
+
+        feather.replace();
+    </script>
 
 </body>
+
 </html>

@@ -4,6 +4,7 @@
 
 <h1 class="text-2xl font-bold mb-6 animate-fadeInUp">
     Dashboard Admin 
+        Selamat datang, {{ Auth::user()->name }}
 </h1>
 
 <!-- STAT CARDS -->
