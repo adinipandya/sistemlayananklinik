@@ -23,6 +23,13 @@
                     <option>Dr. Ihsan</option>
                 </select>
             </div>
+               <div>
+                <label class="font-semibold">Pilih Spesaialis</label>
+                <select class="w-full mt-1 p-2 border rounded-lg">
+                    <option>Dokter Umum</option>
+                    <option>Dokter Gigi</option>
+                </select>
+            </div>
 
             <!-- TANGGAL -->
             <div>
@@ -58,9 +65,9 @@
         <h2 class="font-bold text-lg mb-4">Informasi</h2>
 
         <ul class="space-y-2">
-            <li>✔ Pilih dokter sesuai kebutuhan</li>
-            <li>✔ Datang 10 menit sebelum jadwal</li>
-            <li>✔ Bawa kartu identitas</li>
+            <li>Pilih dokter sesuai kebutuhan</li>
+            <li>Datang 10 menit sebelum jadwal</li>
+            <li>Bawa kartu identitas</li>
         </ul>
 
     </div>

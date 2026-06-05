@@ -10,6 +10,8 @@
     <!-- AOS Animation -->
     <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
 
+    
+
     <!-- Style tambahan -->
     <style>
         html {
@@ -37,7 +39,7 @@
         <div class="hidden md:flex gap-6 items-center">
             <a href="#" class="hover:text-blue-500">Beranda</a>
             <a href="#layanan" class="hover:text-blue-500">Layanan</a>
-            <a href="#testimoni" class="hover:text-blue-500">Testimoni</a>
+            <a href="#Ulasan" class="hover:text-blue-500">Ulasan</a>
             <a href="/login" class="bg-gradient-to-r from-blue-500 to-green-500 text-white px-4 py-2 rounded-lg glow transition">
                 Masuk
             </a>
@@ -62,11 +64,9 @@
         <img src="/images/Gedung.png" 
              class="w-full h-full object-cover blur-sm scale-110">
     </div>
-
-    <!-- OVERLAY GELAP -->
     <div class="absolute inset-0 bg-black/50"></div>
 
-    <!-- CONTENT -->
+   // content
     <div class="relative z-10">
 
         <h1 class="text-4xl font-bold mb-4" data-aos="fade-up">
@@ -90,7 +90,6 @@
     </div>
 </section>
 
-<!-- LAYANAN -->
 <section id="layanan" class="py-16 px-6 text-center">
     <h2 class="text-3xl font-bold mb-10" data-aos="fade-up">Layanan Kami</h2>
 
@@ -117,8 +116,74 @@
     </div>
 </section>
 
+<section class="py-16 bg-gray-100">
+
+    <div class="max-w-7xl mx-auto px-6">
+
+        <!-- TITLE -->
+        <h2 class="text-3xl font-bold text-center mb-4">
+            Obat yang Tersedia
+        </h2>
+
+        <div class="text-center mb-10">
+            <a href="/obat" class="bg-gradient-to-r from-blue-500 to-green-500 text-white px-4 py-2 rounded-lg glow transition">
+                Pesan Sekarang
+            </a>
+        </div>
+
+        <!-- CARD OBAT -->
+        <div class="grid md:grid-cols-3 gap-8">
+
+            <!-- OBAT 1 -->
+            <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
+                
+                <div class="h-48 bg-gray-200 flex items-center justify-center text-gray-500">
+                    Pereda Nyeri
+                </div>
+
+                <div class="p-4">
+                    <h3 class="font-semibold">Acetaminophen</h3>
+                    <p class="text-black font-bold mt-1">Rp. 500.000</p>
+                </div>
+
+            </div>
+
+            <!-- OBAT 2 -->
+            <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
+                
+                <div class="h-48 bg-gray-200 flex items-center justify-center text-gray-500">
+                    Antibiotik
+                </div>
+
+                <div class="p-4">
+                    <h3 class="font-semibold">Amoxicillin</h3>
+                    <p class="text-black font-bold mt-1">Rp. 150.000</p>
+                </div>
+
+            </div>
+
+            <!-- OBAT 3 -->
+            <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
+                
+                <div class="h-48 bg-gray-200 flex items-center justify-center text-gray-500">
+                    Vitamin
+                </div>
+
+                <div class="p-4">
+                    <h3 class="font-semibold">Vitamin D</h3>
+                    <p class="text-black font-bold mt-1">Rp. 300.000</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
 <!-- TESTIMONI -->
-<section id="testimoni" class="bg-gradient-to-r from-blue-100 to-green-100 py-16 text-center">
+<section id="Ulasan" class="bg-gradient-to-r from-blue-100 to-green-100 py-16 text-center">
     <h2 class="text-3xl font-bold mb-10" data-aos="fade-up">Umpan Balik Pasien</h2>
 
     <div class="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
@@ -144,7 +209,7 @@
 <!-- CTA -->
 <section class="py-16 text-center">
     <h2 class="text-2xl font-bold mb-4" data-aos="fade-up">
-        Mulai Sekarang 🚀
+        Mulai Sekarang 
     </h2>
 
     <a href="/login" data-aos="zoom-in" class="bg-gradient-to-r from-blue-500 to-green-500 text-white px-8 py-3 rounded-lg hover:scale-110 transition glow">
