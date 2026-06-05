@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PasienController
 {
@@ -15,7 +16,23 @@ class PasienController
     {
         return view('pasien.booking');
     }
+    public function simpanBooking(Request $request)
+    {
+{
+    DB::table('bookings')->insert([
+        'dokter' => $request->dokter,
+        'spesialis' => $request->spesialis,
+        'tanggal' => $request->tanggal,
+        'jam' => $request->jam,
+        'status' => 'Menunggu',
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
 
+    return redirect('/pasien/booking')
+        ->with('success', 'Booking berhasil dibuat');
+}
+    }
     public function jadwal()
     {
         return view('pasien.jadwal_pasien');
