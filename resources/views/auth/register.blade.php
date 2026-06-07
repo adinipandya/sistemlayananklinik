@@ -72,14 +72,28 @@
                     required>
             </div>
 
-            <!-- EMAIL -->
+            <!-- NIK -->
             <div class="mb-4">
+
                 <label>
-                    Email
+                    NIK
                 </label>
 
-                <input type="email" name="email" class="w-full border p-3 rounded-lg" placeholder="Masukkan email Anda"
+                <input type="text" name="nik" maxlength="16" class="w-full border p-3 rounded-lg"
+                    placeholder="Masukkan NIK" required>
+
+            </div>
+
+            <!-- NO HP -->
+            <div class="mb-4">
+
+                <label>
+                    No HP
+                </label>
+
+                <input type="text" name="no_hp" class="w-full border p-3 rounded-lg" placeholder="08xxxxxxxxxx"
                     required>
+
             </div>
 
             <!-- PASSWORD -->

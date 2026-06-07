@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Notification;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +22,38 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer('*', function ($view) {
+
+            if (Auth::check()) {
+
+                $notif = Notification::where(
+                    'user_id',
+                    Auth::id()
+                )
+                    ->latest()
+                    ->take(5)
+                    ->get();
+
+                $unread = Notification::where(
+                    'user_id',
+                    Auth::id()
+                )
+                    ->where(
+                        'is_read',
+                        false
+                    )
+                    ->count();
+
+                $view->with(
+                    'notifications',
+                    $notif
+                );
+
+                $view->with(
+                    'unreadNotifications',
+                    $unread
+                );
+            }
+        });
     }
 }

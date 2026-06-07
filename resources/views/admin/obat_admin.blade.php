@@ -2,79 +2,455 @@
 
 @section('content')
 
-<h1 class="text-2xl font-bold mb-6 animate-fadeInUp">
-    Kelola Obat 💊
-</h1>
+<!-- HEADER -->
 
-<!-- BUTTON TAMBAH -->
-<div class="mb-6 animate-fadeInUp delay-1">
-    <button class="bg-blue-500 text-white px-5 py-2 rounded-lg hover:bg-green-500 hover:scale-105 transition">
-        + Tambah Obat
+<div class="mb-8">
+
+
+    <h1 class="text-3xl font-bold text-slate-800">
+        Kelola Obat
+    </h1>
+
+    <p class="text-slate-500 mt-1">
+        Kelola stok dan data obat Klinik Polibatam.
+    </p>
+
+
+</div>
+
+<!-- STATISTIK -->
+
+<div class="grid md:grid-cols-4 gap-5 mb-8">
+
+
+    <div class="bg-white border border-slate-200 rounded-xl p-5">
+
+        <div class="flex items-center gap-2">
+
+            <i class="bi bi-capsule text-blue-500"></i>
+
+            <span class="text-sm text-slate-500">
+                Total Obat
+            </span>
+
+        </div>
+
+        <h2 class="text-4xl font-bold text-slate-800 mt-3">
+            {{ $totalObat }}
+        </h2>
+
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-xl p-5">
+
+        <div class="flex items-center gap-2">
+
+            <i class="bi bi-check-circle text-green-500"></i>
+
+            <span class="text-sm text-slate-500">
+                Stok Aman
+            </span>
+
+        </div>
+
+        <h2 class="text-4xl font-bold text-green-600 mt-3">
+            {{ $stokAman }}
+        </h2>
+
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-xl p-5">
+
+        <div class="flex items-center gap-2">
+
+            <i class="bi bi-exclamation-circle text-yellow-500"></i>
+
+            <span class="text-sm text-slate-500">
+                Stok Menipis
+            </span>
+
+        </div>
+
+        <h2 class="text-4xl font-bold text-yellow-500 mt-3">
+            {{ $stokMenipis }}
+        </h2>
+
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-xl p-5">
+
+        <div class="flex items-center gap-2">
+
+            <i class="bi bi-x-circle text-red-500"></i>
+
+            <span class="text-sm text-slate-500">
+                Stok Habis
+            </span>
+
+        </div>
+
+        <h2 class="text-4xl font-bold text-red-500 mt-3">
+            {{ $stokHabis }}
+        </h2>
+
+    </div>
+
+
+</div>
+
+<!-- SEARCH + BUTTON -->
+
+<div class="flex flex-col md:flex-row justify-between gap-4 mb-6">
+
+
+    <input type="text" id="searchObat" placeholder="Cari nama obat..."
+        class="border border-slate-300 rounded-xl px-4 py-3 w-full md:w-80">
+
+    <button onclick="openTambahModal()"
+        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl flex items-center gap-2">
+
+        <i class="bi bi-plus-lg"></i>
+
+        Tambah Obat
+
     </button>
-</div>
 
-<!-- TABLE -->
-<div class="bg-white p-6 rounded-xl shadow animate-fadeInUp delay-2">
-
-    <table class="w-full text-left">
-        <thead>
-            <tr class="border-b text-gray-600">
-                <th class="py-3">No</th>
-                <th>Nama Obat</th>
-                <th>Jenis</th>
-                <th>Stok</th>
-                <th>Harga</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-
-        <tbody>
-
-            <!-- ROW -->
-            <tr class="border-b hover:bg-blue-50 hover:scale-[1.01] transition">
-                <td class="py-3">1</td>
-                <td>Paracetamol</td>
-                <td>Tablet</td>
-                <td>100</td>
-                <td>Rp 5.000</td>
-                <td class="space-x-2">
-
-                    <button class="bg-yellow-400 text-white px-3 py-1 rounded hover:scale-105 transition">
-                        Edit
-                    </button>
-
-                    <button onclick="return confirm('Yakin hapus?')"
-                        class="bg-red-500 text-white px-3 py-1 rounded hover:scale-105 transition">
-                        Hapus
-                    </button>
-
-                </td>
-            </tr>
-
-            <!-- ROW -->
-            <tr class="border-b hover:bg-blue-50 hover:scale-[1.01] transition">
-                <td class="py-3">2</td>
-                <td>Amoxicillin</td>
-                <td>Kapsul</td>
-                <td>50</td>
-                <td>Rp 10.000</td>
-                <td class="space-x-2">
-
-                    <button class="bg-yellow-400 text-white px-3 py-1 rounded hover:scale-105 transition">
-                        Edit
-                    </button>
-
-                    <button onclick="return confirm('Yakin hapus?')"
-                        class="bg-red-500 text-white px-3 py-1 rounded hover:scale-105 transition">
-                        Hapus
-                    </button>
-
-                </td>
-            </tr>
-
-        </tbody>
-    </table>
 
 </div>
+
+<div id="obatContainer" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+
+    @forelse($obat as $item)
+
+    <div class="obat-card bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-lg transition">
+
+        <div class="flex justify-between items-start">
+
+            <div>
+
+                <h3 class="text-xl font-semibold text-slate-800">
+                    {{ $item->nama_obat }}
+                </h3>
+
+                <p class="text-slate-500 text-sm mt-1">
+                    {{ $item->jenis_obat }}
+                </p>
+
+            </div>
+
+            @if($item->stok > 20)
+
+            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs">
+                Aman
+            </span>
+
+            @elseif($item->stok > 0)
+
+            <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs">
+                Menipis
+            </span>
+
+            @else
+
+            <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs">
+                Habis
+            </span>
+
+            @endif
+
+        </div>
+
+        <div class="mt-6">
+
+            <div class="flex justify-between text-sm mb-2">
+
+                <span>Stok</span>
+
+                <span class="font-semibold">
+                    {{ $item->stok }}
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="mt-5">
+
+            <p class="text-slate-500 text-sm">
+                Harga
+            </p>
+
+            <h4 class="text-lg font-bold text-slate-800">
+                Rp {{ number_format($item->harga, 0, ',', '.') }}
+            </h4>
+
+        </div>
+
+        <div class="mt-3">
+
+            <p class="text-slate-500 text-sm">
+                {{ $item->deskripsi }}
+            </p>
+
+        </div>
+
+        <div class="flex gap-2 mt-6">
+
+            <button onclick="openEditModal(
+        '{{ $item->id }}',
+        '{{ $item->nama_obat }}',
+        '{{ $item->jenis_obat }}',
+        '{{ $item->stok }}',
+        '{{ $item->harga }}',
+        '{{ $item->deskripsi }}'
+    )" class="flex-1 bg-yellow-100 hover:bg-yellow-200 text-yellow-700 py-2 rounded-xl">
+
+                <i class="bi bi-pencil-square"></i>
+                Edit
+
+            </button>
+
+            <form action="{{ route('obat.destroy', $item->id) }}" method="POST" class="flex-1">
+
+                @csrf
+                @method('DELETE')
+
+                <button type="submit" onclick="return confirm('Yakin ingin menghapus obat ini?')"
+                    class="w-full bg-red-100 hover:bg-red-200 text-red-700 py-2 rounded-xl">
+
+                    <i class="bi bi-trash"></i>
+                    Hapus
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    @empty
+
+    <div class="col-span-3 text-center py-10">
+
+        <p class="text-slate-500">
+            Belum ada data obat.
+        </p>
+
+    </div>
+
+    @endforelse
+
+</div>
+
+<!-- MODAL TAMBAH -->
+
+<div id="tambahModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+
+
+    <div class="bg-white rounded-xl p-6 w-full max-w-lg">
+
+        <h2 class="text-xl font-bold mb-4">
+
+            <i class="bi bi-capsule-pill mr-2"></i>
+
+            Tambah Obat
+
+        </h2>
+
+        <form action="{{ route('obat.store') }}" method="POST">
+
+            @csrf
+
+            <input type="text" name="nama_obat" placeholder="Nama Obat" class="w-full border rounded-lg p-3 mb-3">
+
+            <input type="text" name="jenis_obat" placeholder="Jenis Obat" class="w-full border rounded-lg p-3 mb-3">
+
+            <input type="number" name="stok" placeholder="Stok" class="w-full border rounded-lg p-3 mb-3">
+
+            <input type="number" name="harga" placeholder="Harga" class="w-full border rounded-lg p-3 mb-3">
+
+            <textarea name="deskripsi" placeholder="Deskripsi Obat"
+                class="w-full border rounded-lg p-3 mb-4"></textarea>
+
+            <div class="flex gap-3">
+
+                <button type="submit" class="flex-1 bg-blue-600 text-white py-3 rounded-lg">
+
+                    Tambah
+
+                </button>
+
+                <button type="button" onclick="closeTambahModal()"
+                    class="flex-1 bg-slate-500 text-white py-3 rounded-lg">
+
+                    Batal
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+</div>
+
+<!-- MODAL EDIT -->
+<div id="editModal"
+    class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+
+    <div class="bg-white rounded-xl p-6 w-full max-w-lg">
+
+        <h2 class="text-xl font-bold mb-4">
+            Edit Obat
+        </h2>
+
+        <form id="editForm" method="POST">
+
+            @csrf
+            @method('PUT')
+
+            <input
+                id="editNama"
+                type="text"
+                name="nama_obat"
+                class="w-full border rounded-lg p-3 mb-3">
+
+            <input
+                id="editJenis"
+                type="text"
+                name="jenis_obat"
+                class="w-full border rounded-lg p-3 mb-3">
+
+            <input
+                id="editStok"
+                type="number"
+                name="stok"
+                class="w-full border rounded-lg p-3 mb-3">
+
+            <input
+                id="editHarga"
+                type="number"
+                name="harga"
+                class="w-full border rounded-lg p-3 mb-3">
+
+            <textarea
+                id="editDeskripsi"
+                name="deskripsi"
+                class="w-full border rounded-lg p-3 mb-4"></textarea>
+
+            <div class="flex gap-3">
+
+                <button
+                    type="submit"
+                    class="flex-1 bg-yellow-500 text-white py-3 rounded-lg">
+
+                    Simpan Perubahan
+
+                </button>
+
+                <button
+                    type="button"
+                    onclick="closeEditModal()"
+                    class="flex-1 bg-slate-500 text-white py-3 rounded-lg">
+
+                    Batal
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+    function openTambahModal() {
+
+        document
+            .getElementById('tambahModal')
+            .classList.remove('hidden');
+
+    }
+
+    function openEditModal(
+    id,
+    nama,
+    jenis,
+    stok,
+    harga,
+    deskripsi
+)
+{
+    document
+        .getElementById('editModal')
+        .classList.remove('hidden');
+
+    document
+        .getElementById('editForm')
+        .action =
+        '/admin/obat/' + id;
+
+    document
+        .getElementById('editNama')
+        .value = nama;
+
+    document
+        .getElementById('editJenis')
+        .value = jenis;
+
+    document
+        .getElementById('editStok')
+        .value = stok;
+
+    document
+        .getElementById('editHarga')
+        .value = harga;
+
+    document
+        .getElementById('editDeskripsi')
+        .value = deskripsi;
+}
+
+function closeEditModal()
+{
+    document
+        .getElementById('editModal')
+        .classList.add('hidden');
+}
+
+    function closeTambahModal() {
+
+        document
+            .getElementById('tambahModal')
+            .classList.add('hidden');
+
+    }
+
+    document
+        .getElementById('searchObat')
+        .addEventListener('keyup', function () {
+
+            let value = this.value.toLowerCase();
+
+            let cards = document.querySelectorAll('.obat-card');
+
+            cards.forEach(card => {
+
+                let text = card.innerText.toLowerCase();
+
+                card.style.display =
+                    text.includes(value) ?
+                    '' :
+                    'none';
+
+            });
+
+        });
+</script>
 
 @endsection

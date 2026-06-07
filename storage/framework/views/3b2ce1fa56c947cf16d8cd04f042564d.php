@@ -1,218 +1,306 @@
 <?php $__env->startSection('content'); ?>
 
-<!-- HEADER -->
 <div class="mb-8">
 
     <h1 class="text-3xl font-bold text-slate-800">
         Dashboard Dokter
     </h1>
 
-    <p class="text-slate-500 mt-1">
-        Selamat datang, Dr. <?php echo e(Auth::user()->name); ?>
+    <p class="text-slate-500 mt-2">
+        Selamat datang,
+        Dr. <?php echo e(Auth::user()->name); ?>
 
     </p>
 
 </div>
 
 <!-- STATISTIK -->
-<div class="grid md:grid-cols-4 gap-5 mb-8">
+<div class="grid lg:grid-cols-4 gap-6 mb-8">
 
-    <div class="bg-white border border-slate-200 rounded-xl p-5">
+    <div class="bg-white rounded-3xl p-6 shadow-sm">
 
-        <p class="text-sm text-slate-500">
-            Jadwal Hari Ini
-        </p>
+        <div class="flex justify-between items-start">
 
-        <h2 class="text-3xl font-bold text-blue-600 mt-2">
-            5
-        </h2>
+            <div>
 
-    </div>
+                <p class="text-slate-500 text-sm">
+                    Pasien Hari Ini
+                </p>
 
-    <div class="bg-white border border-slate-200 rounded-xl p-5">
+                <h2 class="text-4xl font-bold mt-2 text-slate-800">
+                    <?php echo e($pasienHariIni); ?>
 
-        <p class="text-sm text-slate-500">
-            Pasien Hari Ini
-        </p>
+                </h2>
 
-        <h2 class="text-3xl font-bold text-green-600 mt-2">
-            12
-        </h2>
+            </div>
 
-    </div>
+            <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center">
 
-    <div class="bg-white border border-slate-200 rounded-xl p-5">
+                <i data-feather="users" class="text-blue-600"></i>
 
-        <p class="text-sm text-slate-500">
-            Konsultasi Aktif
-        </p>
+            </div>
 
-        <h2 class="text-3xl font-bold text-blue-600 mt-2">
-            3
-        </h2>
+        </div>
 
     </div>
 
-    <div class="bg-white border border-slate-200 rounded-xl p-5">
+    <div class="bg-white rounded-3xl p-6 shadow-sm">
 
-        <p class="text-sm text-slate-500">
-            Rekam Medis
-        </p>
+        <div class="flex justify-between items-start">
 
-        <h2 class="text-3xl font-bold text-green-600 mt-2">
-            25
-        </h2>
+            <div>
+
+                <p class="text-slate-500 text-sm">
+                    Jadwal Hari Ini
+                </p>
+
+                <h2 class="text-4xl font-bold mt-2 text-slate-800">
+                    <?php echo e($jadwalHariIni); ?>
+
+                </h2>
+
+            </div>
+
+            <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center">
+
+                <i data-feather="calendar" class="text-blue-600"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="bg-white rounded-3xl p-6 shadow-sm">
+
+        <div class="flex justify-between items-start">
+
+            <div>
+
+                <p class="text-slate-500 text-sm">
+                    Konsultasi Aktif
+                </p>
+
+                <h2 class="text-4xl font-bold mt-2 text-slate-800">
+                    <?php echo e($konsultasiAktif); ?>
+
+                </h2>
+
+            </div>
+
+            <div class="w-14 h-14 rounded-2xl bg-orange-100 flex items-center justify-center">
+
+                <i data-feather="activity" class="text-orange-500"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="bg-white rounded-3xl p-6 shadow-sm">
+
+        <div class="flex justify-between items-start">
+
+            <div>
+
+                <p class="text-slate-500 text-sm">
+                    Rekam Medis
+                </p>
+
+                <h2 class="text-4xl font-bold mt-2 text-slate-800">
+                    <?php echo e($totalRekamMedis); ?>
+
+                </h2>
+
+            </div>
+
+            <div class="w-14 h-14 rounded-2xl bg-purple-100 flex items-center justify-center">
+
+                <i data-feather="file-text" class="text-purple-600"></i>
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
-<!-- JADWAL + PASIEN -->
-<div class="grid lg:grid-cols-3 gap-6 mb-8">
+<!-- KONTEN -->
+<div class="grid lg:grid-cols-3 gap-6">
 
     <!-- JADWAL -->
-    <div class="lg:col-span-2 bg-white border border-slate-200 rounded-xl">
+    <div class="lg:col-span-2 bg-white rounded-3xl shadow-sm">
 
-        <div class="p-5 border-b">
+        <div class="p-6 border-b">
 
-            <h2 class="font-semibold text-slate-700">
+            <h2 class="font-bold text-lg">
                 Jadwal Konsultasi Hari Ini
             </h2>
 
         </div>
 
-        <table class="w-full">
+        <div class="overflow-x-auto">
 
-            <thead class="bg-slate-50">
+            <table class="w-full">
 
-                <tr>
+                <thead>
 
-                    <th class="text-left p-4">
-                        Jam
-                    </th>
+                    <tr class="text-slate-500 text-sm">
 
-                    <th class="text-left p-4">
-                        Pasien
-                    </th>
+                        <th class="text-left p-5">
+                            Jam
+                        </th>
 
-                    <th class="text-left p-4">
-                        Keluhan
-                    </th>
+                        <th class="text-left p-5">
+                            Pasien
+                        </th>
 
-                    <th class="text-left p-4">
-                        Status
-                    </th>
+                        <th class="text-left p-5">
+                            Keluhan
+                        </th>
 
-                </tr>
+                        <th class="text-left p-5">
+                            Status
+                        </th>
 
-            </thead>
+                    </tr>
 
-            <tbody>
+                </thead>
 
-                <tr class="border-t">
+                <tbody>
 
-                    <td class="p-4">08:00</td>
-                    <td class="p-4">Ihsan</td>
-                    <td class="p-4">Demam</td>
+                    <?php $__empty_1 = true; $__currentLoopData = $jadwalHariIniList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $jadwal): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
-                    <td class="p-4">
+                    <tr class="border-t">
 
-                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
-                            Selesai
-                        </span>
+                        <td class="p-5">
+                            <?php echo e(\Carbon\Carbon::parse($jadwal->jam)->format('H:i')); ?>
 
-                    </td>
+                        </td>
 
-                </tr>
+                        <td class="p-5">
+                            <?php echo e($jadwal->pasien->name); ?>
 
-                <tr class="border-t">
+                        </td>
 
-                    <td class="p-4">09:00</td>
-                    <td class="p-4">Ardi</td>
-                    <td class="p-4">Batuk</td>
+                        <td class="p-5">
+                            <?php echo e($jadwal->keluhan); ?>
 
-                    <td class="p-4">
+                        </td>
 
-                        <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
-                            Menunggu
-                        </span>
+                        <td class="p-5">
 
-                    </td>
+                            <span class="px-3 py-1 rounded-full text-sm
+        <?php if($jadwal->status == 'Selesai'): ?>
+            bg-green-100 text-green-700
+        <?php elseif($jadwal->status == 'Menunggu'): ?>
+            bg-yellow-100 text-yellow-700
+        <?php else: ?>
+            bg-blue-100 text-blue-700
+        <?php endif; ?>">
 
-                </tr>
+                                <?php echo e($jadwal->status); ?>
 
-                <tr class="border-t">
 
-                    <td class="p-4">10:00</td>
-                    <td class="p-4">Dini</td>
-                    <td class="p-4">Sakit Kepala</td>
+                            </span>
 
-                    <td class="p-4">
+                        </td>
 
-                        <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
-                            Proses
-                        </span>
+                    </tr>
 
-                    </td>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
 
-                </tr>
+                    <tr>
 
-            </tbody>
+                        <td colspan="4" class="p-6 text-center text-slate-500">
 
-        </table>
+                            Tidak ada jadwal hari ini
+
+                        </td>
+
+                    </tr>
+
+                    <?php endif; ?>
+
+                </tbody>
+
+            </table>
+
+        </div>
 
     </div>
 
-    <!-- PROFIL DOKTER -->
-    <div class="bg-white border border-slate-200 rounded-xl p-6">
+    <!-- PROFIL -->
+    <div class="bg-white rounded-3xl shadow-sm p-6">
 
-        <div class="flex flex-col items-center">
+        <div class="text-center">
 
-            <div class="flex flex-col items-center">
-
-            <?php if(Auth::user()->photo): ?>
-
-            </div>
+            <?php if(Auth::user()?->photo): ?>
 
             <img src="<?php echo e(asset('storage/' . Auth::user()->photo)); ?>"
-                class="w-32 h-32 rounded-full object-cover border-4 border-blue-100">
+                class="w-28 h-28 rounded-full mx-auto object-cover">
 
             <?php else: ?>
 
-            <div class="w-32 h-32 rounded-full bg-blue-100 flex items-center justify-center">
+            <div class="w-28 h-28 mx-auto rounded-full bg-blue-100 flex items-center justify-center">
 
-                <i data-feather="user" class="w-12 h-12 text-blue-600"></i>
+                <i data-feather="user" class="w-10 h-10 text-blue-600"></i>
 
             </div>
 
             <?php endif; ?>
 
-            <h3 class="font-semibold text-lg">
+            <h3 class="font-bold text-xl mt-4">
+
                 <?php echo e(Auth::user()->name); ?>
+
 
             </h3>
 
-            <p class="text-slate-500 text-sm">
+            <p class="text-slate-500">
                 Dokter Umum
             </p>
 
         </div>
 
-        <div class="mt-6 space-y-3 text-sm">
+        <div class="mt-8 space-y-4">
 
             <div class="flex justify-between">
-                <span class="text-slate-500">Poliklinik</span>
-                <span>Umum</span>
+
+                <span class="text-slate-500">
+                    SIP
+                </span>
+
+                <span>
+                    SIP-2026-001
+                </span>
+
             </div>
 
             <div class="flex justify-between">
-                <span class="text-slate-500">Pasien Hari Ini</span>
-                <span>12</span>
+
+                <span class="text-slate-500">
+                    Poliklinik
+                </span>
+
+                <span>
+                    Umum
+                </span>
+
             </div>
 
             <div class="flex justify-between">
-                <span class="text-slate-500">Jadwal</span>
-                <span>5</span>
+
+                <span class="text-slate-500">
+                    Jam Praktik
+                </span>
+
+                <span>
+                    08:00 - 16:00
+                </span>
+
             </div>
 
         </div>
@@ -221,44 +309,41 @@
 
 </div>
 
-<!-- AKSI CEPAT -->
-<div class="grid md:grid-cols-3 gap-5">
+<!-- QUICK ACTION -->
+<div class="grid md:grid-cols-3 gap-6 mt-8">
 
-    <a href="/dokter/konsultasi"
-       class="bg-blue-600 text-white rounded-xl p-5 hover:bg-blue-700 transition">
+    <a href="/dokter/konsultasi" class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white p-6 rounded-3xl">
 
-        <h2 class="font-semibold text-lg">
+        <h3 class="font-bold text-lg">
             Konsultasi Pasien
-        </h2>
+        </h3>
 
-        <p class="text-sm opacity-90 mt-1">
-            Kelola konsultasi pasien
+        <p class="mt-2 opacity-90">
+            Mulai pemeriksaan pasien
         </p>
 
     </a>
 
-    <a href="/dokter/kelola"
-       class="bg-green-600 text-white rounded-xl p-5 hover:bg-green-700 transition">
+    <a href="/dokter/jadwal" class="bg-gradient-to-r from-blue-600 to-green-500 text-white p-6 rounded-3xl">
 
-        <h2 class="font-semibold text-lg">
-            Rekam Medis
-        </h2>
-
-        <p class="text-sm opacity-90 mt-1">
-            Kelola data rekam medis
-        </p>
-
-    </a>
-
-    <a href="/dokter/jadwal"
-       class="bg-white border border-slate-200 rounded-xl p-5 hover:bg-slate-50 transition">
-
-        <h2 class="font-semibold text-lg text-slate-700">
+        <h3 class="font-bold text-lg">
             Jadwal Praktik
-        </h2>
+        </h3>
 
-        <p class="text-sm text-slate-500 mt-1">
-            Lihat jadwal dokter
+        <p class="mt-2 opacity-90">
+            Kelola jadwal konsultasi
+        </p>
+
+    </a>
+
+    <a href="/dokter/kelola" class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white p-6 rounded-3xl">
+
+        <h3 class="font-bold text-lg">
+            Rekam Medis
+        </h3>
+
+        <p class="mt-2 opacity-90">
+            Lihat riwayat pasien
         </p>
 
     </a>

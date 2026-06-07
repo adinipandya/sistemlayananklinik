@@ -1,0 +1,189 @@
+<?php $__env->startSection('content'); ?>
+
+<div class="flex justify-between items-center mb-8">
+
+    <div>
+
+        <h1 class="text-3xl font-bold text-slate-800">
+            Resep Obat
+        </h1>
+
+        <p class="text-slate-500 mt-2">
+            Daftar resep yang telah dibuat dokter
+        </p>
+
+    </div>
+
+    <button class="bg-blue-600 text-white px-5 py-3 rounded-2xl">
+
+        Buat Resep
+
+    </button>
+
+</div>
+
+<!-- STATISTIK -->
+<div class="grid lg:grid-cols-4 gap-6 mb-8">
+
+    <div class="bg-white rounded-3xl shadow-sm p-6">
+
+        <p class="text-slate-500 text-sm">
+            Total Resep
+        </p>
+
+        <h2 class="text-4xl font-bold mt-2">
+            <?php echo e($totalResep); ?>
+
+        </h2>
+
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-sm p-6">
+
+        <p class="text-slate-500 text-sm">
+            Hari Ini
+        </p>
+
+        <h2 class="text-4xl font-bold mt-2 text-blue-600">
+            <?php echo e($resepHariIni); ?>
+
+        </h2>
+
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-sm p-6">
+
+        <p class="text-slate-500 text-sm">
+            Ditebus
+        </p>
+
+        <h2 class="text-4xl font-bold mt-2 text-green-600">
+            <?php echo e($resepMingguIni); ?>
+
+        </h2>
+
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-sm p-6">
+
+        <p class="text-slate-500 text-sm">
+            Menunggu
+        </p>
+
+        <h2 class="text-4xl font-bold mt-2 text-yellow-500">
+            <?php echo e($resepBulanIni); ?>
+
+        </h2>
+
+    </div>
+
+</div>
+
+<!-- TABLE -->
+<div class="bg-white rounded-3xl shadow-sm overflow-hidden">
+
+    <div class="p-6 border-b">
+
+        <h2 class="font-bold">
+            Daftar Resep
+        </h2>
+
+    </div>
+
+    <table class="w-full">
+
+        <thead>
+
+            <tr class="bg-slate-50">
+
+                <th class="p-4 text-left">
+                    No RM
+                </th>
+
+                <th class="p-4 text-left">
+                    Pasien
+                </th>
+
+                <th class="p-4 text-left">
+                    Tanggal
+                </th>
+
+                <th class="p-4 text-left">
+                    Diagnosa
+                </th>
+
+                <th class="p-4 text-left">
+                    Jumlah Obat
+                </th>
+
+                <th class="p-4 text-left">
+                    Aksi
+                </th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <?php $__empty_1 = true; $__currentLoopData = $rekamMedis; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+
+            <tr class="border-b hover:bg-slate-50">
+
+                <td class="p-4 font-medium text-blue-600">
+                    <?php echo e($item->no_rekam_medis); ?>
+
+                </td>
+
+                <td class="p-4">
+                    <?php echo e($item->jadwal->pasien->name); ?>
+
+                </td>
+
+                <td class="p-4">
+                    <?php echo e($item->created_at->format('d M Y')); ?>
+
+                </td>
+
+                <td class="p-4">
+                    <?php echo e($item->diagnosa); ?>
+
+                </td>
+
+                <td class="p-4">
+                    <?php echo e($item->resepObat->count()); ?> Obat
+                </td>
+
+                <td class="p-4">
+
+                    <a href="<?php echo e(route('resep.detail', $item->id)); ?>"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+
+                        Detail
+
+                    </a>
+
+                </td>
+
+            </tr>
+
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+
+            <tr>
+
+                <td colspan="6" class="text-center py-6 text-slate-500">
+                    Belum ada resep obat
+                </td>
+
+            </tr>
+
+            <?php endif; ?>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.dokter', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /Users/ardiansyah/laravel/sistemlayananklinik/resources/views/dokter/resep_obat.blade.php ENDPATH**/ ?>
