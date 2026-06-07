@@ -201,6 +201,8 @@ Route::get(
 
 Route::get('/pasien', [PasienController::class, 'dashboard']);
 Route::get('/pasien/booking', [PasienController::class, 'booking']);
+Route::post('/pasien/booking', [PasienController::class, 'simpanBooking'])
+    ->name('booking.store');
 Route::get('/pasien/jadwal', [PasienController::class, 'jadwal']);
 Route::get('/pasien/profile', [PasienController::class, 'profile']);
 Route::get('/pasien/riwayat', [PasienController::class, 'riwayat_konsultasi']);
