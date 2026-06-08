@@ -180,6 +180,8 @@
 
             @else
 
+            </div>
+
             <div class="w-32 h-32 rounded-full bg-blue-100 flex items-center justify-center">
 
                 <i data-feather="user" class="w-12 h-12 text-blue-600"></i>

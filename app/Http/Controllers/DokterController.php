@@ -3,13 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-<<<<<<< HEAD
 use App\Models\Pasien;
-=======
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
->>>>>>> 3bb6fc0cac8f0c805b4843d76809dfa72c1b61d3
 
 class DokterController extends Controller
 {
@@ -32,7 +29,6 @@ class DokterController extends Controller
         return view('dokter.konsultasi');
     }
 
-<<<<<<< HEAD
     // ======================================================
     // DATA PASIEN DOKTER
     // ======================================================
@@ -59,14 +55,10 @@ class DokterController extends Controller
     // KELOLA REKAM MEDIS
     // ======================================================
 
-=======
->>>>>>> 3bb6fc0cac8f0c805b4843d76809dfa72c1b61d3
     public function kelola()
     {
         return view('dokter.kelola_rekam');
     }
-<<<<<<< HEAD
-=======
 
     public function profile()
     {
@@ -147,5 +139,4 @@ public function deletePhoto()
         'Foto profil berhasil dihapus'
     );
 }
->>>>>>> 3bb6fc0cac8f0c805b4843d76809dfa72c1b61d3
 }

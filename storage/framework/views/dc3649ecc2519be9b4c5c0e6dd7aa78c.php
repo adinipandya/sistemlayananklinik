@@ -1,1 +1,0 @@
-<?php /**PATH /Users/ardiansyah/laravel/sistemlayananklinik/resources/views/pasien/feedback.blade.php ENDPATH**/ ?>

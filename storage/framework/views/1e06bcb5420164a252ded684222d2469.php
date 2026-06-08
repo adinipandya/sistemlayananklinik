@@ -6,140 +6,172 @@
     Kelola Dokter 👨‍⚕️
 </h1>
 
+<!-- TOMBOL TAMBAH DOKTER -->
+<div class="mb-6">
+    <button onclick="openModal()"
+            class="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-lg shadow">
+        + Tambah Dokter
+    </button>
+</div>
 
-<div class="bg-white p-6 rounded-xl shadow mb-6">
+<!-- MODAL TAMBAH DOKTER -->
+<div id="modalTambah"
+     class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
 
-    <form action="/admin/dokter/store" method="POST">
+    <div class="bg-white w-full max-w-md p-6 rounded-xl shadow-lg">
 
-        <?php echo csrf_field(); ?>
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">
+                Tambah Dokter
+            </h2>
 
-        <div class="mb-4">
-            <input type="text"
-                   name="nama"
-                   placeholder="Nama Dokter"
-                   class="border p-2 w-full rounded"
-                   required>
+            <button onclick="closeModal()"
+                    type="button"
+                    class="text-gray-500 text-xl">
+                ✕
+            </button>
         </div>
 
-        <div class="mb-4">
-            <input type="text"
-                   name="spesialis"
-                   placeholder="Spesialis"
-                   class="border p-2 w-full rounded"
-                   required>
-        </div>
+        <form action="/admin/dokter/store" method="POST">
 
-        <div class="mb-4">
-            <input type="text"
-                   name="telepon"
-                   placeholder="No HP"
-                   class="border p-2 w-full rounded"
-                   required>
-        </div>
+            <?php echo csrf_field(); ?>
 
-        <button type="submit"
-                class="bg-blue-500 text-white px-5 py-2 rounded hover:bg-blue-600 transition">
-            + Tambah Dokter
-        </button>
+            <div class="mb-4">
+                <label class="block mb-1">
+                    Nama Dokter
+                </label>
 
-    </form>
+                <input type="text"
+                       name="nama"
+                       class="border p-2 rounded w-full"
+                       required>
+            </div>
+
+            <div class="mb-4">
+                <label class="block mb-1">
+                    Spesialis
+                </label>
+
+                <input type="text"
+                       name="spesialis"
+                       class="border p-2 rounded w-full"
+                       required>
+            </div>
+
+            <div class="mb-4">
+                <label class="block mb-1">
+                    Telepon
+                </label>
+
+                <input type="text"
+                       name="telepon"
+                       class="border p-2 rounded w-full"
+                       required>
+            </div>
+
+            <div class="flex justify-end gap-2">
+
+                <button type="button"
+                        onclick="closeModal()"
+                        class="bg-gray-300 px-4 py-2 rounded">
+                    Batal
+                </button>
+
+                <button type="submit"
+                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    Simpan
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
 
 </div>
 
+<!-- DATA DOKTER -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-<div class="bg-white p-6 rounded-xl shadow">
+    <?php $__currentLoopData = $dokters; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dokter): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
-    <table class="w-full text-left border">
+    <div class="bg-white rounded-xl shadow p-5 hover:shadow-lg transition">
 
-        <thead>
-            <tr class="border-b bg-gray-100">
-                <th class="p-3">No</th>
-                <th class="p-3">Nama</th>
-                <th class="p-3">Spesialis</th>
-                <th class="p-3">Telepon</th>
-                <th class="p-3">Aksi</th>
-            </tr>
-        </thead>
+        <div class="text-center">
 
-        <tbody>
+            <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto text-3xl">
+                👨‍⚕️
+            </div>
 
-            <?php $__currentLoopData = $dokters; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dokter): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <h2 class="font-bold text-lg mt-3">
+                <?php echo e($dokter->nama); ?>
 
-            <tr class="border-b">
+            </h2>
 
-                <form action="/admin/dokter/update/<?php echo e($dokter->id); ?>"
-                      method="POST">
+            <p class="text-gray-500">
+                <?php echo e($dokter->spesialis); ?>
 
-                    <?php echo csrf_field(); ?>
-                    <?php echo method_field('PUT'); ?>
+            </p>
 
-                    <td class="p-3">
-                        <?php echo e($loop->iteration); ?>
+            <p class="mt-2 text-sm text-gray-600">
+                <?php echo e($dokter->telepon); ?>
 
-                    </td>
+            </p>
 
-                    <td class="p-3">
-                        <input type="text"
-                               name="nama"
-                               value="<?php echo e($dokter->nama); ?>"
-                               class="border p-1 rounded w-full"
-                               required>
-                    </td>
+        </div>
 
-                    <td class="p-3">
-                        <input type="text"
-                               name="spesialis"
-                               value="<?php echo e($dokter->spesialis); ?>"
-                               class="border p-1 rounded w-full"
-                               required>
-                    </td>
+        <div class="flex gap-2 mt-5">
 
-                    <td class="p-3">
-                        <input type="text"
-                               name="telepon"
-                               value="<?php echo e($dokter->telepon); ?>"
-                               class="border p-1 rounded w-full"
-                               required>
-                    </td>
+            <form action="/admin/dokter/update/<?php echo e($dokter->id); ?>"
+                  method="POST"
+                  class="flex-1">
 
-                    <td class="p-3">
+                <?php echo csrf_field(); ?>
+                <?php echo method_field('PUT'); ?>
 
-                        <div class="flex items-center gap-2">
+                <button type="submit"
+                        class="w-full bg-yellow-500 text-white py-2 rounded hover:bg-yellow-600">
+                    Edit
+                </button>
 
-                            <button type="submit"
-                                    class="bg-yellow-400 text-white px-4 py-2 rounded h-10 hover:bg-yellow-500 transition">
-                                Edit
-                            </button>
+            </form>
 
-                </form>
+            <form action="/admin/dokter/delete/<?php echo e($dokter->id); ?>"
+                  method="POST"
+                  class="flex-1">
 
-                <form action="/admin/dokter/delete/<?php echo e($dokter->id); ?>"
-                      method="POST">
+                <?php echo csrf_field(); ?>
+                <?php echo method_field('DELETE'); ?>
 
-                    <?php echo csrf_field(); ?>
-                    <?php echo method_field('DELETE'); ?>
+                <button type="submit"
+                        onclick="return confirm('Yakin hapus?')"
+                        class="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600">
+                    Hapus
+                </button>
 
-                    <button type="submit"
-                            onclick="return confirm('Yakin hapus?')"
-                            class="bg-red-500 text-white px-4 py-2 rounded h-10 hover:bg-red-600 transition">
-                        Hapus
-                    </button>
+            </form>
 
-                </form>
+        </div>
 
-                        </div>
+    </div>
 
-                    </td>
-
-            </tr>
-
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-        </tbody>
-
-    </table>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 </div>
+
+<script>
+
+function openModal() {
+    document.getElementById('modalTambah').classList.remove('hidden');
+    document.getElementById('modalTambah').classList.add('flex');
+}
+
+function closeModal() {
+    document.getElementById('modalTambah').classList.remove('flex');
+    document.getElementById('modalTambah').classList.add('hidden');
+}
+
+</script>
 
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\laravel\sistemlayananklinik\sistemlayananklinik\resources\views/admin/dokter_admin.blade.php ENDPATH**/ ?>

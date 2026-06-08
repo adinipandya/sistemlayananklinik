@@ -1,7 +1,9 @@
 <?php $__env->startSection('content'); ?>
 
 <h1 class="text-2xl font-bold mb-6 animate-fadeInUp">
-    Dashboard Admin 🛠️
+    Dashboard Admin 
+        Selamat datang, <?php echo e(Auth::user()->name); ?>
+
 </h1>
 
 <!-- STAT CARDS -->
@@ -57,4 +59,4 @@
 </div>
 
 <?php $__env->stopSection(); ?>
-<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /Users/ardiansyah/laravel/sistemlayananklinik/resources/views/admin/dashboard_admin.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\laravel\sistemlayananklinik\sistemlayananklinik\resources\views/admin/dashboard_admin.blade.php ENDPATH**/ ?>

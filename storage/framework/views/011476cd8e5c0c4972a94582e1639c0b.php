@@ -309,4 +309,4 @@
 
 </body>
 </html>
-<?php /**PATH /Users/ardiansyah/laravel/sistemlayananklinik/resources/views/layouts/admin.blade.php ENDPATH**/ ?>
+<?php /**PATH D:\laravel\sistemlayananklinik\sistemlayananklinik\resources\views/layouts/admin.blade.php ENDPATH**/ ?>
