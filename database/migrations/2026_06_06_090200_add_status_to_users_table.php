@@ -10,27 +10,27 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        Schema::create('dokters', function (Blueprint $table) {
+{
+    Schema::table('users', function ($table) {
 
-            $table->id();
+        $table->enum(
+            'status',
+            [
+                'Menunggu',
+                'Aktif'
+            ]
+        )->default('Menunggu');
 
-            $table->string('nama');
-
-            $table->string('spesialis');
-
-            $table->string('telepon');
-
-            $table->timestamps();
-
-        });
-    }
+    });
+}
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('dokters');
+        Schema::table('users', function (Blueprint $table) {
+            //
+        });
     }
 };

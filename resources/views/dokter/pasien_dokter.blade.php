@@ -32,7 +32,7 @@
             <th>Alamat</th>
         </tr>
 
-        @foreach($pasiens as $pasien)
+        @foreach($pasien as $pasien)
 
         <tr>
             <td>{{ $loop->iteration }}</td>

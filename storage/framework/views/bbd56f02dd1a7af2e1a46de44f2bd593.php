@@ -47,20 +47,20 @@
             Buat akun untuk mulai menggunakan layanan kami.
         </p>
 
-        {{-- ERROR --}}
-        @if ($errors->any())
+        
+        <?php if($errors->any()): ?>
         <div class="bg-red-100 text-red-700 p-3 rounded-lg mb-4">
             <ul class="text-sm">
-                @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
+                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <li><?php echo e($error); ?></li>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </ul>
         </div>
-        @endif
+        <?php endif; ?>
 
-        {{-- FORM --}}
+        
         <form action="/register" method="POST" onsubmit="return validatePassword()">
-            @csrf
+            <?php echo csrf_field(); ?>
 
             <!-- NAMA -->
             <div class="mb-4">
@@ -161,4 +161,4 @@
 
 </body>
 
-</html>
+</html><?php /**PATH D:\laravel\sistemlayananklinik\sistemlayananklinik\resources\views/auth/register.blade.php ENDPATH**/ ?>

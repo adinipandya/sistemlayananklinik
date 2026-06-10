@@ -13,25 +13,42 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
+
             'name' => 'required',
-            'email' => 'required|email|unique:users',
+
+            'nik' => 'required|unique:users',
+
+            'no_hp' => 'required',
+
             'password' => 'required|min:6'
+
         ]);
 
         User::create([
+
             'name' => $request->name,
-            'email' => $request->email,
+
+            'nik' => $request->nik,
+
+            'no_hp' => $request->no_hp,
+
             'password' => Hash::make($request->password),
-            'role' => 'patient'
+
+            'role' => 'pasien',
+
+            'status' => 'Menunggu'
+
         ]);
 
         return redirect('/login');
     }
 
-    // LOGIN
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only(
+            'email',
+            'password'
+        );
 
         if (Auth::attempt($credentials)) {
 
@@ -40,17 +57,25 @@ class AuthController extends Controller
             $user = Auth::user();
 
             if ($user->role == 'admin') {
+
                 return redirect('/admin');
             }
 
-            if ($user->role == 'doctor') {
+            if ($user->role == 'dokter') {
+
                 return redirect('/dokter');
             }
 
-            return redirect('/pasien');
+            if ($user->role == 'pasien') {
+
+                return redirect('/pasien');
+            }
         }
 
-        return back()->with('error', 'Email atau password salah');
+        return back()->with(
+            'error',
+            'Email atau password salah'
+        );
     }
 
     // LOGOUT

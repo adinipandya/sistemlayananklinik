@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="mb-8 flex justify-between items-center">
+<div class="flex justify-between items-center mb-8">
 
     <div>
 
@@ -10,205 +10,318 @@
             Edit Rekam Medis
         </h1>
 
-        <p class="text-slate-500 mt-1">
-            Perbarui data rekam medis pasien
+        <p class="text-slate-500 mt-2">
+            Perbarui hasil pemeriksaan dan tindakan medis pasien
         </p>
 
     </div>
 
-    <a href="/dokter/rekam-medis/detail"
-    class="border border-slate-300 px-4 py-2 rounded-lg hover:bg-slate-50">
-
-        Kembali
-
-    </a>
-
 </div>
 
-<div class="bg-white border border-slate-200 rounded-xl">
+<form action="{{ route('rekam-medis.update', $rekamMedis->id) }}" method="POST">
 
-    <form action="{{ route('rekam_medis.update',1) }}"
-    method="POST"
-    class="p-6">
+    @csrf
+    @method('PUT')
 
-        @csrf
-        @method('PUT')
+    <!-- IDENTITAS -->
+    <div class="bg-white rounded-3xl shadow-sm p-8 mb-6">
 
-        <!-- DATA PASIEN -->
-        <div class="grid md:grid-cols-4 gap-4 mb-6">
+        <h2 class="font-bold text-xl mb-6">
+            Informasi Pasien
+        </h2>
+
+        <div class="grid md:grid-cols-4 gap-5">
 
             <div>
-                <label class="block text-sm mb-2">
-                    No RM
+
+                <label class="text-sm text-slate-500">
+                    No Rekam Medis
                 </label>
 
-                <input
-                type="text"
-                value="RM001"
-                readonly
-                class="w-full bg-slate-100 border rounded-lg p-3">
+                <input value="RM{{ str_pad($rekamMedis->jadwal->pasien->id, 3, '0', STR_PAD_LEFT) }}" readonly
+                    class="w-full mt-2 bg-slate-100 border rounded-2xl p-3">
+
             </div>
 
             <div>
-                <label class="block text-sm mb-2">
+
+                <label class="text-sm text-slate-500">
                     Nama Pasien
                 </label>
 
-                <input
-                type="text"
-                value="Ihsan"
-                readonly
-                class="w-full bg-slate-100 border rounded-lg p-3">
+                <input value="{{ $rekamMedis->jadwal->pasien->name }}" readonly
+                    class="w-full mt-2 bg-slate-100 border rounded-2xl p-3">
+
             </div>
 
             <div>
-                <label class="block text-sm mb-2">
+
+                <label class="text-sm text-slate-500">
                     Umur
                 </label>
 
-                <input
-                type="text"
-                value="21 Tahun"
-                readonly
-                class="w-full bg-slate-100 border rounded-lg p-3">
+                <input value="{{ \Carbon\Carbon::parse($rekamMedis->jadwal->pasien->tanggal_lahir)->age }} Tahun"
+                    readonly class="w-full mt-2 bg-slate-100 border rounded-2xl p-3">
+
             </div>
 
             <div>
-                <label class="block text-sm mb-2">
+
+                <label class="text-sm text-slate-500">
                     Tanggal
                 </label>
 
-                <input
-                type="date"
-                value="2026-04-20"
-                readonly
-                class="w-full bg-slate-100 border rounded-lg p-3">
-            </div>
-
-        </div>
-
-        <!-- KELUHAN -->
-        <div class="mb-5">
-
-            <label class="block font-medium mb-2">
-                Keluhan Utama
-            </label>
-
-            <textarea
-            name="keluhan"
-            rows="3"
-            class="w-full border rounded-lg p-3">Demam tinggi, batuk dan pilek selama 3 hari.</textarea>
-
-        </div>
-
-        <!-- PEMERIKSAAN -->
-        <div class="mb-6">
-
-            <h3 class="font-semibold mb-4">
-                Pemeriksaan Fisik
-            </h3>
-
-            <div class="grid md:grid-cols-4 gap-4">
-
-                <input
-                type="text"
-                value="120/80"
-                class="border rounded-lg p-3">
-
-                <input
-                type="text"
-                value="38.2"
-                class="border rounded-lg p-3">
-
-                <input
-                type="text"
-                value="65 Kg"
-                class="border rounded-lg p-3">
-
-                <input
-                type="text"
-                value="170 Cm"
-                class="border rounded-lg p-3">
+                <input value="{{ $rekamMedis->created_at->format('d F Y') }}" readonly
+                    class="w-full mt-2 bg-slate-100 border rounded-2xl p-3">
 
             </div>
 
         </div>
 
-        <!-- DIAGNOSIS -->
-        <div class="mb-5">
+    </div>
 
-            <label class="block font-medium mb-2">
-                Diagnosis
-            </label>
+    <!-- PEMERIKSAAN -->
+    <div class="bg-white rounded-3xl shadow-sm p-8 mb-6">
 
-            <textarea
-            name="diagnosa"
-            rows="4"
-            class="w-full border rounded-lg p-3">Influenza ringan (ISPA ringan).</textarea>
+        <h2 class="font-bold text-xl mb-6">
+            Pemeriksaan Fisik
+        </h2>
+
+        <div class="grid md:grid-cols-4 gap-5">
+
+            <div>
+
+                <label class="text-sm text-slate-500">
+                    Tekanan Darah
+                </label>
+
+                <input type="text" name="tekanan_darah" value="{{ $rekamMedis->tekanan_darah }}"
+                    class="w-full mt-2 border rounded-2xl p-3">
+
+            </div>
+
+            <div>
+
+                <label class="text-sm text-slate-500">
+                    Suhu Tubuh
+                </label>
+
+                <input type="text" name="suhu_tubuh" value="{{ $rekamMedis->suhu_tubuh }}"
+                    class="w-full mt-2 border rounded-2xl p-3">
+
+            </div>
+
+            <div>
+
+                <label class="text-sm text-slate-500">
+                    Berat Badan
+                </label>
+
+                <input type="text" name="berat_badan" value="{{ $rekamMedis->berat_badan }}"
+                    class="w-full mt-2 border rounded-2xl p-3">
+
+            </div>
+
+            <div>
+
+                <label class="text-sm text-slate-500">
+                    Tinggi Badan
+                </label>
+
+                <input type="text" name="tinggi_badan" value="{{ $rekamMedis->tinggi_badan }}"
+                    class="w-full mt-2 border rounded-2xl p-3">
+
+            </div>
 
         </div>
 
-        <!-- TINDAKAN -->
-        <div class="mb-5">
+    </div>
 
-            <label class="block font-medium mb-2">
-                Tindakan Medis
-            </label>
+    <!-- KELUHAN -->
+    <div class="bg-white rounded-3xl shadow-sm p-8 mb-6">
 
-            <textarea
-            rows="3"
-            class="w-full border rounded-lg p-3">Istirahat cukup dan observasi selama 3 hari.</textarea>
+        <h2 class="font-bold text-xl mb-4">
+            Keluhan Utama
+        </h2>
 
-        </div>
+        <textarea name="keluhan" rows="4"
+            class="w-full border rounded-2xl p-4">{{ $rekamMedis->jadwal->keluhan }}</textarea>
 
-        <!-- RESEP -->
-        <div class="mb-5">
+    </div>
 
-            <label class="block font-medium mb-2">
+    <!-- DIAGNOSA -->
+    <div class="bg-white rounded-3xl shadow-sm p-8 mb-6">
+
+        <h2 class="font-bold text-xl mb-4">
+            Diagnosis
+        </h2>
+
+        <textarea name="diagnosa" rows="5" class="w-full border rounded-2xl p-4">{{ $rekamMedis->diagnosa }}</textarea>
+
+    </div>
+
+    <!-- TINDAKAN -->
+    <div class="bg-white rounded-3xl shadow-sm p-8 mb-6">
+
+        <h2 class="font-bold text-xl mb-4">
+            Tindakan Medis
+        </h2>
+
+        <textarea name="tindakan" rows="4" class="w-full border rounded-2xl p-4">{{ $rekamMedis->tindakan }}</textarea>
+
+    </div>
+
+    <!-- RESEP -->
+    <div class="bg-white rounded-3xl shadow-sm p-8 mb-6">
+
+        <div class="flex justify-between items-center mb-6">
+
+            <h2 class="font-bold text-xl">
                 Resep Obat
-            </label>
+            </h2>
 
-            <textarea
-            name="resep"
-            rows="3"
-            class="w-full border rounded-lg p-3">Paracetamol 500mg, Vitamin C 500mg</textarea>
+            <button type="button" onclick="tambahObat()" class="bg-blue-600 text-white px-4 py-2 rounded-xl">
 
-        </div>
-
-        <!-- CATATAN -->
-        <div class="mb-6">
-
-            <label class="block font-medium mb-2">
-                Catatan Dokter
-            </label>
-
-            <textarea
-            rows="3"
-            class="w-full border rounded-lg p-3">Kontrol kembali 3 hari jika belum membaik.</textarea>
-
-        </div>
-
-        <div class="flex justify-end gap-3">
-
-            <a href="/dokter/rekam-medis/detail"
-            class="px-5 py-3 border rounded-lg">
-
-                Batal
-
-            </a>
-
-            <button
-            type="submit"
-            class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700">
-
-                Simpan Perubahan
+                + Tambah Obat
 
             </button>
 
         </div>
 
-    </form>
+        <div id="obatContainer">
 
-</div>
+            @forelse($rekamMedis->resepObat as $resep)
+
+            <div class="grid md:grid-cols-3 gap-4 mb-4">
+
+                <select name="obat_id[]" class="border rounded-2xl p-3">
+
+                    @foreach($obat as $item)
+
+                    <option value="{{ $item->id }}" {{ $item->id == $resep->obat_id ? 'selected' : '' }}>
+
+                        {{ $item->nama_obat }}
+
+                    </option>
+
+                    @endforeach
+
+                </select>
+
+                <input type="number" name="jumlah[]" value="{{ $resep->jumlah }}" class="border rounded-2xl p-3">
+
+                <input type="text" name="aturan_pakai[]" value="{{ $resep->aturan_pakai }}"
+                    class="border rounded-2xl p-3">
+
+            </div>
+
+            @empty
+
+            <div class="grid md:grid-cols-3 gap-4 mb-4">
+
+                <select name="obat_id[]" class="border rounded-2xl p-3">
+
+                    <option value="">
+                        Pilih Obat
+                    </option>
+
+                    @foreach($obat as $item)
+
+                    <option value="{{ $item->id }}">
+                        {{ $item->nama_obat }}
+                    </option>
+
+                    @endforeach
+
+                </select>
+
+                <input type="number" name="jumlah[]" placeholder="Jumlah" class="border rounded-2xl p-3">
+
+                <input type="text" name="aturan_pakai[]" placeholder="Aturan Pakai" class="border rounded-2xl p-3">
+
+            </div>
+
+            @endforelse
+
+        </div>
+
+    </div>
+
+    <!-- CATATAN -->
+    <div class="bg-white rounded-3xl shadow-sm p-8 mb-8">
+
+        <h2 class="font-bold text-xl mb-4">
+            Catatan Dokter
+        </h2>
+
+        <textarea name="catatan" rows="4" class="w-full border rounded-2xl p-4">{{ $rekamMedis->catatan }}</textarea>
+
+    </div>
+
+    <!-- BUTTON -->
+    <div class="flex justify-end gap-3">
+
+        <a href="{{ route('rekam-medis.detail', $rekamMedis->id) }}" class="border px-6 py-3 rounded-2xl">
+
+            Batal
+
+        </a>
+
+        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-2xl">
+
+            Simpan Perubahan
+
+        </button>
+
+    </div>
+
+</form>
+
+<script>
+    function tambahObat() {
+        let html = `
+        <div class="grid md:grid-cols-3 gap-4 mb-4">
+
+            <select
+                name="obat_id[]"
+                class="border rounded-2xl p-3">
+
+                <option value="">
+                    Pilih Obat
+                </option>
+
+                @foreach($obat as $item)
+
+                    <option value="{{ $item->id }}">
+                        {{ $item->nama_obat }}
+                    </option>
+
+                @endforeach
+
+            </select>
+
+            <input
+                type="number"
+                name="jumlah[]"
+                placeholder="Jumlah"
+                class="border rounded-2xl p-3">
+
+            <input
+                type="text"
+                name="aturan_pakai[]"
+                placeholder="Aturan Pakai"
+                class="border rounded-2xl p-3">
+
+        </div>
+    `;
+
+        document
+            .getElementById('obatContainer')
+            .insertAdjacentHTML(
+                'beforeend',
+                html
+            );
+    }
+</script>
 
 @endsection

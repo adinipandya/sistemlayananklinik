@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="mb-8 flex justify-between items-center">
+<div class="flex justify-between items-center mb-8">
 
     <div>
 
@@ -10,7 +10,7 @@
             Detail Rekam Medis
         </h1>
 
-        <p class="text-slate-500 mt-1">
+        <p class="text-slate-500 mt-2">
             Informasi lengkap hasil pemeriksaan pasien
         </p>
 
@@ -19,317 +19,305 @@
 </div>
 
 <!-- IDENTITAS -->
-<div class="bg-white rounded-xl border border-slate-200 p-6 mb-6">
+<div class="bg-white rounded-3xl shadow-sm p-8 mb-6">
 
-    <h2 class="font-semibold text-lg mb-5">
-        Informasi Pasien
-    </h2>
+    <div class="flex items-center gap-5">
 
-    <div class="grid md:grid-cols-3 gap-5">
+        <div class="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center">
 
-        <div>
-            <p class="text-sm text-slate-500">No RM</p>
-            <p class="font-medium">RM001</p>
+            <i data-feather="user" class="w-8 h-8 text-blue-600">
+            </i>
+
         </div>
 
         <div>
-            <p class="text-sm text-slate-500">Nama Pasien</p>
-            <p class="font-medium">Ihsan</p>
-        </div>
 
-        <div>
-            <p class="text-sm text-slate-500">Umur</p>
-            <p class="font-medium">21 Tahun</p>
-        </div>
+            <h2 class="text-2xl font-bold">
+                {{ $rekamMedis->jadwal->pasien->name }}
+            </h2>
 
-        <div>
-            <p class="text-sm text-slate-500">Jenis Kelamin</p>
-            <p class="font-medium">Laki-Laki</p>
-        </div>
+            <p class="text-slate-500">
+                RM{{ str_pad($rekamMedis->jadwal->pasien->id, 3, '0', STR_PAD_LEFT) }}
+            </p>
 
-        <div>
-            <p class="text-sm text-slate-500">Dokter Pemeriksa</p>
-            <p class="font-medium">Dr. Ardi</p>
-        </div>
-
-        <div>
-            <p class="text-sm text-slate-500">Tanggal Pemeriksaan</p>
-            <p class="font-medium">20 April 2026</p>
         </div>
 
     </div>
 
-</div>
+    <div class="grid md:grid-cols-4 gap-6 mt-8">
 
-<!-- KELUHAN -->
-<div class="bg-white rounded-xl border border-slate-200 p-6 mb-6">
+        <div>
 
-    <h2 class="font-semibold mb-3">
-        Keluhan Utama
-    </h2>
+            <p class="text-sm text-slate-500">
+                Umur
+            </p>
 
-    <p>
-        Demam tinggi, batuk dan pilek selama 3 hari.
-    </p>
+            <p class="font-semibold mt-1">
+                {{ \Carbon\Carbon::parse($rekamMedis->jadwal->pasien->tanggal_lahir)->age }} Tahun
+            </p>
+
+        </div>
+
+        <div>
+
+            <p class="text-sm text-slate-500">
+                Jenis Kelamin
+            </p>
+
+            <p class="font-semibold mt-1">
+                {{ $rekamMedis->jadwal->pasien->jenis_kelamin }}
+            </p>
+
+        </div>
+
+        <div>
+
+            <p class="text-sm text-slate-500">
+                Dokter
+            </p>
+
+            <p class="font-semibold mt-1">
+                Dr. {{ $rekamMedis->jadwal->dokter->nama }}
+            </p>
+
+        </div>
+
+        <div>
+
+            <p class="text-sm text-slate-500">
+                Tanggal Pemeriksaan
+            </p>
+
+            <p class="font-semibold mt-1">
+                {{ $rekamMedis->created_at->format('d F Y') }}
+            </p>
+
+        </div>
+
+    </div>
 
 </div>
 
 <!-- PEMERIKSAAN -->
-<div class="bg-white rounded-xl border border-slate-200 p-6 mb-6">
+<div class="grid lg:grid-cols-4 gap-6 mb-6">
 
-    <h2 class="font-semibold mb-4">
-        Pemeriksaan Fisik
-    </h2>
+    <div class="bg-white rounded-3xl shadow-sm p-6">
 
-    <div class="grid md:grid-cols-4 gap-4">
+        <p class="text-slate-500 text-sm">
+            Tekanan Darah
+        </p>
 
-        <div class="bg-slate-50 rounded-lg p-4">
+        <h2 class="text-2xl font-bold mt-2">
+            {{ $rekamMedis->tekanan_darah }}
+        </h2>
 
-            <p class="text-sm text-slate-500">
-                Tekanan Darah
-            </p>
+    </div>
 
-            <h3 class="font-bold text-lg">
-                120/80
-            </h3>
+    <div class="bg-white rounded-3xl shadow-sm p-6">
 
-        </div>
+        <p class="text-slate-500 text-sm">
+            Suhu
+        </p>
 
-        <div class="bg-slate-50 rounded-lg p-4">
+        <h2 class="text-2xl font-bold mt-2">
+            {{ $rekamMedis->suhu_tubuh }}°C
+        </h2>
 
-            <p class="text-sm text-slate-500">
-                Suhu
-            </p>
+    </div>
 
-            <h3 class="font-bold text-lg">
-                38.2°C
-            </h3>
+    <div class="bg-white rounded-3xl shadow-sm p-6">
 
-        </div>
+        <p class="text-slate-500 text-sm">
+            Berat Badan
+        </p>
 
-        <div class="bg-slate-50 rounded-lg p-4">
+        <h2 class="text-2xl font-bold mt-2">
+            {{ $rekamMedis->berat_badan }} Kg
+        </h2>
 
-            <p class="text-sm text-slate-500">
-                Berat Badan
-            </p>
+    </div>
 
-            <h3 class="font-bold text-lg">
-                65 Kg
-            </h3>
+    <div class="bg-white rounded-3xl shadow-sm p-6">
 
-        </div>
+        <p class="text-slate-500 text-sm">
+            Tinggi Badan
+        </p>
 
-        <div class="bg-slate-50 rounded-lg p-4">
-
-            <p class="text-sm text-slate-500">
-                Tinggi Badan
-            </p>
-
-            <h3 class="font-bold text-lg">
-                170 Cm
-            </h3>
-
-        </div>
+        <h2 class="text-2xl font-bold mt-2">
+            {{ $rekamMedis->tinggi_badan }} Cm
+        </h2>
 
     </div>
 
 </div>
 
-<!-- DIAGNOSIS -->
-<div class="bg-white rounded-xl border border-slate-200 p-6 mb-6">
+<!-- KONTEN -->
+<div class="grid lg:grid-cols-2 gap-6">
 
-    <h2 class="font-semibold mb-3">
-        Diagnosis
-    </h2>
+    <!-- KIRI -->
+    <div class="space-y-6">
 
-    <p>
-        Influenza ringan (ISPA ringan).
-    </p>
+        <div class="bg-white rounded-3xl shadow-sm p-6">
 
-</div>
+            <h3 class="font-bold text-lg mb-4">
+                Keluhan Utama
+            </h3>
 
-<!-- TINDAKAN -->
-<div class="bg-white rounded-xl border border-slate-200 p-6 mb-6">
+            <p class="leading-relaxed text-slate-700">
+                {{ $rekamMedis->jadwal->keluhan }}
+            </p>
 
-    <h2 class="font-semibold mb-3">
-        Tindakan Medis
-    </h2>
+        </div>
 
-    <p>
-        Edukasi pasien, istirahat cukup dan observasi selama 3 hari.
-    </p>
+        <div class="bg-white rounded-3xl shadow-sm p-6">
 
-</div>
+            <h3 class="font-bold text-lg mb-4">
+                Diagnosis
+            </h3>
 
-<!-- RESEP -->
-<div class="bg-white rounded-xl border border-slate-200 p-6 mb-6">
+            <p class="leading-relaxed text-slate-700">
+                {{ $rekamMedis->diagnosa }}
+            </p>
 
-    <h2 class="font-semibold mb-4">
-        Resep Obat
-    </h2>
+        </div>
 
-    <table class="w-full">
+        <div class="bg-white rounded-3xl shadow-sm p-6">
 
-        <thead>
+            <h3 class="font-bold text-lg mb-4">
+                Tindakan Medis
+            </h3>
 
-            <tr class="border-b">
+            <p class="leading-relaxed text-slate-700">
+                {{ $rekamMedis->tindakan }}
+            </p>
 
-                <th class="text-left py-3">
-                    Nama Obat
-                </th>
-
-                <th class="text-left py-3">
-                    Dosis
-                </th>
-
-                <th class="text-left py-3">
-                    Aturan Pakai
-                </th>
-
-            </tr>
-
-        </thead>
-
-        <tbody>
-
-            <tr class="border-b">
-
-                <td class="py-3">
-                    Paracetamol
-                </td>
-
-                <td>
-                    500mg
-                </td>
-
-                <td>
-                    3x1
-                </td>
-
-            </tr>
-
-            <tr>
-
-                <td class="py-3">
-                    Vitamin C
-                </td>
-
-                <td>
-                    500mg
-                </td>
-
-                <td>
-                    1x1
-                </td>
-
-            </tr>
-
-        </tbody>
-
-    </table>
-
-</div>
-
-<!-- CATATAN -->
-<div class="bg-white rounded-xl border border-slate-200 p-6 mb-8">
-
-    <h2 class="font-semibold mb-3">
-        Catatan Dokter
-    </h2>
-
-    <p>
-        Kontrol kembali dalam 3 hari apabila demam tidak membaik.
-    </p>
-
-</div>
-
-<!-- BUTTON -->
-<div class="mt-8 border-t pt-5">
-
-    <div class="flex items-center gap-3">
-
-        <a href="/dokter/rekam-medis/edit" title="Edit Rekam Medis"
-            class="w-11 h-11 flex items-center justify-center rounded-lg bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
-
-            <i data-feather="edit-2"></i>
-
-        </a>
-
-        <!-- DELETE -->
-        <button onclick="openDeleteModal()" title="Hapus Rekam Medis"
-            class="w-11 h-11 flex items-center justify-center rounded-lg bg-red-100 text-red-600 hover:bg-red-200">
-
-            <i data-feather="trash-2"></i>
-
-        </button>
-
-        <!-- PDF -->
-        <a href="/dokter/rekam-medis/print" title="Cetak PDF"
-            class="w-11 h-11 flex items-center justify-center rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-200">
-
-            <i data-feather="printer"></i>
-
-        </a>
-
-        <!-- KEMBALI -->
-        <a href="/dokter/kelola" title="Kembali"
-            class="w-11 h-11 flex items-center justify-center rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200">
-
-            <i data-feather="arrow-left"></i>
-
-        </a>
+        </div>
 
     </div>
 
-    <div id="deleteModal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <!-- KANAN -->
+    <div class="space-y-6">
 
-        <div class="bg-white rounded-xl p-6 w-full max-w-sm">
+        <div class="bg-white rounded-3xl shadow-sm p-6">
 
-            <h2 class="text-lg font-semibold mb-2">
-                Hapus Rekam Medis
-            </h2>
+            <h3 class="font-bold text-lg mb-4">
+                Resep Obat
+            </h3>
 
-            <p class="text-slate-500 mb-6">
-                Data yang dihapus tidak dapat dikembalikan.
-            </p>
+            <div class="overflow-hidden border rounded-2xl">
 
-            <div class="flex gap-3">
+                <table class="w-full">
 
-                <button onclick="closeDeleteModal()" class="flex-1 border rounded-lg py-2">
+                    <thead class="bg-slate-50">
 
-                    Batal
+                        <tr>
 
-                </button>
+                            <th class="p-4 text-left">
+                                Obat
+                            </th>
 
-                <form action="{{ route('rekam_medis.destroy',1) }}" method="POST" class="flex-1">
+                            <th class="p-4 text-left">
+                                Dosis
+                            </th>
 
-                    @csrf
-                    @method('DELETE')
+                            <th class="p-4 text-left">
+                                Aturan
+                            </th>
 
-                    <button class="w-full bg-red-500 text-white py-2 rounded-lg">
+                        </tr>
 
-                        Hapus
+                    </thead>
 
-                    </button>
+                    <tbody>
 
-                </form>
+                        @forelse($rekamMedis->resepObat as $resep)
+
+                        <tr class="border-t">
+
+                            <td class="p-4">
+                                {{ $resep->obat->nama_obat }}
+                            </td>
+
+                            <td class="p-4">
+                                {{ $resep->jumlah }}
+                            </td>
+
+                            <td class="p-4">
+                                {{ $resep->aturan_pakai }}
+                            </td>
+
+                        </tr>
+
+                        @empty
+
+                        <tr>
+
+                            <td colspan="3" class="p-4 text-center text-slate-500">
+                                Tidak ada resep obat
+                            </td>
+
+                        </tr>
+
+                        @endforelse
+
+                    </tbody>
+
+                </table>
 
             </div>
 
         </div>
 
+        <div class="bg-white rounded-3xl shadow-sm p-6">
+
+            <h3 class="font-bold text-lg mb-4">
+                Catatan Dokter
+            </h3>
+
+            <p class="leading-relaxed text-slate-700">
+                {{ $rekamMedis->catatan }}
+            </p>
+
+        </div>
+
     </div>
 
 </div>
 
-<script>
-    function openDeleteModal() {
-        document.getElementById('deleteModal').classList.remove('hidden');
-    }
+<!-- FOOTER ACTION -->
+<div class="flex justify-end gap-3 mt-8">
 
-    function closeDeleteModal() {
-        document.getElementById('deleteModal').classList.add('hidden');
-    }
-</script>
+    <div class="flex justify-end gap-3 mt-8">
+
+        <a href="/dokter/kelola" class="border px-5 py-3 rounded-2xl flex items-center gap-2">
+
+            <i data-feather="arrow-left" class="w-4 h-4"></i>
+
+        </a>
+
+        <a href="{{ route('rekam-medis.edit', $rekamMedis->id) }}"
+            class="bg-yellow-500 text-white px-5 py-3 rounded-2xl flex items-center gap-2">
+
+            <i data-feather="edit-2" class="w-4 h-4"></i>
+
+        </a>
+
+        <a href="/dokter/rekam-medis/print"
+            class="bg-blue-600 text-white px-5 py-3 rounded-2xl flex items-center gap-2">
+
+            <i data-feather="printer" class="w-4 h-4"></i>
+
+        </a>
+
+        <button onclick="confirm('Yakin ingin menghapus rekam medis ini?')"
+            class="bg-red-500 text-white px-5 py-3 rounded-2xl flex items-center gap-2">
+
+            <i data-feather="trash-2" class="w-4 h-4"></i>
+
+        </button>
+
+    </div>
+
+</div>
 
 @endsection

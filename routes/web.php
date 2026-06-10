@@ -23,27 +23,23 @@ Route::get('/', [HomeController::class, 'index']);
 
 /*
 |--------------------------------------------------------------------------
-| AUTH
+| AUTH (tanpa middleware)
 |--------------------------------------------------------------------------
 */
 
-// LOGIN
 Route::get('/login', function () {
     return view('auth.login');
-});
+})->name('login');
 
-// REGISTER
 Route::get('/register', function () {
     return view('auth.register');
 });
 
-// FORGOT PASSWORD
 Route::get('/forgot_password', function () {
     return view('auth.forgot_password');
 });
 
 Route::post('/forgot_password', function (Request $request) {
-
     $user = User::where('email', $request->email)->first();
 
     if (!$user) {
@@ -54,161 +50,107 @@ Route::post('/forgot_password', function (Request $request) {
         return back()->with('error', 'Konfirmasi password tidak cocok.');
     }
 
-    $user->update([
-        'password' => Hash::make($request->password)
-    ]);
+    $user->update(['password' => Hash::make($request->password)]);
 
-    return redirect('/login')
-        ->with('success', 'Password berhasil diubah.');
+    return redirect('/login')->with('success', 'Password berhasil diubah.');
 });
 
-// AUTH PROCESS
 Route::post('/login', [AuthController::class, 'login']);
-
 Route::post('/register', [AuthController::class, 'register']);
-
-Route::post('/logout', [AuthController::class, 'logout'])
-    ->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 /*
 |--------------------------------------------------------------------------
-| ADMIN
+| ADMIN (wajib login)
 |--------------------------------------------------------------------------
 */
 
-Route::get('/admin', [AdminController::class, 'dashboard']);
+Route::middleware(['auth'])->prefix('admin')->group(function () {
 
-/* ---------------- DOKTER ---------------- */
+    Route::get('/', [AdminController::class, 'dashboard']);
 
-// TAMPILKAN DATA DOKTER
-Route::get('/admin/dokter', [AdminController::class, 'dokter']);
+    // DOKTER
+    Route::get('/dokter', [AdminController::class, 'dokter']);
+    Route::post('/dokter', [AdminController::class, 'storeDokter']);
+    Route::post('/dokter/store', [AdminController::class, 'storeDokter']);
+    Route::put('/dokter/update/{id}', [AdminController::class, 'updateDokter']);
+    Route::delete('/dokter/delete/{id}', [AdminController::class, 'destroyDokter']);
 
-// CRUD DOKTER
-Route::post('/admin/dokter/store', [AdminController::class, 'storeDokter']);
+    // PASIEN
+    Route::get('/pasien', [AdminController::class, 'pasien']);
+    Route::post('/pasien/store', [AdminController::class, 'storePasien']);
+    Route::put('/pasien/update/{id}', [AdminController::class, 'updatePasien']);
+    Route::delete('/pasien/delete/{id}', [AdminController::class, 'destroyPasien']);
+    Route::put('/pasien/{id}/verifikasi', [AdminController::class, 'verifikasiPasien']);
 
-Route::put('/admin/dokter/update/{id}', [AdminController::class, 'updateDokter']);
+    // MENU ADMIN
+    Route::get('/jadwal', [AdminController::class, 'jadwal']);
+    Route::get('/obat', [AdminController::class, 'obat']);
+    Route::get('/resep', [AdminController::class, 'resep']);
+    Route::get('/feedback', [AdminController::class, 'feedback']);
+    Route::put('/feedback/{id}', [AdminController::class, 'updateFeedback']);
 
-Route::delete('/admin/dokter/delete/{id}', [AdminController::class, 'destroyDokter']);
-
-/* ---------------- PASIEN ---------------- */
-
-// TAMPILKAN DATA PASIEN
-Route::get('/admin/pasien', [AdminController::class, 'pasien']);
-
-// CRUD PASIEN
-Route::post('/admin/pasien/store', [AdminController::class, 'storePasien']);
-
-Route::put('/admin/pasien/update/{id}', [AdminController::class, 'updatePasien']);
-
-Route::delete('/admin/pasien/delete/{id}', [AdminController::class, 'destroyPasien']);
-
-// SEARCH PASIEN
-Route::get('/admin/pasien/search', [AdminController::class, 'pasien'])
-    ->name('admin.pasien.search');
-
-/* ---------------- MENU ADMIN ---------------- */
-
-Route::get('/admin/jadwal', [AdminController::class, 'jadwal']);
-
-Route::get('/admin/obat', [AdminController::class, 'obat']);
-
-Route::get('/admin/resep', [AdminController::class, 'resep']);
+    // OBAT
+    Route::post('/obat/store', [AdminController::class, 'storeObat'])->name('obat.store');
+    Route::put('/obat/{id}', [AdminController::class, 'updateObat'])->name('obat.update');
+    Route::delete('/obat/{id}', [AdminController::class, 'destroyObat'])->name('obat.destroy');
+});
 
 /*
 |--------------------------------------------------------------------------
-| DOKTER
+| DOKTER (wajib login)
 |--------------------------------------------------------------------------
 */
 
-Route::get('/dokter', [DokterController::class, 'dashboard']);
+Route::middleware(['auth'])->prefix('dokter')->group(function () {
 
-Route::get('/dokter/jadwal', [DokterController::class, 'jadwal']);
+    Route::get('/', [DokterController::class, 'dashboard']);
+    Route::get('/jadwal', [DokterController::class, 'jadwal']);
+    Route::get('/pasien', [DokterController::class, 'datapasien']);
+    Route::get('/kelola', [DokterController::class, 'kelola']);
+    Route::get('/profile', [DokterController::class, 'profile']);
+    Route::get('/password', [DokterController::class, 'password']);
+    Route::get('/resep', [DokterController::class, 'resep'])->name('resep.index');
+    Route::get('/pengaturan', function () { return view('dokter.pengaturan'); });
 
-Route::get('/dokter/konsultasi', [DokterController::class, 'konsultasi']);
+    Route::post('/profile', [DokterController::class, 'updateProfile']);
+    Route::post('/profile/delete-photo', [DokterController::class, 'deletePhoto']);
 
-// DATA PASIEN
-Route::get('/dokter/pasien', [DokterController::class, 'pasien']);
+    Route::post('/jadwal/batal/{id}', [DokterController::class, 'batalkanJadwal'])->name('jadwal.batal');
 
-// SEARCH PASIEN
-Route::get('/dokter/pasien/search', [DokterController::class, 'searchPasien'])
-    ->name('dokter.pasien.search');
+    Route::get('/konsultasi/{id?}', [DokterController::class, 'konsultasi'])->name('dokter.konsultasi');
+    Route::post('/konsultasi/{id}/simpan', [DokterController::class, 'simpanRekamMedis'])->name('rekam-medis.store');
 
-// KELOLA REKAM MEDIS
-Route::get('/dokter/kelola', [DokterController::class, 'kelola']);
+    Route::get('/rekam-medis/detail/{id}', [DokterController::class, 'detailRekamMedis'])->name('rekam-medis.detail');
+    Route::get('/rekam-medis/edit/{id}', [DokterController::class, 'editRekamMedis'])->name('rekam-medis.edit');
+    Route::get('/rekam-medis/print', function () { return view('dokter.print_rekam'); });
+    Route::put('/rekam-medis/update/{id}', [DokterController::class, 'updateRekamMedis'])->name('rekam-medis.update');
+    Route::delete('/rekam-medis/{id}', function () {
+        return back()->with('success', 'Data berhasil dihapus');
+    })->name('rekam_medis.destroy');
 
-// UPDATE REKAM MEDIS
-Route::get('/dokter/pasien', [DokterController::class, 'datapasien']);
-Route::get('/dokter/kelola', [DokterController::class, 'kelola']);
-Route::get('/dokter/data_pasien', [DokterController::class, 'datapasien']);
-Route::get('/dokter/profile', [DokterController::class, 'profile']);
-Route::get('/dokter/password', [DokterController::class, 'password']);
-Route::get('/dokter/profile', [DokterController::class, 'profile']);
-Route::post('/dokter/profile', [DokterController::class, 'updateProfile']);
-Route::get('/dokter/password', [DokterController::class, 'password']);
-Route::put('/dokter/rekam_medis/{id}', function () {
-    return back()->with('success', 'Data berhasil diupdate');
-})->name('rekam_medis.update');
-
-// DELETE REKAM MEDIS
-Route::delete('/dokter/rekam-medis/{id}', function () {
-    return back()->with('success', 'Data berhasil dihapus');
-})->name('rekam_medis.destroy');
+    Route::get('/resep/{id}', [DokterController::class, 'detailResep'])->name('resep.detail');
+});
 
 /*
 |--------------------------------------------------------------------------
-| PASIEN
+| PASIEN (wajib login)
 |--------------------------------------------------------------------------
 */
-Route::get('/dokter/profile', function () {
-    return view('dokter.profile');
+
+Route::middleware(['auth'])->prefix('pasien')->group(function () {
+
+    Route::get('/', [PasienController::class, 'dashboard']);
+    Route::get('/jadwal', [PasienController::class, 'jadwal']);
+    Route::get('/profile', [PasienController::class, 'profile']);
+    Route::get('/riwayat', [PasienController::class, 'riwayat_konsultasi']);
+    Route::get('/rekam-medis', [PasienController::class, 'rekam_medis']);
+
+    Route::get('/booking', [PasienController::class, 'booking']);
+    Route::post('/booking', [PasienController::class, 'storeBooking'])->name('pasien.booking.store');
+
+    Route::get('/feedback', [PasienController::class, 'feedback']);
+    Route::post('/feedback', [PasienController::class, 'storeFeedback']);
+    Route::put('/feedback/{id}', [PasienController::class, 'updateFeedback']);
+    Route::delete('/feedback/{id}', [PasienController::class, 'destroyFeedback']);
 });
-
-Route::get('/dokter/pengaturan', function () {
-    return view('dokter.pengaturan');
-});
-
-Route::get('/dokter/password', function () {
-    return view('dokter.password');
-});
-
-Route::post(
-    '/dokter/profile/delete-photo',
-    [DokterController::class, 'deletePhoto']
-);
-
-Route::get('/dokter/rekam-medis/detail', function () {
-    return view('dokter.detail_rekam');
-});
-
-Route::get('/dokter/rekam-medis/edit', function () {
-    return view('dokter.edit_rekam');
-});
-
-Route::get('/dokter/rekam-medis/print', function () {
-    return view('dokter.print_rekam');
-});
-
-Route::post('/dokter/jadwal/batal/{id}', function () {
-
-    return back()->with(
-        'success',
-        'Konsultasi berhasil dibatalkan'
-    );
-
-})->name('jadwal.batal');
-
-/* PASIEN */
-
-Route::get('/pasien', [PasienController::class, 'dashboard']);
-
-Route::get('/pasien/booking', [PasienController::class, 'booking']);
-
-Route::get('/pasien/jadwal', [PasienController::class, 'jadwal']);
-
-Route::get('/pasien/profile', [PasienController::class, 'profile']);
-
-Route::get('/pasien/feedback', [PasienController::class, 'feedback']);
-
-Route::get('/pasien/riwayat', [PasienController::class, 'riwayat_konsultasi']);
-
-Route::get('/pasien/rekam-medis', [PasienController::class, 'rekam_medis']);

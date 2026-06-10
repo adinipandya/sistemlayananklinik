@@ -2,12 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Feedback;
 
 class HomeController
 {
     public function index()
     {
-        return view('pages.home');
+        $feedback = Feedback::with('user')
+            ->where('status', 'Direspon')
+            ->latest()
+            ->take(6)
+            ->get();
+
+        return view(
+            'pages.home',
+            compact('feedback')
+        );
     }
 }
