@@ -4,11 +4,11 @@
 
 
 <h1 class="text-3xl font-bold text-slate-800">
-    Rekam Medis
+    Riwayat Pemeriksaan
 </h1>
 
 <p class="text-slate-500 mt-1">
-    Riwayat pemeriksaan dan konsultasi pasien
+    Lihat riwayat kunjungan dan status pemeriksaan Anda
 </p>
 
 
@@ -46,7 +46,7 @@
 <div class="bg-white border border-slate-200 rounded-xl p-5">
 
     <p class="text-sm text-slate-500">
-        Menunggu Hasil
+        Menunggu Pemeriksaan
     </p>
 
     <h2 class="text-3xl font-bold text-yellow-500 mt-2">
@@ -66,7 +66,7 @@
 <div class="p-5 border-b">
 
     <h2 class="font-semibold text-slate-700">
-        Riwayat Rekam Medis
+        Riwayat Pemeriksaan
     </h2>
 
 </div>
@@ -76,28 +76,12 @@
     <thead class="bg-slate-50">
 
         <tr>
-
-            <th class="text-left p-4">
-                Tanggal
-            </th>
-
-            <th class="text-left p-4">
-                Dokter
-            </th>
-
-            <th class="text-left p-4">
-                Diagnosa
-            </th>
-
-            <th class="text-left p-4">
-                Status
-            </th>
-
-            <th class="text-left p-4">
-                Aksi
-            </th>
-
-        </tr>
+    <th class="p-4 text-left">Tanggal</th>
+<th class="p-4 text-left">Dokter</th>
+<th class="p-4 text-left">Poli</th>
+<th class="p-4 text-left">Status</th>
+<th class="p-4 text-left">Aksi</th>
+</tr>
 
     </thead>
 
@@ -114,7 +98,7 @@
             </td>
 
             <td class="p-4">
-                Flu & Batuk
+                Poli Umum
             </td>
 
             <td class="p-4">
@@ -184,102 +168,86 @@
 <!-- MODAL DETAIL -->
 
 <div id="detailModal"
+onclick="closeDetailModal()"
 class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
 
+    <div
+    onclick="event.stopPropagation()"
+    class="bg-white rounded-2xl shadow-xl w-full max-w-xl overflow-hidden">
 
-<div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden">
+        <div class="border-b p-6">
 
-    <div class="border-b p-6">
+            <h2 class="text-xl font-semibold">
+                Detail Kunjungan
+            </h2>
 
-        <h2 class="text-xl font-semibold">
-            Detail Rekam Medis
-        </h2>
-
-        <p class="text-sm text-slate-500">
-            Informasi hasil pemeriksaan pasien
-        </p>
-
-    </div>
-
-    <div class="p-6">
-
-        <div class="grid md:grid-cols-2 gap-5">
-
-            <div>
-
-                <p class="text-sm text-slate-500">
-                    Dokter
-                </p>
-
-                <p class="font-medium">
-                    Dr. Ardi
-                </p>
-
-            </div>
-
-            <div>
-
-                <p class="text-sm text-slate-500">
-                    Tanggal Pemeriksaan
-                </p>
-
-                <p class="font-medium">
-                    20 Juni 2026
-                </p>
-
-            </div>
-
-        </div>
-
-        <div class="mt-5">
-
-            <p class="text-sm text-slate-500 mb-2">
-                Keluhan
+            <p class="text-sm text-slate-500">
+                Informasi kunjungan pasien
             </p>
 
-            <div class="bg-slate-50 border rounded-lg p-4">
-                Demam dan batuk selama 3 hari.
-            </div>
-
         </div>
 
-        <div class="mt-5">
+        <div class="p-6">
 
-            <p class="text-sm text-slate-500 mb-2">
-                Diagnosis
-            </p>
+            <div class="grid md:grid-cols-2 gap-5">
 
-            <div class="bg-slate-50 border rounded-lg p-4">
-                Influenza ringan.
+                <div>
+                    <p class="text-sm text-slate-500">
+                        Dokter
+                    </p>
+
+                    <p class="font-medium">
+                        Dr. Ardi
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-sm text-slate-500">
+                        Tanggal Kunjungan
+                    </p>
+
+                    <p class="font-medium">
+                        20 Juni 2026
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-sm text-slate-500">
+                        Poli
+                    </p>
+
+                    <p class="font-medium">
+                        Poli Umum
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-sm text-slate-500">
+                        Status
+                    </p>
+
+                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+                        Selesai
+                    </span>
+                </div>
+
             </div>
 
-        </div>
+            <div class="mt-6 bg-blue-50 border border-blue-200 rounded-xl p-4">
 
-        <div class="mt-5">
+                <h3 class="font-medium text-blue-800 mb-2">
+                    Informasi
+                </h3>
 
-            <p class="text-sm text-slate-500 mb-2">
-                Resep Obat
-            </p>
+                <p class="text-sm text-blue-700">
+                    Detail rekam medis dan resep obat hanya dapat diakses oleh dokter sesuai kebijakan klinik.
+                </p>
 
-            <div class="bg-slate-50 border rounded-lg p-4">
-                Paracetamol 500mg, Vitamin C.
             </div>
-
-        </div>
-
-        <div class="flex gap-3 mt-6">
-
-            <button
-                onclick="window.print()"
-                class="flex-1 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700">
-
-                Download PDF
-
-            </button>
 
             <button
                 onclick="closeDetailModal()"
-                class="flex-1 border border-slate-300 py-3 rounded-lg hover:bg-slate-50">
+                class="w-full mt-6 border border-slate-300 py-3 rounded-lg hover:bg-slate-50">
 
                 Tutup
 
@@ -288,9 +256,6 @@ class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-
         </div>
 
     </div>
-
-</div>
-
 
 </div>
 

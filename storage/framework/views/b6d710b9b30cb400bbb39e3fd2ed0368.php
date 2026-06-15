@@ -26,7 +26,8 @@
     </p>
 
     <h2 class="text-3xl font-bold text-blue-600 mt-2">
-        1
+        <?php echo e($jadwalAktif); ?>
+
     </h2>
 
 </div>
@@ -38,7 +39,8 @@
     </p>
 
     <h2 class="text-3xl font-bold text-green-600 mt-2">
-        8
+        <?php echo e($konsultasiSelesai); ?>
+
     </h2>
 
 </div>
@@ -50,7 +52,8 @@
     </p>
 
     <h2 class="text-3xl font-bold text-blue-600 mt-2">
-        9
+        <?php echo e($totalBooking); ?>
+
     </h2>
 
 </div>
@@ -74,7 +77,8 @@
             Dokter
         </p>
         <p class="font-medium">
-            Dr. Ihsan
+            Dr. <?php echo e($jadwal->first()?->dokter?->nama); ?>
+
         </p>
     </div>
 
@@ -152,87 +156,49 @@
 
     <tbody>
 
-        <tr class="border-t">
+<?php $__currentLoopData = $jadwal; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
-            <td class="p-4">
-                Dr. Ihsan
-            </td>
+<tr class="border-t">
 
-            <td class="p-4">
-                25 Juni 2026
-            </td>
+    <td class="p-4">
+        <?php echo e($item->dokter->nama); ?>
 
-            <td class="p-4">
-                10.00 WIB
-            </td>
+    </td>
 
-            <td class="p-4">
+    <td class="p-4">
+        <?php echo e(\Carbon\Carbon::parse($item->tanggal)->format('d M Y')); ?>
 
-                <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
-                    Menunggu
-                </span>
+    </td>
 
-            </td>
+    <td class="p-4">
+        <?php echo e(substr($item->jam,0,5)); ?> WIB
+    </td>
 
-            <td class="p-4 flex gap-2">
+    <td class="p-4">
 
-                <button
-                    onclick="openDetailModal()"
-                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+        <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
 
-                    Detail
+            <?php echo e($item->status); ?>
 
-                </button>
 
-                <button
-                    onclick="openCancelModal()"
-                    class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+        </span>
 
-                    Batalkan
+    </td>
 
-                </button>
+    <td class="p-4">
 
-            </td>
+        <a href="<?php echo e(route('pasien.jadwal.detail', $item->id)); ?>"
+   class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+    Detail
+</a>
 
-        </tr>
+    </td>
 
-        <tr class="border-t">
+</tr>
 
-            <td class="p-4">
-                Dr. Ardi
-            </td>
+<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-            <td class="p-4">
-                20 Juni 2026
-            </td>
-
-            <td class="p-4">
-                08.00 WIB
-            </td>
-
-            <td class="p-4">
-
-                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
-                    Selesai
-                </span>
-
-            </td>
-
-            <td class="p-4">
-
-                <button
-                    onclick="openDetailModal()"
-                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-
-                    Detail
-
-                </button>
-
-            </td>
-
-        </tr>
-
-    </tbody>
+</tbody>
 
 </table>
 

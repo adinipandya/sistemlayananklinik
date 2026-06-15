@@ -203,21 +203,30 @@ class AdminController
     }
     public function storeDokter(Request $request)
     {
+        $request->validate([
+
+            'nama'      => 'required',
+            'nik'       => 'required|digits:16|unique:dokters,nik',
+            'email'     => 'required|email|unique:dokters,email',
+            'no_str'    => 'required|unique:dokters,no_str',
+            'no_sip'    => 'required|unique:dokters,sip',
+            'spesialis' => 'required',
+            'no_hp'     => 'required',
+            'password'  => 'required|min:8'
+
+        ]);
+
         Dokter::create([
 
-            'nama' => $request->nama,
-
-            'sip' => $request->sip,
-
+            'nama'      => $request->nama,
+            'nik'       => $request->nik,
+            'email'     => $request->email,
+            'no_str'    => $request->no_str,
+            'sip'       => $request->no_sip,
             'spesialis' => $request->spesialis,
-
-            'no_hp' => $request->no_hp,
-
-            'email' => $request->email,
-
-            'alamat' => $request->alamat,
-
-            'status' => 'Aktif'
+            'no_hp'     => $request->no_hp,
+            'password'  => bcrypt($request->password),
+            'status'    => 'Aktif'
 
         ]);
 

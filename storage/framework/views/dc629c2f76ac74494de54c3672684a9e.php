@@ -51,26 +51,26 @@
                 <p class="text-gray-500 text-sm mt-1">Isi data diri Anda dengan benar</p>
             </div>
 
-            {{-- ERROR --}}
-            @if ($errors->any())
+            
+            <?php if($errors->any()): ?>
             <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-3 rounded-lg mb-5 text-sm">
                 <ul class="list-disc pl-5 space-y-1">
-                    @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
+                    <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <li><?php echo e($error); ?></li>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </ul>
             </div>
-            @endif
+            <?php endif; ?>
 
             <form action="/register" method="POST" onsubmit="return validatePassword()">
-                @csrf
+                <?php echo csrf_field(); ?>
 
                 <!-- NAMA -->
                 <div class="mb-4">
                     <label class="block text-gray-700 font-semibold mb-1 text-sm">
                         <i class="fas fa-user text-gray-400 mr-2"></i> Nama Lengkap
                     </label>
-                    <input type="text" name="name" value="{{ old('name') }}"
+                    <input type="text" name="name" value="<?php echo e(old('name')); ?>"
                         class="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white transition"
                         placeholder="Masukkan nama Anda" required>
                 </div>
@@ -80,7 +80,7 @@
                     <label class="block text-gray-700 font-semibold mb-1 text-sm">
                         <i class="fas fa-id-card text-gray-400 mr-2"></i> NIK (16 digit)
                     </label>
-                    <input type="text" name="nik" maxlength="16" minlength="16" value="{{ old('nik') }}"
+                    <input type="text" name="nik" maxlength="16" minlength="16" value="<?php echo e(old('nik')); ?>"
                         class="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white transition"
                         placeholder="Masukkan NIK" required>
                 </div>
@@ -90,7 +90,7 @@
                     <label class="block text-gray-700 font-semibold mb-1 text-sm">
                         <i class="fas fa-envelope text-gray-400 mr-2"></i> Email
                     </label>
-                    <input type="email" name="email" value="{{ old('email') }}"
+                    <input type="email" name="email" value="<?php echo e(old('email')); ?>"
                         class="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white transition"
                         placeholder="contoh@gmail.com" required>
                 </div>
@@ -150,4 +150,4 @@
     </script>
 </body>
 
-</html>
+</html><?php /**PATH /Users/ardiansyah/laravel/sistemlayananklinik/resources/views/auth/register.blade.php ENDPATH**/ ?>

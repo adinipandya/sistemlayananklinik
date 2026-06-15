@@ -16,12 +16,6 @@
 
     </div>
 
-    <button class="bg-blue-600 text-white px-5 py-3 rounded-2xl">
-
-        Buat Resep
-
-    </button>
-
 </div>
 
 <!-- STATISTIK -->

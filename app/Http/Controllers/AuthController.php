@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+
 use App\Models\User;
+use App\Models\Dokter;
 
 class AuthController extends Controller
 {
@@ -16,11 +18,11 @@ class AuthController extends Controller
 
             'name' => 'required',
 
-            'nik' => 'required|unique:users',
+            'nik' => 'required|digits:16|unique:users,nik',
 
-            'no_hp' => 'required',
+            'email' => 'required|email|unique:users,email',
 
-            'password' => 'required|min:6'
+            'password' => 'required|min:8'
 
         ]);
 
@@ -30,7 +32,7 @@ class AuthController extends Controller
 
             'nik' => $request->nik,
 
-            'no_hp' => $request->no_hp,
+            'email' => $request->email,
 
             'password' => Hash::make($request->password),
 

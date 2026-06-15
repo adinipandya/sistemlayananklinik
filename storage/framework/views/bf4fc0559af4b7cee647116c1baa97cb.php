@@ -1,21 +1,13 @@
 <?php $__env->startSection('content'); ?>
 
-<div class="mb-8">
+<!-- STATISTIK -->
 
-
-    <h1 class="text-3xl font-bold text-slate-800">
-        Booking Jadwal Konsultasi
+   <h1 class="text-3xl font-bold text-slate-800">
+        Booking Pasien
     </h1>
 
     <p class="text-slate-500 mt-1">
-        Pilih dokter dan jadwal konsultasi yang tersedia
-    </p>
-
-
-</div>
-
-<!-- STATISTIK -->
-
+Kelola Booking Anda    </p>
 <div class="grid md:grid-cols-3 gap-5 mb-8">
 
 
@@ -69,8 +61,29 @@
         <h2 class="font-semibold text-lg mb-5">
             Form Booking
         </h2>
+        <?php if(session('error')): ?>
 
-        <form action="<?php echo e(route('pasien.booking.store')); ?>" method="POST">
+<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+
+    <?php echo e(session('error')); ?>
+
+
+</div>
+
+<?php endif; ?>
+
+<?php if(session('success')): ?>
+
+<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+
+    <?php echo e(session('success')); ?>
+
+
+</div>
+
+<?php endif; ?>
+
+        <form action="<?php echo e(route('booking.store')); ?>" method="POST">
 
             <?php echo csrf_field(); ?>
 
@@ -85,7 +98,7 @@
                     <?php $__currentLoopData = $dokters; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dokter): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
                     <option value="<?php echo e($dokter->id); ?>">
-                        <?php echo e($dokter->nama); ?>
+                        Dr. <?php echo e($dokter->nama); ?>
 
                     </option>
 
@@ -275,7 +288,7 @@
                 </td>
 
                 <td class="p-4">
-                    <?php echo e($item->dokter->nama); ?>
+                    Dr. <?php echo e($item->dokter->nama); ?>
 
                 </td>
 
@@ -320,10 +333,6 @@
 
     <div class="bg-white p-8 rounded-2xl shadow-xl text-center w-full max-w-sm">
 
-        <div class="text-5xl mb-3">
-            ✅
-        </div>
-
         <h2 class="text-xl font-bold mb-2">
             Booking Berhasil
         </h2>
@@ -360,6 +369,14 @@
         document.getElementById('popup').classList.add('hidden');
     }
 </script>
+
+<?php if(session('success')): ?>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('popup').classList.remove('hidden');
+});
+</script>
+<?php endif; ?>
 
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.pasien', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /Users/ardiansyah/laravel/sistemlayananklinik/resources/views/pasien/booking.blade.php ENDPATH**/ ?>
