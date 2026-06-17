@@ -276,29 +276,7 @@
                     Jadwal Dokter
 
                 </a>
-
-                <a href="/admin/obat"
-                    class="flex items-center gap-3 px-4 py-3 rounded-xl
-                    <?php echo e(request()->is('admin/obat')
-                    ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600 font-semibold'
-                    : 'text-slate-700 hover:bg-slate-100'); ?>">
-
-                    <i data-feather="package"></i>
-                    Data Obat
-
-                </a>
-
-                <a href="/admin/resep"
-                    class="flex items-center gap-3 px-4 py-3 rounded-xl
-                    <?php echo e(request()->is('admin/resep')
-                    ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600 font-semibold'
-                    : 'text-slate-700 hover:bg-slate-100'); ?>">
-
-                    <i data-feather="file-text"></i>
-                    Resep Obat
-
-                </a>
-
+                
                 <a href="/admin/feedback"
                     class="flex items-center gap-3 px-4 py-3 rounded-xl
                     <?php echo e(request()->is('admin/feedback')

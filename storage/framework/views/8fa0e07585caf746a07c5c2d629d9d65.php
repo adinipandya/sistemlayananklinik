@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 <!-- HEADER -->
 <div class="mb-8">
@@ -25,7 +23,8 @@
         </div>
 
         <h2 class="text-4xl font-bold text-slate-800 mt-3">
-            {{ $totalJadwal }}
+            <?php echo e($totalJadwal); ?>
+
         </h2>
     </div>
 
@@ -38,7 +37,8 @@
         </div>
 
         <h2 class="text-4xl font-bold text-green-600 mt-3">
-            {{ $hariIni }}
+            <?php echo e($hariIni); ?>
+
         </h2>
     </div>
 
@@ -51,7 +51,8 @@
         </div>
 
         <h2 class="text-4xl font-bold text-yellow-500 mt-3">
-            {{ $menunggu }}
+            <?php echo e($menunggu); ?>
+
         </h2>
     </div>
 
@@ -64,7 +65,8 @@
         </div>
 
         <h2 class="text-4xl font-bold text-green-600 mt-3">
-            {{ $selesai }}
+            <?php echo e($selesai); ?>
+
         </h2>
     </div>
 
@@ -93,36 +95,38 @@
 <!-- TIMELINE JADWAL -->
 <div id="jadwalContainer" class="space-y-6">
 
-    @forelse($jadwals as $jadwal)
+    <?php $__empty_1 = true; $__currentLoopData = $jadwals; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $jadwal): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
     <div class="relative pl-10 jadwal-card">
 
         <div class="absolute left-0 top-3 w-4 h-4 rounded-full
-            @if($jadwal->status == 'Selesai')
+            <?php if($jadwal->status == 'Selesai'): ?>
                 bg-green-600
-            @elseif($jadwal->status == 'Menunggu')
+            <?php elseif($jadwal->status == 'Menunggu'): ?>
                 bg-yellow-500
-            @elseif($jadwal->status == 'Disetujui')
+            <?php elseif($jadwal->status == 'Disetujui'): ?>
                 bg-blue-600
-            @else
+            <?php else: ?>
                 bg-red-500
-            @endif">
+            <?php endif; ?>">
         </div>
 
-        @if(!$loop->last)
+        <?php if(!$loop->last): ?>
             <div class="absolute left-[7px] top-7 h-full w-[2px] bg-slate-200"></div>
-        @endif
+        <?php endif; ?>
 
         <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition">
 
             <div class="flex justify-between items-center">
 
                 <h3 class="font-semibold text-lg text-slate-800">
-                    {{ $jadwal->dokter->nama ?? '-' }}
+                    <?php echo e($jadwal->dokter->nama ?? '-'); ?>
+
                 </h3>
 
                 <span class="text-sm font-medium text-blue-600">
-                    {{ \Carbon\Carbon::parse($jadwal->jam)->format('H:i') }}
+                    <?php echo e(\Carbon\Carbon::parse($jadwal->jam)->format('H:i')); ?>
+
                 </span>
 
             </div>
@@ -134,7 +138,8 @@
                         Pasien :
                     </span>
 
-                    {{ $jadwal->pasien->name ?? '-' }}
+                    <?php echo e($jadwal->pasien->name ?? '-'); ?>
+
                 </p>
 
                 <p>
@@ -142,7 +147,8 @@
                         Tanggal :
                     </span>
 
-                    {{ \Carbon\Carbon::parse($jadwal->tanggal)->format('d-m-Y') }}
+                    <?php echo e(\Carbon\Carbon::parse($jadwal->tanggal)->format('d-m-Y')); ?>
+
                 </p>
 
                 <p>
@@ -150,30 +156,35 @@
                         Keluhan :
                     </span>
 
-                    {{ $jadwal->keluhan }}
+                    <?php echo e($jadwal->keluhan); ?>
+
                 </p>
 
             </div>
 
             <div class="mt-4 flex justify-between items-center">
 
-                @if($jadwal->status == 'Menunggu')
+                <?php if($jadwal->status == 'Menunggu'): ?>
                     <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
-                        {{ $jadwal->status }}
+                        <?php echo e($jadwal->status); ?>
+
                     </span>
-                @elseif($jadwal->status == 'Disetujui')
+                <?php elseif($jadwal->status == 'Disetujui'): ?>
                     <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
-                        {{ $jadwal->status }}
+                        <?php echo e($jadwal->status); ?>
+
                     </span>
-                @elseif($jadwal->status == 'Selesai')
+                <?php elseif($jadwal->status == 'Selesai'): ?>
                     <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
-                        {{ $jadwal->status }}
+                        <?php echo e($jadwal->status); ?>
+
                     </span>
-                @else
+                <?php else: ?>
                     <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
-                        {{ $jadwal->status }}
+                        <?php echo e($jadwal->status); ?>
+
                     </span>
-                @endif
+                <?php endif; ?>
 
                 <div class="flex gap-2">
 
@@ -199,13 +210,13 @@
 
     </div>
 
-    @empty
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
 
     <div class="bg-white border border-slate-200 rounded-xl p-8 text-center text-slate-500">
         Belum ada data jadwal konsultasi.
     </div>
 
-    @endforelse
+    <?php endif; ?>
 
 </div>
 
@@ -222,8 +233,7 @@
             Tambah Jadwal
         </h2>
 
-        {{-- Form ini masih tampilan saja.
-             Nanti jika ingin CRUD penuh, action dan method POST bisa ditambahkan. --}}
+        
         <form>
 
             <input
@@ -242,11 +252,12 @@
                     Pilih Dokter
                 </option>
 
-                @foreach($dokters as $dokter)
-                    <option value="{{ $dokter->id }}">
-                        {{ $dokter->nama }}
+                <?php $__currentLoopData = $dokters; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dokter): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($dokter->id); ?>">
+                        <?php echo e($dokter->nama); ?>
+
                     </option>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
             </select>
 
@@ -256,11 +267,12 @@
                     Pilih Pasien
                 </option>
 
-                @foreach($pasiens as $pasien)
-                    <option value="{{ $pasien->id }}">
-                        {{ $pasien->name }}
+                <?php $__currentLoopData = $pasiens; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pasien): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($pasien->id); ?>">
+                        <?php echo e($pasien->name); ?>
+
                     </option>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
             </select>
 
@@ -324,4 +336,5 @@
         });
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\laravel\sistemlayananklinik\sistemlayananklinik\resources\views/admin/jadwal_admin.blade.php ENDPATH**/ ?>
