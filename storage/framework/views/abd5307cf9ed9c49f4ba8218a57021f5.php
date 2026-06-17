@@ -191,27 +191,22 @@
 
                     <div class="grid md:grid-cols-3 gap-4 mb-4">
 
-                        <select name="obat_id[]" class="border rounded-xl p-3">
+                        <input
+                            type="text"
+                            name="nama_obat[]"
+                            placeholder="Nama Obat"
+                            class="border rounded-xl p-3">
 
-                            <option value="">
-                                Pilih Obat
-                            </option>
+                        <input
+                            type="text"
+                            name="jumlah[]"
+                            placeholder="Jumlah"
+                            class="border rounded-xl p-3">
 
-                            <?php $__currentLoopData = $obat; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-
-                            <option value="<?php echo e($item->id); ?>">
-                                <?php echo e($item->nama_obat); ?>
-
-                                (Stok: <?php echo e($item->stok); ?>)
-                            </option>
-
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-                        </select>
-
-                        <input type="number" name="jumlah[]" placeholder="Jumlah" class="border rounded-xl p-3">
-
-                        <input type="text" name="aturan_pakai[]" placeholder="Aturan Pakai"
+                        <input
+                            type="text"
+                            name="aturan_pakai[]"
+                            placeholder="Aturan Pakai"
                             class="border rounded-xl p-3">
 
                     </div>
@@ -333,31 +328,18 @@
 
 <script>
     function tambahObat() {
+
         let html = `
         <div class="grid md:grid-cols-3 gap-4 mb-4">
 
-            <select
-                name="obat_id[]"
+            <input
+                type="text"
+                name="nama_obat[]"
+                placeholder="Nama Obat"
                 class="border rounded-xl p-3">
 
-                <option value="">
-                    Pilih Obat
-                </option>
-
-                <?php $__currentLoopData = $obat; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-
-                    <option value="<?php echo e($item->id); ?>">
-                        <?php echo e($item->nama_obat); ?>
-
-                        (Stok: <?php echo e($item->stok); ?>)
-                    </option>
-
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-            </select>
-
             <input
-                type="number"
+                type="text"
                 name="jumlah[]"
                 placeholder="Jumlah"
                 class="border rounded-xl p-3">
@@ -373,11 +355,9 @@
 
         document
             .getElementById('obatContainer')
-            .insertAdjacentHTML(
-                'beforeend',
-                html
-            );
+            .insertAdjacentHTML('beforeend', html);
     }
+
 </script>
 
 <?php $__env->stopSection(); ?>

@@ -113,13 +113,16 @@ Route::put('/dokter/rekam-medis/update/{id}', [DokterController::class, 'updateR
 Route::delete('/dokter/rekam-medis/{id}',     [DokterController::class, 'destroyRekamMedis'])
     ->name('rekam_medis.destroy');
 
-// Resep detail
-Route::get('/dokter/resep/{id}', [DokterController::class, 'detailResep'])->name('resep.detail');
+// Resep download
+Route::get('/resep/{id}/download', [DokterController::class, 'downloadResep'])
+    ->name('resep.download');
 
 // Print rekam (view saja)
 Route::get('/dokter/rekam-medis/print', function () {
     return view('dokter.print_rekam');
 });
+Route::get('/resep/{id}/print', [DokterController::class, 'printResep'])
+    ->name('resep.print');
 
 
 /* ─── PASIEN ────────────────────────────────────────────────────── */

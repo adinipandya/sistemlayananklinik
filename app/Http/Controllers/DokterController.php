@@ -13,6 +13,8 @@ use App\Models\Obat;
 use App\Models\ResepObat;
 use App\Models\Notification;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+
 class DokterController extends Controller
 {
     public function dashboard()
@@ -509,5 +511,27 @@ class DokterController extends Controller
                 'success',
                 'Rekam medis berhasil diperbarui'
             );
+    }
+
+    public function downloadResep($id)
+    {
+        $rekamMedis = RekamMedis::with([
+            'jadwal.pasien',
+            'jadwal.dokter',
+            'resepObat.obat'
+        ])->findOrFail($id);
+
+        return view('dokter.download_resep', compact('rekamMedis'));
+    }
+
+    public function printResep($id)
+    {
+        $rekamMedis = RekamMedis::with([
+            'jadwal.pasien',
+            'jadwal.dokter',
+            'resepObat.obat'
+        ])->findOrFail($id);
+
+        return view('dokter.cetak_resep', compact('rekamMedis'));
     }
 }
