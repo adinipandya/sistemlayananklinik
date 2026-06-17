@@ -2,14 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DokterController;
 use App\Http\Controllers\PasienController;
 use App\Http\Controllers\AuthController;
+
 use App\Models\User;
 
 
@@ -22,7 +23,7 @@ Route::get('/', [HomeController::class, 'index']);
 
 Route::get('/login', function () {
     return view('auth.login');
-});
+})->name('login');
 
 Route::get('/register', function () {
     return view('auth.register');
@@ -33,7 +34,6 @@ Route::get('/forgot_password', function () {
 });
 
 Route::post('/forgot_password', function (Request $request) {
-
     $user = User::where('email', $request->email)->first();
 
     if (!$user) {
@@ -55,6 +55,11 @@ Route::post('/login',    [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout',   [AuthController::class, 'logout'])->name('logout');
 
+/*
+|--------------------------------------------------------------------------
+| ADMIN (wajib login)
+|--------------------------------------------------------------------------
+*/
 
 /* ─── ADMIN ─────────────────────────────────────────────────────── */
 

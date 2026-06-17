@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-
 use App\Models\Feedback;
 use App\Models\Dokter;
 use App\Models\JadwalKonsultasi;
@@ -14,6 +13,10 @@ use App\Models\User;
 
 class PasienController extends Controller
 {
+    // ======================================================
+    // PASIEN
+    // ======================================================
+
     public function dashboard()
     {
         return view('pasien.dashboard_pasien');
@@ -57,6 +60,7 @@ class PasienController extends Controller
     {
         return view('pasien.rekam_medis');
     }
+
     public function riwayat_konsultasi()
     {
         return view('pasien.riwayat_konsultasi');
@@ -64,23 +68,14 @@ class PasienController extends Controller
 
     public function booking()
     {
-        $dokters = Dokter::where(
-            'status',
-            'Aktif'
-        )->get();
+        $dokters = Dokter::where('status', 'Aktif')->get();
 
         $riwayat = JadwalKonsultasi::with('dokter')
             ->where('user_id', Auth::id())
             ->latest()
             ->get();
 
-        return view(
-            'pasien.booking',
-            compact(
-                'dokters',
-                'riwayat'
-            )
-        );
+        return view('pasien.booking', compact('dokters', 'riwayat'));
     }
 
  public function storeBooking(Request $request)
@@ -190,92 +185,56 @@ public function pengaturan()
 }
     public function feedback()
     {
-        $feedback = Feedback::where(
-            'user_id',
-            Auth::id()
-        )->latest()->get();
+        $feedback = Feedback::where('user_id', Auth::id())
+            ->latest()
+            ->get();
 
-        return view(
-            'pasien.feedback',
-            compact('feedback')
-        );
+        return view('pasien.feedback', compact('feedback'));
     }
 
     public function storeFeedback(Request $request)
     {
         Feedback::create([
-
-            'user_id' => Auth::id(),
-
+            'user_id'  => Auth::id(),
             'kategori' => $request->kategori,
-
-            'rating' => $request->rating,
-
+            'rating'   => $request->rating,
             'komentar' => $request->komentar
-
         ]);
 
-        return back()->with(
-            'success',
-            'Feedback berhasil dikirim'
-        );
+        return back()->with('success', 'Feedback berhasil dikirim');
     }
 
     public function updateFeedback(Request $request, $id)
     {
-        $feedback = Feedback::where(
-            'id',
-            $id
-        )->where(
-            'user_id',
-            Auth::id()
-        )->firstOrFail();
+        $feedback = Feedback::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
 
         if ($feedback->status == 'Direspon') {
-
-            return back()->with(
-                'error',
-                'Feedback yang sudah direspon tidak dapat diubah'
-            );
+            return back()->with('error', 'Feedback yang sudah direspon tidak dapat diubah');
         }
 
         $feedback->update([
-
             'kategori' => $request->kategori,
-            'rating' => $request->rating,
+            'rating'   => $request->rating,
             'komentar' => $request->komentar
-
         ]);
 
-        return back()->with(
-            'success',
-            'Feedback berhasil diperbarui'
-        );
+        return back()->with('success', 'Feedback berhasil diperbarui');
     }
 
     public function destroyFeedback($id)
     {
-        $feedback = Feedback::where(
-            'id',
-            $id
-        )->where(
-            'user_id',
-            Auth::id()
-        )->firstOrFail();
+        $feedback = Feedback::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
 
         if ($feedback->status == 'Direspon') {
-
-            return back()->with(
-                'error',
-                'Feedback yang sudah direspon tidak dapat dihapus'
-            );
+            return back()->with('error', 'Feedback yang sudah direspon tidak dapat dihapus');
         }
 
         $feedback->delete();
 
-        return back()->with(
-            'success',
-            'Feedback berhasil dihapus'
-        );
+        return back()->with('success', 'Feedback berhasil dihapus');
     }
 }

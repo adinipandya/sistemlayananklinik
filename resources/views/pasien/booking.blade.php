@@ -103,144 +103,68 @@ Kelola Booking Anda    </p>
 
                     @endforeach
 
+            <!-- PILIH DOKTER -->
+            <div>
+                <label class="font-semibold">Pilih Dokter</label>
+                <select name="dokter" class="w-full mt-1 p-2 border rounded-lg">
+                    <option>Dr. Ardi</option>
+                    <option>Dr. Dini</option>
+                    <option>Dr. Ihsan</option>
                 </select>
-
             </div>
-
-            <div class="mb-4">
-
-                <label class="block text-sm text-slate-600 mb-2">
-                    Spesialisasi
-                </label>
-
-                <select class="w-full border border-slate-300 rounded-lg p-3">
-
+               <div>
+                <label class="font-semibold">Pilih Spesaialis</label>
+                <select name="spesialis" class="w-full mt-1 p-2 border rounded-lg">
                     <option>Dokter Umum</option>
                     <option>Dokter Gigi</option>
-
                 </select>
-
             </div>
 
-            <div class="mb-4">
-
-                <label class="block text-sm text-slate-600 mb-2">
-                    Tanggal Konsultasi
-                </label>
-
-                <input type="date" name="tanggal" class="w-full border border-slate-300 rounded-lg p-3">
-
+            <!-- TANGGAL -->
+            <div>
+                <label class="font-semibold">Tanggal</label>
+                <input type="date" name="tanggal" class="w-full mt-1 p-2 border rounded-lg">
             </div>
 
-            <div class="mb-4">
-
-                <label class="block text-sm text-slate-600 mb-2">
-                    Jam Konsultasi
-                </label>
-
-                <select name="jam" class="w-full border border-slate-300 rounded-lg p-3">
-
+            <!-- JAM -->
+            <div>
+                <label class="font-semibold">Jam</label>
+                <select name="jam" class="w-full mt-1 p-2 border rounded-lg">
                     <option>08:00</option>
-                    <option>09:00</option>
                     <option>10:00</option>
                     <option>13:00</option>
                     <option>15:00</option>
-
                 </select>
-
             </div>
 
-            <div class="mb-5">
-
-                <label class="block text-sm text-slate-600 mb-2">
-                    Keluhan Awal
-                </label>
-
-                <textarea name="keluhan" rows="4" class="w-full border border-slate-300 rounded-lg p-3"
-                    placeholder="Tuliskan keluhan yang dirasakan..."></textarea>
-
-            </div>
-
-            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg">
-
+            <!-- BUTTON -->
+            <button type="submit"
+            class="w-full bg-gradient-to-r from-blue-500 to-green-400 text-white py-2 rounded-lg hover:scale-105 transition">
                 Booking Sekarang
-
             </button>
 
         </form>
-
     </div>
 
-    <!-- INFORMASI -->
-    <div class="bg-white border border-slate-200 rounded-xl p-6">
+    <!-- INFO -->
+    <div data-aos="fade-left"
+    class="bg-gradient-to-r from-blue-500 to-green-400 text-white p-6 rounded-xl">
 
-        <h2 class="font-semibold text-lg mb-5">
-            Jadwal Dokter Hari Ini
-        </h2>
+        <h2 class="font-bold text-lg mb-4">Informasi</h2>
 
-        <div class="space-y-4">
-
-            <div class="border-b pb-3">
-
-                <p class="font-medium">
-                    Dr. Ardi
-                </p>
-
-                <p class="text-sm text-slate-500">
-                    Dokter Umum • 08.00 - 12.00
-                </p>
-
-            </div>
-
-            <div class="border-b pb-3">
-
-                <p class="font-medium">
-                    Dr. Dini
-                </p>
-
-                <p class="text-sm text-slate-500">
-                    Dokter Gigi • 13.00 - 16.00
-                </p>
-
-            </div>
-
-            <div>
-
-                <p class="font-medium">
-                    Dr. Ihsan
-                </p>
-
-                <p class="text-sm text-slate-500">
-                    Dokter Umum • 08.00 - 15.00
-                </p>
-
-            </div>
-
-        </div>
-
-        <div class="mt-8 p-4 bg-blue-50 rounded-xl border border-blue-100">
-
-            <h3 class="font-medium text-blue-700 mb-2">
-                Informasi Booking
-            </h3>
-
-            <ul class="text-sm text-slate-600 space-y-1">
-
-                <li>• Datang 10 menit sebelum jadwal</li>
-                <li>• Membawa kartu identitas</li>
-                <li>• Membawa kartu BPJS (jika ada)</li>
-                <li>• Booking dapat dibatalkan sebelum jadwal dimulai</li>
-
-            </ul>
-
-        </div>
+        <ul class="space-y-2">
+            <li>Pilih dokter sesuai kebutuhan</li>
+            <li>Datang 10 menit sebelum jadwal</li>
+            <li>Bawa kartu identitas</li>
+        </ul>
 
     </div>
-
 
 </div>
 
-<!-- RIWAYAT -->
+<!-- POPUP SUCCESS -->
+<div id="popup"
+class="hidden fixed inset-0 bg-black/40 flex items-center justify-center">
 
 <div class="mt-8 bg-white border border-slate-200 rounded-xl overflow-hidden">
 
@@ -349,21 +273,22 @@ Kelola Booking Anda    </p>
 
             Tutup
 
+        <button onclick="closePopup()"
+        class="bg-blue-500 text-white px-4 py-2 rounded-lg">
+            OK
         </button>
-
     </div>
-
 
 </div>
 
 <script>
-    function showSuccess() {
-        document.getElementById('popup').classList.remove('hidden');
-    }
+function showSuccess() {
+    document.getElementById('popup').classList.remove('hidden');
+}
 
-    function closePopup() {
-        document.getElementById('popup').classList.add('hidden');
-    }
+function closePopup() {
+    document.getElementById('popup').classList.add('hidden');
+}
 </script>
 
 @if(session('success'))

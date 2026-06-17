@@ -267,6 +267,15 @@
                         Nama
                     </label>
 
+                    <div class="space-y-2 text-slate-600">
+
+                        <p><b>No RM :</b> RM001</p>
+                        <p><b>Nama :</b> Nama Pasien</p>
+                        <p><b>Umur :</b> 21 Tahun</p>
+                        <p><b>Jenis Kelamin :</b> Laki-Laki</p>
+                        <p><b>No HP :</b> 08123456789</p>
+
+                    </div>
                     <p id="detailNama" class="font-semibold"></p>
 
                 </div>
@@ -357,4 +366,3 @@ function closePatientModal(){
 </script>
 
 @endsection
-
