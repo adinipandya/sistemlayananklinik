@@ -193,16 +193,26 @@ public function pengaturan()
     }
 
     public function storeFeedback(Request $request)
-    {
-        Feedback::create([
-            'user_id'  => Auth::id(),
-            'kategori' => $request->kategori,
-            'rating'   => $request->rating,
-            'komentar' => $request->komentar
-        ]);
+{
+    $feedback = Feedback::create([
+        'user_id'  => Auth::id(),
+        'kategori' => $request->kategori,
+        'rating'   => $request->rating,
+        'komentar' => $request->komentar
+    ]);
 
-        return back()->with('success', 'Feedback berhasil dikirim');
+    // Notifikasi ke admin
+    $admin = User::where('role', 'admin')->first();
+    if ($admin) {
+        Notification::create([
+            'user_id' => $admin->id,
+            'judul'   => 'Feedback Baru',
+            'pesan'   => Auth::user()->name . ' mengirimkan feedback baru dengan rating ' . $request->rating,
+        ]);
     }
+
+    return back()->with('success', 'Feedback berhasil dikirim');
+}
 
     public function updateFeedback(Request $request, $id)
     {

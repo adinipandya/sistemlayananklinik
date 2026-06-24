@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Klinik Polibatam - Admin</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -34,15 +35,8 @@
                 <img src="{{ asset('images/poltek.png') }}" class="w-8 h-8 object-contain">
 
                 <div>
-
-                    <h1 class="font-bold text-blue-600">
-                        Klinik Polibatam
-                    </h1>
-
-                    <p class="text-xs text-slate-500">
-                        Sistem Layanan Klinik
-                    </p>
-
+                    <h1 class="font-bold text-blue-600">Klinik Polibatam</h1>
+                    <p class="text-xs text-slate-500">Sistem Layanan Klinik</p>
                 </div>
 
             </div>
@@ -53,23 +47,24 @@
                 <!-- NOTIFIKASI -->
                 <div class="relative">
 
-                    <button id="notifButton"
-                        onclick="toggleNotifMenu()"
+                    @php
+                        $notifikasi = \App\Models\Notification::where('user_id', Auth::id())
+                            ->where('is_read', false)
+                            ->latest()
+                            ->get();
+                    @endphp
+
+                    <button id="notifButton" onclick="toggleNotifMenu()"
                         class="relative text-slate-600 hover:text-blue-600">
 
                         <i data-feather="bell"></i>
 
-                        <span class="absolute -top-2 -right-2
-                            bg-red-500 text-white
-                            text-[10px] font-bold
-                            rounded-full
-                            min-w-[18px]
-                            h-[18px]
-                            flex items-center justify-center">
-
-                            3
-
-                        </span>
+                        @if($notifikasi->count() > 0)
+                            <span id="notifBadge"
+                                class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center">
+                                {{ $notifikasi->count() }}
+                            </span>
+                        @endif
 
                     </button>
 
@@ -77,36 +72,20 @@
                         class="hidden absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-xl border z-50">
 
                         <div class="p-4 border-b">
-
-                            <h3 class="font-semibold">
-                                Notifikasi
-                            </h3>
-
+                            <h3 class="font-semibold">Notifikasi</h3>
                         </div>
 
-                        <div class="p-4 border-b">
-
-                            <p class="font-medium text-sm">
-                                Pasien Baru
-                            </p>
-
-                            <p class="text-slate-500 text-sm mt-1">
-                                Ada pendaftaran pasien baru.
-                            </p>
-
-                        </div>
-
-                        <div class="p-4">
-
-                            <p class="font-medium text-sm">
-                                Jadwal Dokter
-                            </p>
-
-                            <p class="text-slate-500 text-sm mt-1">
-                                Jadwal dokter berhasil diperbarui.
-                            </p>
-
-                        </div>
+                        @forelse($notifikasi as $notif)
+                            <div class="notif-item p-4 border-b hover:bg-slate-50 cursor-pointer"
+                                data-id="{{ $notif->id }}">
+                                <p class="font-medium text-sm">{{ $notif->judul }}</p>
+                                <p class="text-slate-500 text-sm mt-1">{{ $notif->pesan }}</p>
+                            </div>
+                        @empty
+                            <div class="p-4 text-center text-slate-400 text-sm">
+                                Tidak ada notifikasi baru
+                            </div>
+                        @endforelse
 
                     </div>
 
@@ -115,39 +94,24 @@
                 <!-- PROFILE -->
                 <div class="relative">
 
-                    <button id="profileButton"
-                        onclick="toggleProfileMenu()"
+                    <button id="profileButton" onclick="toggleProfileMenu()"
                         class="flex items-center gap-3">
 
                         <div class="text-right">
-
-                            <p class="font-medium text-slate-700">
-                                {{ Auth::user()->name }}
-                            </p>
-
-                            <p class="text-xs text-slate-500">
-                                Admin
-                            </p>
-
+                            <p class="font-medium text-slate-700">{{ Auth::user()->name }}</p>
+                            <p class="text-xs text-slate-500">Admin</p>
                         </div>
 
                         @if(Auth::user()?->photo)
-
-                        <img src="{{ asset('storage/' . Auth::user()->photo) }}"
-                            class="w-10 h-10 rounded-full object-cover">
-
+                            <img src="{{ asset('storage/' . Auth::user()->photo) }}"
+                                class="w-10 h-10 rounded-full object-cover">
                         @else
-
-                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-
-                            <i data-feather="user" class="text-blue-600"></i>
-
-                        </div>
-
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                <i data-feather="user" class="text-blue-600"></i>
+                            </div>
                         @endif
 
-                        <i data-feather="chevron-down"
-                            class="w-4 h-4 text-slate-500"></i>
+                        <i data-feather="chevron-down" class="w-4 h-4 text-slate-500"></i>
 
                     </button>
 
@@ -156,50 +120,30 @@
                         class="hidden absolute right-0 mt-3 w-60 bg-white rounded-xl shadow-lg border overflow-hidden">
 
                         <div class="p-4 border-b">
-
-                            <h4 class="font-semibold">
-                                {{ Auth::user()->name }}
-                            </h4>
-
-                            <p class="text-sm text-slate-500">
-                                Admin Klinik Polibatam
-                            </p>
-
+                            <h4 class="font-semibold">{{ Auth::user()->name }}</h4>
+                            <p class="text-sm text-slate-500">Admin Klinik Polibatam</p>
                         </div>
 
-                        <a href="/admin/profile"
+                        <a href="/admin/pengaturan"
                             class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50">
-
                             <i data-feather="settings" class="w-4 h-4"></i>
-
                             Pengaturan
-
                         </a>
 
                         <a href="/admin/password"
                             class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50">
-
                             <i data-feather="lock" class="w-4 h-4"></i>
-
                             Ubah Password
-
                         </a>
 
                         <hr>
 
                         <form action="{{ route('logout') }}" method="POST">
-
                             @csrf
-
-                            <button
-                                class="w-full flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50">
-
+                            <button class="w-full flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50">
                                 <i data-feather="log-out" class="w-4 h-4"></i>
-
                                 Logout
-
                             </button>
-
                         </form>
 
                     </div>
@@ -218,72 +162,45 @@
         <div class="h-full flex flex-col p-5">
 
             <div class="mb-8">
-
-                <h2 class="text-lg font-bold text-blue-600">
-                    Portal Admin
-                </h2>
-
-                <p class="text-sm text-slate-500">
-                    Klinik Polibatam
-                </p>
-
+                <h2 class="text-lg font-bold text-blue-600">Portal Admin</h2>
+                <p class="text-sm text-slate-500">Klinik Polibatam</p>
             </div>
 
             <nav class="space-y-2">
 
                 <a href="/admin"
                     class="flex items-center gap-3 px-4 py-3 rounded-xl
-                    {{ request()->is('admin')
-                    ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600 font-semibold'
-                    : 'text-slate-700 hover:bg-slate-100' }}">
-
+                    {{ request()->is('admin') ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600 font-semibold' : 'text-slate-700 hover:bg-slate-100' }}">
                     <i data-feather="home"></i>
                     Dashboard
-
                 </a>
 
                 <a href="/admin/dokter"
                     class="flex items-center gap-3 px-4 py-3 rounded-xl
-                    {{ request()->is('admin/dokter')
-                    ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600 font-semibold'
-                    : 'text-slate-700 hover:bg-slate-100' }}">
-
+                    {{ request()->is('admin/dokter') ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600 font-semibold' : 'text-slate-700 hover:bg-slate-100' }}">
                     <i data-feather="user-check"></i>
                     Data Dokter
-
                 </a>
 
                 <a href="/admin/pasien"
                     class="flex items-center gap-3 px-4 py-3 rounded-xl
-                    {{ request()->is('admin/pasien')
-                    ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600 font-semibold'
-                    : 'text-slate-700 hover:bg-slate-100' }}">
-
+                    {{ request()->is('admin/pasien') ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600 font-semibold' : 'text-slate-700 hover:bg-slate-100' }}">
                     <i data-feather="users"></i>
                     Data Pasien
-
                 </a>
 
                 <a href="/admin/jadwal"
                     class="flex items-center gap-3 px-4 py-3 rounded-xl
-                    {{ request()->is('admin/jadwal')
-                    ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600 font-semibold'
-                    : 'text-slate-700 hover:bg-slate-100' }}">
-
+                    {{ request()->is('admin/jadwal') ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600 font-semibold' : 'text-slate-700 hover:bg-slate-100' }}">
                     <i data-feather="calendar"></i>
                     Jadwal Dokter
-
                 </a>
-                
+
                 <a href="/admin/feedback"
                     class="flex items-center gap-3 px-4 py-3 rounded-xl
-                    {{ request()->is('admin/feedback')
-                    ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600 font-semibold'
-                    : 'text-slate-700 hover:bg-slate-100' }}">
-
+                    {{ request()->is('admin/feedback') ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600 font-semibold' : 'text-slate-700 hover:bg-slate-100' }}">
                     <i data-feather="message-square"></i>
                     Feedback
-
                 </a>
 
             </nav>
@@ -294,61 +211,63 @@
 
     <!-- CONTENT -->
     <div class="pt-16 ml-64 min-h-screen">
-
         <main class="p-8">
-
             @yield('content')
-
         </main>
-
     </div>
 
     <script>
 
         function toggleNotifMenu() {
-
-            document
-                .getElementById('notifMenu')
-                .classList.toggle('hidden');
+            document.getElementById('notifMenu').classList.toggle('hidden');
         }
 
         function toggleProfileMenu() {
-
-            document
-                .getElementById('profileMenu')
-                .classList.toggle('hidden');
+            document.getElementById('profileMenu').classList.toggle('hidden');
         }
 
         document.addEventListener('click', function(event) {
 
-            const profileMenu =
-                document.getElementById('profileMenu');
+            const profileMenu   = document.getElementById('profileMenu');
+            const profileButton = document.getElementById('profileButton');
 
-            const profileButton =
-                document.getElementById('profileButton');
-
-            if (
-                profileMenu &&
-                !profileMenu.contains(event.target) &&
-                !profileButton.contains(event.target)
-            ) {
+            if (profileMenu && !profileMenu.contains(event.target) && !profileButton.contains(event.target)) {
                 profileMenu.classList.add('hidden');
             }
 
-            const notifMenu =
-                document.getElementById('notifMenu');
+            const notifMenu   = document.getElementById('notifMenu');
+            const notifButton = document.getElementById('notifButton');
 
-            const notifButton =
-                document.getElementById('notifButton');
-
-            if (
-                notifMenu &&
-                !notifMenu.contains(event.target) &&
-                !notifButton.contains(event.target)
-            ) {
+            if (notifMenu && !notifMenu.contains(event.target) && !notifButton.contains(event.target)) {
                 notifMenu.classList.add('hidden');
             }
 
+        });
+
+        // Mark as read saat notifikasi diklik
+        document.querySelectorAll('.notif-item').forEach(item => {
+            item.addEventListener('click', function () {
+                const id = this.dataset.id;
+
+                fetch(`/admin/notifications/${id}/read`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                });
+
+                this.remove();
+
+                const badge = document.getElementById('notifBadge');
+                if (badge) {
+                    const count = parseInt(badge.textContent) - 1;
+                    if (count <= 0) {
+                        badge.remove();
+                    } else {
+                        badge.textContent = count;
+                    }
+                }
+            });
         });
 
         feather.replace();

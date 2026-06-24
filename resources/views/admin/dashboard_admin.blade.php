@@ -86,15 +86,31 @@
 
             @forelse($jadwalHariIni as $jadwal)
 
-                <div class="flex justify-between">
+                <div class="flex justify-between items-center border-b pb-3 last:border-0 last:pb-0">
 
-                    <span>
-                        {{ $jadwal->dokter->nama ?? 'Dokter' }}
-                    </span>
+                    <div>
+                        <p class="font-medium text-slate-800">
+                            {{ $jadwal->pasien->name ?? 'Pasien' }}
+                        </p>
+                        <p class="text-sm text-slate-500">
+                            {{ $jadwal->dokter->nama ?? 'Dokter' }} &bull; {{ $jadwal->dokter->spesialis ?? '-' }}
+                        </p>
+                    </div>
 
-                    <span class="text-slate-500">
-                        {{ \Carbon\Carbon::parse($jadwal->jam)->format('H:i') }}
-                    </span>
+                    <div class="text-right">
+                        <p class="text-sm font-medium text-blue-600">
+                            {{ \Carbon\Carbon::parse($jadwal->jam)->format('H:i') }}
+                        </p>
+                        @if($jadwal->status == 'Menunggu')
+                            <span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full">Menunggu</span>
+                        @elseif($jadwal->status == 'Disetujui')
+                            <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Disetujui</span>
+                        @elseif($jadwal->status == 'Selesai')
+                            <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Selesai</span>
+                        @else
+                            <span class="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full">Dibatalkan</span>
+                        @endif
+                    </div>
 
                 </div>
 
@@ -255,6 +271,39 @@
 
 </div>
 
+<!-- PASIEN MENUNGGU VERIFIKASI -->
+@if($pasienMenungguVerifikasi->count() > 0)
+<div class="bg-yellow-50 border border-yellow-200 rounded-xl p-5 mb-8">
+
+    <div class="flex justify-between items-center mb-4">
+        <div>
+            <h2 class="font-semibold text-yellow-800">⚠️ Pasien Menunggu Verifikasi</h2>
+            <p class="text-sm text-yellow-600">Pasien berikut belum diverifikasi akunnya</p>
+        </div>
+        <a href="/admin/pasien" class="text-yellow-700 text-sm hover:underline font-medium">Kelola Pasien →</a>
+    </div>
+
+    <div class="space-y-2">
+        @foreach($pasienMenungguVerifikasi as $p)
+        <div class="flex justify-between items-center bg-white border border-yellow-200 rounded-lg px-4 py-2">
+            <span class="text-slate-700 font-medium">{{ $p->name }}</span>
+            <div class="flex items-center gap-3">
+                <span class="text-xs text-slate-500">{{ $p->created_at->diffForHumans() }}</span>
+                <form action="/admin/pasien/{{ $p->id }}/verifikasi" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <button type="submit" class="text-xs bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg">
+                        Verifikasi
+                    </button>
+                </form>
+            </div>
+        </div>
+        @endforeach
+    </div>
+
+</div>
+@endif
+
 <!-- AKTIVITAS -->
 <div class="bg-white border border-slate-200 rounded-xl">
 
@@ -266,19 +315,35 @@
 
     </div>
 
-    <div class="p-5 space-y-4">
+    <div class="p-5 space-y-3">
 
-        <div class="border-l-4 border-blue-500 pl-4">
-            Pasien baru berhasil registrasi.
-        </div>
+        @forelse($aktivitasSistem as $aktivitas)
 
-        <div class="border-l-4 border-green-500 pl-4">
-            Jadwal konsultasi berhasil dibuat.
-        </div>
+            <div class="flex items-start gap-3 border-b pb-3 last:border-0 last:pb-0">
 
-        <div class="border-l-4 border-yellow-500 pl-4">
-            Feedback baru telah diterima.
-        </div>
+                @if(str_contains($aktivitas->judul, 'Pasien') || str_contains($aktivitas->judul, 'Registrasi'))
+                    <div class="w-2 h-2 rounded-full bg-blue-500 mt-2 shrink-0"></div>
+                @elseif(str_contains($aktivitas->judul, 'Konsultasi') || str_contains($aktivitas->judul, 'Jadwal') || str_contains($aktivitas->judul, 'Booking'))
+                    <div class="w-2 h-2 rounded-full bg-green-500 mt-2 shrink-0"></div>
+                @elseif(str_contains($aktivitas->judul, 'Feedback'))
+                    <div class="w-2 h-2 rounded-full bg-yellow-500 mt-2 shrink-0"></div>
+                @else
+                    <div class="w-2 h-2 rounded-full bg-slate-400 mt-2 shrink-0"></div>
+                @endif
+
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-slate-700">{{ $aktivitas->judul }}</p>
+                    <p class="text-sm text-slate-500">{{ $aktivitas->pesan }}</p>
+                    <p class="text-xs text-slate-400 mt-1">{{ $aktivitas->created_at->diffForHumans() }}</p>
+                </div>
+
+            </div>
+
+        @empty
+
+            <p class="text-slate-500 text-sm">Belum ada aktivitas sistem.</p>
+
+        @endforelse
 
     </div>
 
