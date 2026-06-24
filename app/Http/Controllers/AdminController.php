@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Models\Pasien;
 use App\Models\Dokter;
 use App\Models\Feedback;
@@ -10,6 +11,7 @@ use App\Models\User;
 use App\Models\Obat;
 use App\Models\Notification;
 use App\Models\JadwalKonsultasi;
+use App\Models\RekamMedis;
 
 class AdminController extends Controller
 {
@@ -17,63 +19,48 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        // Feedback terbaru
         $feedbackTerbaru = Feedback::with('user')
             ->latest()
             ->take(5)
             ->get();
 
-        // Statistik
         $totalFeedback = Feedback::count();
 
-        $feedbackMenunggu = Feedback::where(
-            'status',
-            'Menunggu'
-        )->count();
+        $feedbackMenunggu = Feedback::where('status', 'Menunggu')->count();
 
         $totalDokter = Dokter::count();
 
-        $totalPasien = User::where(
-            'role',
-            'pasien'
-        )->count();
+        $totalPasien = User::where('role', 'pasien')->count();
 
-        $pasienMenunggu = User::where(
-            'role',
-            'pasien'
-        )->where(
-            'status',
-            'Menunggu'
-        )->count();
+        $pasienMenunggu = User::where('role', 'pasien')
+            ->where('status', 'Menunggu')
+            ->count();
 
-        // Dokter terbaru
-        $dokterTerbaru = Dokter::latest()
+        $dokterTerbaru = Dokter::latest()->take(3)->get();
+
+        $pasienTerbaru = User::where('role', 'pasien')
+            ->latest()
             ->take(3)
             ->get();
 
-        // Pasien terbaru
-        $pasienTerbaru = User::where(
-            'role',
-            'pasien'
-        )->latest()
-         ->take(3)
-         ->get();
-
-        // Jadwal hari ini
         $jadwalHariIni = JadwalKonsultasi::with('dokter')
-            ->whereDate(
-                'tanggal',
-                now()->toDateString()
-            )
+            ->whereDate('tanggal', now()->toDateString())
             ->orderBy('jam', 'asc')
             ->take(5)
             ->get();
 
-        // Total jadwal hari ini
-        $totalJadwalHariIni = JadwalKonsultasi::whereDate(
-            'tanggal',
-            now()->toDateString()
-        )->count();
+        $totalJadwalHariIni = JadwalKonsultasi::whereDate('tanggal', now()->toDateString())->count();
+
+        $aktivitasSistem = Notification::with('user')
+            ->latest()
+            ->take(8)
+            ->get();
+
+        $pasienMenungguVerifikasi = User::where('role', 'pasien')
+            ->where('status', 'Menunggu')
+            ->latest()
+            ->take(5)
+            ->get();
 
         return view('admin.dashboard_admin', compact(
             'feedbackTerbaru',
@@ -85,7 +72,9 @@ class AdminController extends Controller
             'dokterTerbaru',
             'pasienTerbaru',
             'jadwalHariIni',
-            'totalJadwalHariIni'
+            'totalJadwalHariIni',
+            'aktivitasSistem',
+            'pasienMenungguVerifikasi'
         ));
     }
 
@@ -100,33 +89,10 @@ class AdminController extends Controller
             ->latest()
             ->get();
 
-        $totalPasien = User::where(
-            'role',
-            'pasien'
-        )->count();
-
-        $pasienAktif = User::where(
-            'role',
-            'pasien'
-        )->where(
-            'status',
-            'Aktif'
-        )->count();
-
-        $menungguVerifikasi = User::where(
-            'role',
-            'pasien'
-        )->where(
-            'status',
-            'Menunggu'
-        )->count();
-
-        $profilBelumLengkap = User::where(
-            'role',
-            'pasien'
-        )->whereNull(
-            'tanggal_lahir'
-        )->count();
+        $totalPasien        = User::where('role', 'pasien')->count();
+        $pasienAktif        = User::where('role', 'pasien')->where('status', 'Aktif')->count();
+        $menungguVerifikasi = User::where('role', 'pasien')->where('status', 'Menunggu')->count();
+        $profilBelumLengkap = User::where('role', 'pasien')->whereNull('tanggal_lahir')->count();
 
         return view('admin.pasien_admin', compact(
             'pasien',
@@ -145,219 +111,203 @@ class AdminController extends Controller
             'alamat' => $request->alamat,
         ]);
 
-        return redirect('/admin/pasien')
-            ->with(
-                'success',
-                'Pasien berhasil ditambahkan'
-            );
+        return redirect('/admin/pasien')->with('success', 'Pasien berhasil ditambahkan');
     }
 
-    public function updatePasien(
-        Request $request,
-        $id
-    ) {
+    public function updatePasien(Request $request, $id)
+    {
         $pasien = Pasien::findOrFail($id);
-
         $pasien->update([
             'nama'   => $request->nama,
             'umur'   => $request->umur,
             'alamat' => $request->alamat,
         ]);
 
-        return redirect('/admin/pasien')
-            ->with(
-                'success',
-                'Pasien berhasil diupdate'
-            );
+        return redirect('/admin/pasien')->with('success', 'Pasien berhasil diupdate');
     }
 
     public function destroyPasien($id)
     {
         Pasien::findOrFail($id)->delete();
 
-        return redirect('/admin/pasien')
-            ->with(
-                'success',
-                'Pasien berhasil dihapus'
-            );
+        return redirect('/admin/pasien')->with('success', 'Pasien berhasil dihapus');
     }
 
     // ================= DOKTER =================
 
     public function dokter(Request $request)
     {
-        $search = $request->search;
+        $search  = $request->search;
+        $dokters = Dokter::where('nama', 'like', "%$search%")->latest()->get();
 
-        $dokters = Dokter::where(
-            'nama',
-            'like',
-            "%$search%"
-        )->latest()->get();
-
-        return view(
-            'admin.dokter_admin',
-            compact('dokters')
-        );
+        return view('admin.dokter_admin', compact('dokters'));
     }
 
-    public function storeDokter(
-        Request $request
-    ) {
+    public function storeDokter(Request $request)
+    {
+        $request->validate([
+            'nama'      => 'required',
+            'nik'       => 'required|digits:16|unique:dokters,nik',
+            'email'     => 'required|email|unique:dokters,email',
+            'no_str'    => 'required|unique:dokters,no_str',
+            'no_sip'    => 'required|unique:dokters,sip',
+            'spesialis' => 'required',
+            'no_hp'     => 'required',
+            'password'  => 'required|min:8'
+        ]);
+
         Dokter::create([
             'nama'      => $request->nama,
-            'no_sip'    => $request->sip,
+            'nik'       => $request->nik,
+            'email'     => $request->email,
+            'no_str'    => $request->no_str,
+            'sip'       => $request->no_sip,
             'spesialis' => $request->spesialis,
             'no_hp'     => $request->no_hp,
-            'email'     => $request->email,
+            'password'  => bcrypt($request->password),
             'status'    => 'Aktif'
         ]);
 
-        return back()->with(
-            'success',
-            'Dokter berhasil ditambahkan'
-        );
+        return back()->with('success', 'Dokter berhasil ditambahkan');
     }
 
-    public function updateDokter(
-        Request $request,
-        $id
-    ) {
+    public function updateDokter(Request $request, $id)
+    {
         $dokter = Dokter::findOrFail($id);
 
-        $dokter->update([
+        $data = [
             'nama'      => $request->nama,
+            'email'     => $request->email,
+            'no_str'    => $request->no_str,
+            'sip'       => $request->no_sip,
             'spesialis' => $request->spesialis,
             'no_hp'     => $request->no_hp,
-        ]);
+            'status'    => $request->status,
+        ];
 
-        return redirect('/admin/dokter')
-            ->with(
-                'success',
-                'Dokter berhasil diupdate'
-            );
+        if ($request->filled('password')) {
+            $data['password'] = bcrypt($request->password);
+        }
+
+        $dokter->update($data);
+
+        return redirect('/admin/dokter')->with('success', 'Dokter berhasil diupdate');
     }
 
     public function destroyDokter($id)
     {
         Dokter::findOrFail($id)->delete();
 
-        return redirect('/admin/dokter')
-            ->with(
-                'success',
-                'Dokter berhasil dihapus'
-            );
+        return redirect('/admin/dokter')->with('success', 'Dokter berhasil dihapus');
     }
 
-    // ================= MENU ADMIN =================
+    // ================= JADWAL =================
 
     public function jadwal()
-{
-    // Ambil semua jadwal beserta relasi dokter dan pasien
-    $jadwals = JadwalKonsultasi::with([
-        'dokter',
-        'pasien'
-    ])
-    ->orderBy('tanggal', 'asc')
-    ->orderBy('jam', 'asc')
-    ->get();
+    {
+        $jadwals = JadwalKonsultasi::with(['dokter', 'pasien'])
+            ->orderBy('tanggal', 'asc')
+            ->orderBy('jam', 'asc')
+            ->get();
 
-    // Statistik
-    $totalJadwal = JadwalKonsultasi::count();
+        $totalJadwal = JadwalKonsultasi::count();
+        $hariIni     = JadwalKonsultasi::whereDate('tanggal', now()->toDateString())->count();
+        $menunggu    = JadwalKonsultasi::where('status', 'Menunggu')->count();
+        $selesai     = JadwalKonsultasi::where('status', 'Selesai')->count();
+        $dokters     = Dokter::all();
+        $pasiens     = User::where('role', 'pasien')->get();
 
-    $hariIni = JadwalKonsultasi::whereDate(
-        'tanggal',
-        now()->toDateString()
-    )->count();
+        return view('admin.jadwal_admin', compact(
+            'jadwals', 'totalJadwal', 'hariIni', 'menunggu', 'selesai', 'dokters', 'pasiens'
+        ));
+    }
 
-    $menunggu = JadwalKonsultasi::where(
-        'status',
-        'Menunggu'
-    )->count();
+    public function updateStatusJadwal(Request $request, $id)
+    {
+        $jadwal = JadwalKonsultasi::findOrFail($id);
+        $jadwal->update(['status' => $request->status]);
 
-    $selesai = JadwalKonsultasi::where(
-        'status',
-        'Selesai'
-    )->count();
+        Notification::create([
+            'user_id' => $jadwal->user_id,
+            'judul'   => 'Status Jadwal Diperbarui',
+            'pesan'   => 'Jadwal konsultasi kamu telah ' . $request->status,
+        ]);
 
-    // Data untuk dropdown modal
-    $dokters = Dokter::all();
+        return back()->with('success', 'Status jadwal berhasil diperbarui');
+    }
 
-    $pasiens = User::where(
-        'role',
-        'pasien'
-    )->get();
+    public function destroyJadwal($id)
+    {
+        JadwalKonsultasi::findOrFail($id)->delete();
+        return back()->with('success', 'Jadwal berhasil dihapus');
+    }
 
-    return view(
-        'admin.jadwal_admin',
-        compact(
-            'jadwals',
-            'totalJadwal',
-            'hariIni',
-            'menunggu',
-            'selesai',
-            'dokters',
-            'pasiens'
-        )
-    );
-}
+    // ================= OBAT =================
 
     public function obat()
     {
-        $obat = Obat::latest()->get();
+        $obat        = Obat::latest()->get();
+        $totalObat   = $obat->count();
+        $stokAman    = $obat->where('stok', '>', 20)->count();
+        $stokMenipis = $obat->whereBetween('stok', [1, 20])->count();
+        $stokHabis   = $obat->where('stok', 0)->count();
 
-        $totalObat = $obat->count();
-
-        $stokAman = $obat->where(
-            'stok',
-            '>',
-            20
-        )->count();
-
-        $stokMenipis = $obat->whereBetween(
-            'stok',
-            [1, 20]
-        )->count();
-
-        $stokHabis = $obat->where(
-            'stok',
-            0
-        )->count();
-
-        return view(
-            'admin.obat_admin',
-            compact(
-                'obat',
-                'totalObat',
-                'stokAman',
-                'stokMenipis',
-                'stokHabis'
-            )
-        );
+        return view('admin.obat_admin', compact('obat', 'totalObat', 'stokAman', 'stokMenipis', 'stokHabis'));
     }
+
+    public function storeObat(Request $request)
+    {
+        Obat::create([
+            'nama_obat'  => $request->nama_obat,
+            'jenis_obat' => $request->jenis_obat,
+            'stok'       => $request->stok,
+            'harga'      => $request->harga,
+            'deskripsi'  => $request->deskripsi
+        ]);
+
+        return back()->with('success', 'Obat berhasil ditambahkan');
+    }
+
+    public function updateObat(Request $request, $id)
+    {
+        $obat = Obat::findOrFail($id);
+        $obat->update([
+            'nama_obat'  => $request->nama_obat,
+            'jenis_obat' => $request->jenis_obat,
+            'stok'       => $request->stok,
+            'harga'      => $request->harga,
+            'deskripsi'  => $request->deskripsi
+        ]);
+
+        return back()->with('success', 'Data obat berhasil diperbarui');
+    }
+
+    public function destroyObat($id)
+    {
+        Obat::findOrFail($id)->delete();
+
+        return back()->with('success', 'Data obat berhasil dihapus');
+    }
+
+    // ================= RESEP =================
 
     public function resep()
     {
         return view('admin.resep_admin');
     }
 
+    // ================= FEEDBACK =================
+
     public function feedback()
     {
-        $feedback = Feedback::with('user')
-            ->latest()
-            ->get();
+        $feedback = Feedback::with('user')->latest()->get();
 
-        return view(
-            'admin.feedback',
-            compact('feedback')
-        );
+        return view('admin.feedback', compact('feedback'));
     }
 
-    public function updateFeedback(
-        Request $request,
-        $id
-    ) {
+    public function updateFeedback(Request $request, $id)
+    {
         $feedback = Feedback::findOrFail($id);
-
         $feedback->update([
             'respon' => $request->respon,
             'status' => 'Direspon'
@@ -369,19 +319,15 @@ class AdminController extends Controller
             'pesan'   => 'Admin telah membalas feedback Anda'
         ]);
 
-        return back()->with(
-            'success',
-            'Feedback berhasil direspon'
-        );
+        return back()->with('success', 'Feedback berhasil direspon');
     }
+
+    // ================= VERIFIKASI PASIEN =================
 
     public function verifikasiPasien($id)
     {
         $pasien = User::findOrFail($id);
-
-        $pasien->update([
-            'status' => 'Aktif'
-        ]);
+        $pasien->update(['status' => 'Aktif']);
 
         Notification::create([
             'user_id' => $pasien->id,
@@ -389,58 +335,59 @@ class AdminController extends Controller
             'pesan'   => 'Akun Anda telah aktif'
         ]);
 
-        return back()->with(
-            'success',
-            'Pasien berhasil diverifikasi'
-        );
+        return back()->with('success', 'Pasien berhasil diverifikasi');
     }
 
-    public function storeObat(
-        Request $request
-    ) {
-        Obat::create([
-            'nama_obat'  => $request->nama_obat,
-            'jenis_obat' => $request->jenis_obat,
-            'stok'       => $request->stok,
-            'harga'      => $request->harga,
-            'deskripsi'  => $request->deskripsi
-        ]);
+    // ================= PENGATURAN =================
 
-        return back()->with(
-            'success',
-            'Obat berhasil ditambahkan'
-        );
-    }
-
-    public function updateObat(
-        Request $request,
-        $id
-    ) {
-        $obat = Obat::findOrFail($id);
-
-        $obat->update([
-            'nama_obat'  => $request->nama_obat,
-            'jenis_obat' => $request->jenis_obat,
-            'stok'       => $request->stok,
-            'harga'      => $request->harga,
-            'deskripsi'  => $request->deskripsi
-        ]);
-
-        return back()->with(
-            'success',
-            'Data obat berhasil diperbarui'
-        );
-    }
-
-    public function destroyObat($id)
+    public function pengaturan()
     {
-        $obat = Obat::findOrFail($id);
+        return view('admin.pengaturan');
+    }
 
-        $obat->delete();
+    public function updatePengaturan(Request $request)
+    {
+        auth()->user()->update([
+            'name'  => $request->name,
+            'email' => $request->email,
+            'no_hp' => $request->no_hp,
+        ]);
 
-        return back()->with(
-            'success',
-            'Data obat berhasil dihapus'
-        );
+        return back()->with('success', 'Profil berhasil diperbarui.');
+    }
+
+    public function updateFoto(Request $request)
+    {
+        $request->validate(['foto' => 'required|image|max:2048']);
+
+        $path = $request->file('foto')->store('foto_profil', 'public');
+
+        auth()->user()->update(['foto' => $path]);
+
+        return back()->with('success', 'Foto profil berhasil diperbarui.');
+    }
+
+    public function passwordPage()
+    {
+        return view('admin.password');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $user = auth()->user();
+
+        if (!Hash::check($request->password_lama, $user->password)) {
+            return back()->with('error', 'Password lama tidak sesuai.');
+        }
+
+        if ($request->password_baru !== $request->password_konfirmasi) {
+            return back()->with('error', 'Konfirmasi password tidak cocok.');
+        }
+
+        $user->update([
+            'password' => Hash::make($request->password_baru),
+        ]);
+
+        return back()->with('success', 'Password berhasil diubah.');
     }
 }

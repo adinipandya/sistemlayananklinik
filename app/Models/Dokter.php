@@ -8,20 +8,22 @@ use App\Models\JadwalKonsultasi;
 class Dokter extends Model
 {
     protected $fillable = [
-    'nama',
-    'no_sip',
-    'spesialis',
-    'no_hp',
-    'email',
-    'status'
-
+        'nama',
+        'nik',
+        'email',
+        'no_str',
+        'sip',
+        'spesialis',
+        'no_hp',
+        'password',
+        'status'
     ];
 
     public function jadwalKonsultasi()
-{
-    return $this->hasMany(
-        JadwalKonsultasi::class,
-        'dokter_id'
-    );
-}
+    {
+        return $this->hasMany(
+            JadwalKonsultasi::class,
+            'dokter_id'
+        );
+    }
 }

@@ -235,16 +235,41 @@
             @csrf
             @method('PUT')
 
-            <input
-                id="editNama"
-                type="text"
-                name="nama"
+            <input type="text" name="nama"
+                placeholder="Nama Dokter"
                 class="w-full border rounded-lg p-3 mb-3">
 
-            <input
-                id="editSpesialis"
-                type="text"
-                name="spesialis"
+            <input type="text" name="nik"
+                maxlength="16"
+                placeholder="NIK"
+                class="w-full border rounded-lg p-3 mb-3">
+
+            <input type="email" name="email"
+                placeholder="Email"
+                class="w-full border rounded-lg p-3 mb-3">
+
+            <input type="text" name="no_str"
+                placeholder="Nomor STR"
+                class="w-full border rounded-lg p-3 mb-3">
+
+            <input type="text" name="no_sip"
+                placeholder="Nomor SIP"
+                class="w-full border rounded-lg p-3 mb-3">
+
+            <select name="spesialis"
+                class="w-full border rounded-lg p-3 mb-3">
+
+                <option value="Umum">Umum</option>
+                <option value="Gigi">Gigi</option>
+
+            </select>
+
+            <input type="text" name="no_hp"
+                placeholder="Nomor HP"
+                class="w-full border rounded-lg p-3 mb-3">
+
+            <input type="password" name="password"
+                placeholder="Password"
                 class="w-full border rounded-lg p-3 mb-3">
 
             <input
@@ -303,16 +328,22 @@ function openEditModal(id, nama, spesialis, nohp) {
         .classList.remove('hidden');
 }
 
-function closeEditModal() {
-    document.getElementById('editModal')
-        .classList.add('hidden');
-}
+    function closeEditModal() {
+        document
+            .getElementById('editModal')
+            .classList.add('hidden');
+    }
+    document
+        .getElementById('searchDokter')
+        .addEventListener('keyup', function() {
 
 document
     .getElementById('searchDokter')
     .addEventListener('keyup', function () {
 
-        let value = this.value.toLowerCase();
+            document
+                .getElementById('searchDokter')
+                .addEventListener('keyup', function() {
 
         let cards = document.querySelectorAll('.dokter-card');
 

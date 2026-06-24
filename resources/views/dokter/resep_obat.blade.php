@@ -16,12 +16,6 @@
 
     </div>
 
-    <button class="bg-blue-600 text-white px-5 py-3 rounded-2xl">
-
-        Buat Resep
-
-    </button>
-
 </div>
 
 <!-- STATISTIK -->
@@ -150,11 +144,10 @@
 
                 <td class="p-4">
 
-                    <a href="{{ route('resep.detail', $item->id) }}"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
-
-                        Detail
-
+                    <a href="{{ route('resep.print', $item->id) }}"
+                        target="_blank"
+                        class="bg-green-600 text-white px-4 py-2 rounded-lg">
+                        Download
                     </a>
 
                 </td>

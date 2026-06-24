@@ -193,26 +193,22 @@
 
                     <div class="grid md:grid-cols-3 gap-4 mb-4">
 
-                        <select name="obat_id[]" class="border rounded-xl p-3">
+                        <input
+                            type="text"
+                            name="nama_obat[]"
+                            placeholder="Nama Obat"
+                            class="border rounded-xl p-3">
 
-                            <option value="">
-                                Pilih Obat
-                            </option>
+                        <input
+                            type="text"
+                            name="jumlah[]"
+                            placeholder="Jumlah"
+                            class="border rounded-xl p-3">
 
-                            @foreach($obat as $item)
-
-                            <option value="{{ $item->id }}">
-                                {{ $item->nama_obat }}
-                                (Stok: {{ $item->stok }})
-                            </option>
-
-                            @endforeach
-
-                        </select>
-
-                        <input type="number" name="jumlah[]" placeholder="Jumlah" class="border rounded-xl p-3">
-
-                        <input type="text" name="aturan_pakai[]" placeholder="Aturan Pakai"
+                        <input
+                            type="text"
+                            name="aturan_pakai[]"
+                            placeholder="Aturan Pakai"
                             class="border rounded-xl p-3">
 
                     </div>
@@ -331,30 +327,18 @@
 
 <script>
     function tambahObat() {
+
         let html = `
         <div class="grid md:grid-cols-3 gap-4 mb-4">
 
-            <select
-                name="obat_id[]"
+            <input
+                type="text"
+                name="nama_obat[]"
+                placeholder="Nama Obat"
                 class="border rounded-xl p-3">
 
-                <option value="">
-                    Pilih Obat
-                </option>
-
-                @foreach($obat as $item)
-
-                    <option value="{{ $item->id }}">
-                        {{ $item->nama_obat }}
-                        (Stok: {{ $item->stok }})
-                    </option>
-
-                @endforeach
-
-            </select>
-
             <input
-                type="number"
+                type="text"
                 name="jumlah[]"
                 placeholder="Jumlah"
                 class="border rounded-xl p-3">
@@ -370,11 +354,9 @@
 
         document
             .getElementById('obatContainer')
-            .insertAdjacentHTML(
-                'beforeend',
-                html
-            );
+            .insertAdjacentHTML('beforeend', html);
     }
+
 </script>
 
 @endsection

@@ -175,7 +175,7 @@
 
                         </a>
 
-                        <a href="/pasien/password"
+                        <a href="/pasien/pengaturan"
                             class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50">
 
                             <i data-feather="lock" class="w-4 h-4"></i>

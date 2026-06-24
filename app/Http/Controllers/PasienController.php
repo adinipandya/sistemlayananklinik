@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Pasien;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Feedback;
 use App\Models\Dokter;
@@ -22,16 +22,40 @@ class PasienController extends Controller
         return view('pasien.dashboard_pasien');
     }
 
-    public function jadwal()
-    {
-        return view('pasien.jadwal_pasien');
-    }
+ public function jadwal()
+{
+    $jadwal = JadwalKonsultasi::with('dokter')
+        ->where('user_id', Auth::id())
+        ->orderBy('tanggal')
+        ->orderBy('jam')
+        ->get();
 
-    public function profile()
-    {
-        return view('pasien.profile');
-    }
+    $jadwalAktif = $jadwal
+        ->whereIn('status', ['Menunggu', 'Disetujui'])
+        ->count();
 
+    $konsultasiSelesai = $jadwal
+        ->where('status', 'Selesai')
+        ->count();
+
+    $totalBooking = $jadwal->count();
+
+    $jadwalTerdekat = $jadwal
+        ->whereIn('status', ['Menunggu', 'Disetujui'])
+        ->sortBy('tanggal')
+        ->first();
+
+    return view(
+        'pasien.jadwal_pasien',
+        compact(
+            'jadwal',
+            'jadwalAktif',
+            'konsultasiSelesai',
+            'totalBooking',
+            'jadwalTerdekat'
+        )
+    );
+}
     public function rekam_medis()
     {
         return view('pasien.rekam_medis');
@@ -54,41 +78,111 @@ class PasienController extends Controller
         return view('pasien.booking', compact('dokters', 'riwayat'));
     }
 
-    public function storeBooking(Request $request)
-    {
-        $request->validate([
-            'dokter_id' => 'required|exists:dokters,id',
-            'tanggal'   => 'required|date',
-            'jam'       => 'required',
-            'keluhan'   => 'required'
-        ]);
+ public function storeBooking(Request $request)
+{
+    $request->validate([
 
-        $jadwal = JadwalKonsultasi::create([
-            'user_id'   => Auth::id(),
-            'dokter_id' => $request->dokter_id,
-            'tanggal'   => $request->tanggal,
-            'jam'       => $request->jam,
-            'keluhan'   => $request->keluhan,
-            'status'    => 'Menunggu'
-        ]);
+        'dokter_id' => 'required|exists:dokters,id',
 
-        $dokter = User::where('role', 'dokter')->first();
+        'tanggal' => 'required|date|after_or_equal:today',
 
-        if ($dokter) {
-            Notification::create([
-                'user_id' => $dokter->id,
-                'judul'   => 'Booking Baru',
-                'pesan'   => Auth::user()->name .
-                    ' membuat jadwal konsultasi pada ' .
-                    $request->tanggal .
-                    ' pukul ' .
-                    $request->jam
-            ]);
-        }
+        'jam' => 'required',
 
-        return back()->with('success', 'Booking berhasil dibuat');
+        'keluhan' => 'required'
+
+    ]);
+
+    $cekJadwal = JadwalKonsultasi::where(
+        'dokter_id',
+        $request->dokter_id
+    )
+    ->where(
+        'tanggal',
+        $request->tanggal
+    )
+    ->where(
+        'jam',
+        $request->jam
+    )
+    ->whereIn(
+        'status',
+        [
+            'Menunggu',
+            'Disetujui'
+        ]
+    )
+    ->exists();
+
+    if ($cekJadwal) {
+
+        return back()->with(
+            'error',
+            'Jadwal dokter pada jam tersebut sudah dibooking'
+        );
+
     }
 
+    $jadwal = JadwalKonsultasi::create([
+
+        'user_id' => Auth::id(),
+
+        'dokter_id' => $request->dokter_id,
+
+        'tanggal' => $request->tanggal,
+
+        'jam' => $request->jam,
+
+        'keluhan' => $request->keluhan,
+
+        'status' => 'Menunggu'
+
+    ]);
+
+    $dokter = User::where(
+        'role',
+        'dokter'
+    )->first();
+
+    if ($dokter) {
+
+        Notification::create([
+
+            'user_id' => $dokter->id,
+
+            'judul' => 'Booking Baru',
+
+            'pesan' => Auth::user()->name .
+                ' membuat jadwal konsultasi pada ' .
+                $request->tanggal .
+                ' pukul ' .
+                $request->jam,
+
+            'is_read' => false
+
+        ]);
+    }
+
+    return back()->with(
+        'success',
+        'Booking berhasil dibuat'
+    );
+}
+public function detailJadwal($id)
+{
+    $jadwal = JadwalKonsultasi::with('dokter')
+        ->findOrFail($id);
+
+    return view('pasien.detail_jadwal', compact('jadwal'));
+}
+public function profile()
+{
+    return view('pasien.profile_pasien');
+}
+
+public function pengaturan()
+{
+    return view('pasien.pengaturan_pasien');
+}
     public function feedback()
     {
         $feedback = Feedback::where('user_id', Auth::id())
