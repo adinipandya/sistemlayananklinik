@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,9 +18,17 @@
             border-radius: 999px;
         }
     </style>
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
 </head>
 
 <body class="bg-slate-100">
+
+@php
+$notifications = \App\Models\Notification::where(
+    'user_id',
+    Auth::id()
+)->latest()->get();
+@endphp
 
     <!-- HEADER -->
     <header class="fixed top-0 left-0 right-0 h-16 bg-white border-b border-slate-200 z-50">
@@ -66,50 +73,44 @@
                             min-w-[18px]
                             h-[18px]
                             flex items-center justify-center">
-
-                            2
+    {{ $notifications->count() }}
 
                         </span>
 
                     </button>
 
                     <div id="notifMenu"
-                        class="hidden absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-xl border z-50">
+class="hidden absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-xl border z-50">
 
-                        <div class="p-4 border-b">
+    <div class="p-4 border-b">
+        <h3 class="font-semibold">
+            Notifikasi
+        </h3>
+    </div>
 
-                            <h3 class="font-semibold">
-                                Notifikasi
-                            </h3>
+    @forelse($notifications as $notif)
 
-                        </div>
+    <div class="p-4 border-b">
 
-                        <div class="p-4 border-b">
+        <p class="font-medium text-sm">
+            {{ $notif->judul }}
+        </p>
 
-                            <p class="font-medium text-sm">
-                                Konsultasi
-                            </p>
+        <p class="text-slate-500 text-sm mt-1">
+            {{ $notif->pesan }}
+        </p>
 
-                            <p class="text-slate-500 text-sm mt-1">
-                                Jadwal konsultasi Anda telah dikonfirmasi.
-                            </p>
+    </div>
 
-                        </div>
+    @empty
 
-                        <div class="p-4">
+    <div class="p-4 text-center text-slate-500">
+        Tidak ada notifikasi
+    </div>
 
-                            <p class="font-medium text-sm">
-                                Rekam Medis
-                            </p>
+    @endforelse
 
-                            <p class="text-slate-500 text-sm mt-1">
-                                Rekam medis terbaru tersedia.
-                            </p>
-
-                        </div>
-
-                    </div>
-
+</div>  
                 </div>
 
                 <!-- PROFILE -->
@@ -270,7 +271,7 @@
                     : 'text-slate-700 hover:bg-slate-100' }}">
 
                     <i data-feather="file-text"></i>
-                    Rekam Medis
+                    Riwayat Konsultasi
 
                 </a>
 
@@ -341,7 +342,14 @@
         feather.replace();
 
     </script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 
+<script>
+AOS.init({
+    duration: 800,
+    once: true
+});
+</script>
 </body>
 
 </html>

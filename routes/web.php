@@ -34,7 +34,20 @@ Route::get('/forgot_password', function () {
 
 Route::post('/forgot_password', function (Request $request) {
 
-    $user = User::where('email', $request->email)->first();
+    $user = User::where('email', $request->email)
+            ->where('nik', $request->nik)
+            ->first();  
+            $request->validate([
+    'email' => 'required|email',
+    'nik' => 'required|digits:16',
+    'password' => 'required|min:8'
+]);
+if (!$user) {
+    return back()->with(
+        'error',
+        'Email atau NIK tidak sesuai.'
+    );
+}
 
     if (!$user) {
         return back()->with('error', 'Email tidak ditemukan.');
@@ -125,12 +138,16 @@ Route::get('/dokter/rekam-medis/print', function () {
 /* ─── PASIEN ────────────────────────────────────────────────────── */
 
 Route::get('/pasien',          [PasienController::class, 'dashboard']);
-Route::get('/pasien/profile',  [PasienController::class, 'profile']);
 Route::get('/pasien/riwayat',  [PasienController::class, 'riwayat_konsultasi']);
 Route::get('/pasien/rekam-medis', [PasienController::class, 'rekam_medis']);
 
 // Booking — satu pasang GET/POST dengan satu nama route
-Route::get('/pasien/booking',  [PasienController::class, 'booking']);
+Route::get('/pasien/booking', [PasienController::class, 'booking'])
+    ->name('booking');
+Route::get(
+    '/pasien/booking/dokter/{id}',
+    [PasienController::class, 'pilihDokter']
+)->name('booking.dokter');
 Route::post('/pasien/booking', [PasienController::class, 'storeBooking'])->name('booking.store');
 
 // Jadwal
@@ -147,4 +164,8 @@ Route::delete('/pasien/feedback/{id}', [PasienController::class, 'destroyFeedbac
 
 // Profile
 Route::get('/pasien/profile', [PasienController::class, 'profile']);
+Route::post('/pasien/profile', [PasienController::class, 'updateProfile'])
+    ->name('pasien.profile.update');
 Route::get('/pasien/pengaturan', [PasienController::class, 'pengaturan']);
+Route::post('/pasien/password', [PasienController::class, 'updatePassword'])
+    ->name('pasien.password.update');

@@ -90,7 +90,6 @@
                 <a href="#" class="text-ink font-semibold">Beranda</a>
                 <a href="#cara-pakai" class="text-slate hover:text-ink transition-colors">Cara Pakai</a>
                 <a href="#layanan" class="text-slate hover:text-ink transition-colors">Layanan</a>
-                <a href="#obat" class="text-slate hover:text-ink transition-colors">Obat</a>
                 <a href="#ulasan" class="text-slate hover:text-ink transition-colors">Ulasan</a>
                 <a href="/login"
                     class="bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-700 transition">
@@ -392,7 +391,6 @@
                 <div class="space-y-2 text-blue-200">
                     <a href="#cara-pakai" class="block hover:text-white transition-colors">Cara Pakai</a>
                     <a href="#layanan" class="block hover:text-white transition-colors">Layanan</a>
-                    <a href="#obat" class="block hover:text-white transition-colors">Obat</a>
                     <a href="#ulasan" class="block hover:text-white transition-colors">Ulasan Pasien</a>
                 </div>
             </div>

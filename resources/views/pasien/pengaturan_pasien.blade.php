@@ -10,10 +10,23 @@
     </h1>
 
     <p class="text-slate-500 mt-2">
-        Ubah password akun dokter untuk menjaga keamanan sistem
+    Ubah password akun Anda untuk menjaga keamanan sistem
+</p>
+   @if(session('error'))
+<div class="mb-8 mt-4 bg-red-50 border-l-4 border-red-500 px-4 py-3 rounded-lg">
+    <p class="text-red-700">
+        {{ session('error') }}
     </p>
-
 </div>
+@endif
+
+@if(session('success'))
+<div class="mb-8 mt-4 bg-green-50 border-l-4 border-green-500 px-4 py-3 rounded-lg">
+    <p class="text-green-700">
+        {{ session('success') }}
+    </p>
+</div>
+@endif
 
 <div class="grid lg:grid-cols-3 gap-6">
 
@@ -79,7 +92,11 @@
     <div class="lg:col-span-2">
 
         <form
-            class="bg-white rounded-3xl shadow-sm p-8">
+    action="{{ route('pasien.password.update') }}"
+    method="POST"
+    class="bg-white rounded-3xl shadow-sm p-8">
+
+    @csrf
 
             <h2 class="font-bold text-xl mb-6">
                 Ubah Password
@@ -99,9 +116,10 @@
                     <div class="relative">
 
                         <input
-                            type="password"
-                            id="oldPassword"
-                            class="w-full border rounded-2xl p-4 pr-12">
+    type="password"
+    id="oldPassword"
+    name="old_password"
+    class="w-full border rounded-2xl p-4 pr-12">
 
                         <button
                             type="button"
@@ -128,9 +146,10 @@
                     <div class="relative">
 
                         <input
-                            type="password"
-                            id="newPassword"
-                            class="w-full border rounded-2xl p-4 pr-12">
+    type="password"
+    id="newPassword"
+    name="new_password"
+    class="w-full border rounded-2xl p-4 pr-12">
 
                         <button
                             type="button"
@@ -157,9 +176,10 @@
                     <div class="relative">
 
                         <input
-                            type="password"
-                            id="confirmPassword"
-                            class="w-full border rounded-2xl p-4 pr-12">
+    type="password"
+    id="confirmPassword"
+    name="new_password_confirmation"
+    class="w-full border rounded-2xl p-4 pr-12">
 
                         <button
                             type="button"
@@ -191,7 +211,7 @@
                 </button>
 
                 <a
-                    href="/dokter/profile"
+                    href="/pasien/profile"
                     class="border px-6 py-3 rounded-2xl hover:bg-slate-50">
 
                     Kembali
