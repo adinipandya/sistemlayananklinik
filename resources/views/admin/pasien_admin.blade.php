@@ -94,9 +94,7 @@
                             '{{ $item->jenis_kelamin ?? '-' }}',
                             '{{ $item->no_hp ?? '-' }}',
                             '{{ $item->alamat ?? '-' }}',
-                            '{{ $item->golongan_darah ?? '-' }}',
-                            '{{ $item->alergi ?? '-' }}',
-                            '{{ $item->kontak_darurat ?? '-' }}'
+                            '{{ $item->golongan_darah ?? '-' }}'
                         )" class="bg-blue-100 hover:bg-blue-200 text-blue-600 px-3 py-2 rounded-lg">
                             <i class="bi bi-eye"></i>
                         </button>
@@ -152,14 +150,6 @@
                 <p class="text-sm text-slate-500">Alamat</p>
                 <p id="detailAlamat"></p>
             </div>
-            <div class="mt-4">
-                <p class="text-sm text-slate-500">Alergi</p>
-                <p id="detailAlergi"></p>
-            </div>
-            <div class="mt-4">
-                <p class="text-sm text-slate-500">Kontak Darurat</p>
-                <p id="detailDarurat"></p>
-            </div>
             <button onclick="closeDetailModal()"
                 class="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg">
                 Tutup
@@ -169,21 +159,11 @@
 </div>
 
 <script>
-    function openModal() {
-        document.getElementById('modalTambah').classList.remove('hidden');
-        document.getElementById('modalTambah').classList.add('flex');
-    }
-
-    function closeModal() {
-        document.getElementById('modalTambah').classList.remove('flex');
-        document.getElementById('modalTambah').classList.add('hidden');
-    }
-
     function closeDetailModal() {
         document.getElementById('detailModal').classList.add('hidden');
     }
 
-    function openDetailModal(nama, nik, tgl, jk, hp, alamat, goldar, alergi, darurat) {
+    function openDetailModal(nama, nik, tgl, jk, hp, alamat, goldar) {
         document.getElementById('detailNama').innerText = nama;
         document.getElementById('detailNik').innerText = nik;
         document.getElementById('detailTgl').innerText = tgl;
@@ -191,8 +171,6 @@
         document.getElementById('detailHp').innerText = hp;
         document.getElementById('detailAlamat').innerText = alamat;
         document.getElementById('detailGoldar').innerText = goldar;
-        document.getElementById('detailAlergi').innerText = alergi;
-        document.getElementById('detailDarurat').innerText = darurat;
         document.getElementById('detailModal').classList.remove('hidden');
     }
 

@@ -289,13 +289,6 @@ class AdminController extends Controller
         return back()->with('success', 'Data obat berhasil dihapus');
     }
 
-    // ================= RESEP =================
-
-    public function resep()
-    {
-        return view('admin.resep_admin');
-    }
-
     // ================= FEEDBACK =================
 
     public function feedback()

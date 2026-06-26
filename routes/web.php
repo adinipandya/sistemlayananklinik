@@ -84,7 +84,6 @@ Route::get('/admin/dokter',    [AdminController::class, 'dokter']);
 Route::get('/admin/pasien',    [AdminController::class, 'pasien']);
 Route::get('/admin/jadwal',    [AdminController::class, 'jadwal']);
 Route::get('/admin/obat',      [AdminController::class, 'obat']);
-Route::get('/admin/resep',     [AdminController::class, 'resep']);
 Route::get('/admin/feedback',  [AdminController::class, 'feedback']);
 
 Route::get('/admin/pengaturan',       [AdminController::class, 'pengaturan']);
