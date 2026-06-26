@@ -4,178 +4,155 @@
 
 <!-- HEADER -->
 <div class="mb-8">
-
-    <h1 class="text-3xl font-bold text-slate-800">
-        Kelola Jadwal
-    </h1>
-
-    <p class="text-slate-500 mt-1">
-        Atur jadwal konsultasi dokter dan pasien Klinik Polibatam.
-    </p>
-
+    <h1 class="text-3xl font-bold text-slate-800">Kelola Jadwal</h1>
+    <p class="text-slate-500 mt-1">Atur jadwal konsultasi dokter dan pasien Klinik Polibatam.</p>
 </div>
 
 <!-- STATISTIK -->
 <div class="grid md:grid-cols-4 gap-5 mb-8">
 
     <div class="bg-white border border-slate-200 rounded-xl p-5">
-
         <div class="flex items-center gap-2">
-
-            <i class="bi bi-calendar-week text-blue-500"></i>
-
-            <span class="text-sm text-slate-500">
-                Total Jadwal
-            </span>
-
+            <i data-feather="calendar" class="text-blue-500 w-4 h-4"></i>
+            <span class="text-sm text-slate-500">Total Jadwal</span>
         </div>
-
-        <h2 class="text-4xl font-bold text-slate-800 mt-3">
-            15
-        </h2>
-
+        <h2 class="text-4xl font-bold text-slate-800 mt-3">{{ $totalJadwal }}</h2>
     </div>
 
     <div class="bg-white border border-slate-200 rounded-xl p-5">
-
         <div class="flex items-center gap-2">
-
-            <i class="bi bi-calendar-day text-green-500"></i>
-
-            <span class="text-sm text-slate-500">
-                Hari Ini
-            </span>
-
+            <i data-feather="calendar" class="text-green-500 w-4 h-4"></i>
+            <span class="text-sm text-slate-500">Hari Ini</span>
         </div>
-
-        <h2 class="text-4xl font-bold text-green-600 mt-3">
-            5
-        </h2>
-
+        <h2 class="text-4xl font-bold text-green-600 mt-3">{{ $hariIni }}</h2>
     </div>
 
     <div class="bg-white border border-slate-200 rounded-xl p-5">
-
         <div class="flex items-center gap-2">
-
-            <i class="bi bi-hourglass-split text-yellow-500"></i>
-
-            <span class="text-sm text-slate-500">
-                Menunggu
-            </span>
-
+            <i data-feather="clock" class="text-yellow-500 w-4 h-4"></i>
+            <span class="text-sm text-slate-500">Menunggu</span>
         </div>
-
-        <h2 class="text-4xl font-bold text-yellow-500 mt-3">
-            3
-        </h2>
-
+        <h2 class="text-4xl font-bold text-yellow-500 mt-3">{{ $menunggu }}</h2>
     </div>
 
     <div class="bg-white border border-slate-200 rounded-xl p-5">
-
         <div class="flex items-center gap-2">
-
-            <i class="bi bi-check-circle text-green-600"></i>
-
-            <span class="text-sm text-slate-500">
-                Selesai
-            </span>
-
+            <i data-feather="check-circle" class="text-green-600 w-4 h-4"></i>
+            <span class="text-sm text-slate-500">Selesai</span>
         </div>
-
-        <h2 class="text-4xl font-bold text-green-600 mt-3">
-            12
-        </h2>
-
+        <h2 class="text-4xl font-bold text-green-600 mt-3">{{ $selesai }}</h2>
     </div>
 
 </div>
 
-<!-- SEARCH + BUTTON -->
+<!-- SEARCH + FILTER -->
 <div class="flex flex-col md:flex-row justify-between gap-4 mb-6">
 
-    <input type="text" id="searchJadwal" placeholder="Cari dokter atau pasien..."
-        class="border border-slate-300 rounded-xl px-4 py-3 w-full md:w-80">
+    <input
+        type="text"
+        id="searchJadwal"
+        placeholder="Cari dokter atau pasien..."
+        class="border border-slate-300 rounded-xl px-4 py-3 w-full md:w-80"
+    >
 
-    <button onclick="openTambahModal()"
-        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl flex items-center gap-2">
-
-        <i class="bi bi-plus-lg"></i>
-
-        Tambah Jadwal
-
-    </button>
+    <div class="flex gap-2 flex-wrap">
+        <button onclick="filterStatus('semua')" id="filter-semua"
+            class="filter-btn px-4 py-2 rounded-xl text-sm font-medium bg-blue-600 text-white">
+            Semua
+        </button>
+        <button onclick="filterStatus('Menunggu')" id="filter-Menunggu"
+            class="filter-btn px-4 py-2 rounded-xl text-sm font-medium bg-white border border-slate-300 text-slate-600">
+            Menunggu
+        </button>
+        <button onclick="filterStatus('Disetujui')" id="filter-Disetujui"
+            class="filter-btn px-4 py-2 rounded-xl text-sm font-medium bg-white border border-slate-300 text-slate-600">
+            Disetujui
+        </button>
+        <button onclick="filterStatus('Selesai')" id="filter-Selesai"
+            class="filter-btn px-4 py-2 rounded-xl text-sm font-medium bg-white border border-slate-300 text-slate-600">
+            Selesai
+        </button>
+        <button onclick="filterStatus('Dibatalkan')" id="filter-Dibatalkan"
+            class="filter-btn px-4 py-2 rounded-xl text-sm font-medium bg-white border border-slate-300 text-slate-600">
+            Dibatalkan
+        </button>
+    </div>
 
 </div>
 
-<!-- TIMELINE JADWAL -->
+<!-- LIST JADWAL -->
+<div id="jadwalContainer" class="space-y-4">
 
-<div id="jadwalContainer" class="space-y-6">
+    @forelse($jadwals as $jadwal)
 
-    <div class="relative pl-10 jadwal-card">
+    <div class="jadwal-card bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition"
+        data-status="{{ $jadwal->status }}">
 
-        <div class="absolute left-0 top-3 w-4 h-4 rounded-full bg-blue-600"></div>
+        <div class="flex justify-between items-start">
 
-        <div class="absolute left-[7px] top-7 h-full w-[2px] bg-slate-200"></div>
-
-        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition">
-
-            <div class="flex justify-between items-center">
-
+            <div>
                 <h3 class="font-semibold text-lg text-slate-800">
-                    dr. Ardi
+                    {{ $jadwal->dokter->nama ?? '-' }}
                 </h3>
-
-                <span class="text-sm font-medium text-blue-600">
-                    08:00
-                </span>
-
+                <p class="text-sm text-slate-500">{{ $jadwal->dokter->spesialis ?? '-' }}</p>
             </div>
 
-            <div class="mt-4 space-y-2 text-sm">
+            <span class="text-sm font-medium text-blue-600">
+                {{ \Carbon\Carbon::parse($jadwal->jam)->format('H:i') }}
+            </span>
 
-                <p>
-                    <span class="text-slate-500">
-                        Pasien :
-                    </span>
+        </div>
 
-                    Ihsan
-                </p>
+        <div class="mt-4 grid grid-cols-2 gap-2 text-sm">
+            <p><span class="text-slate-500">Pasien :</span> {{ $jadwal->pasien->name ?? '-' }}</p>
+            <p><span class="text-slate-500">Tanggal :</span> {{ \Carbon\Carbon::parse($jadwal->tanggal)->format('d-m-Y') }}</p>
+            <p class="col-span-2"><span class="text-slate-500">Keluhan :</span> {{ $jadwal->keluhan }}</p>
+        </div>
 
-                <p>
-                    <span class="text-slate-500">
-                        Tanggal :
-                    </span>
+        <div class="mt-4 flex justify-between items-center">
 
-                    10 Juni 2026
-                </p>
+            @if($jadwal->status == 'Menunggu')
+                <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">Menunggu</span>
+            @elseif($jadwal->status == 'Disetujui')
+                <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">Disetujui</span>
+            @elseif($jadwal->status == 'Selesai')
+                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">Selesai</span>
+            @else
+                <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">Dibatalkan</span>
+            @endif
 
-            </div>
+            <div class="flex gap-2">
 
-            <div class="mt-4 flex justify-between items-center">
+                @if($jadwal->status == 'Menunggu')
+                    <form action="/admin/jadwal/{{ $jadwal->id }}/status" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="status" value="Disetujui">
+                        <button type="submit"
+                            class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-2 rounded-lg text-sm">
+                            Setujui
+                        </button>
+                    </form>
+                    <form action="/admin/jadwal/{{ $jadwal->id }}/status" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="status" value="Dibatalkan">
+                        <button type="submit"
+                            class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-2 rounded-lg text-sm">
+                            Batalkan
+                        </button>
+                    </form>
+                @endif
 
-                <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
-
-                    Menunggu
-
-                </span>
-
-                <div class="flex gap-2">
-
-                    <button class="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 p-2 rounded-lg">
-
-                        <i class="bi bi-pencil-square"></i>
-
+                <form action="/admin/jadwal/{{ $jadwal->id }}" method="POST"
+                    onsubmit="return confirm('Hapus jadwal ini?')">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit"
+                        class="bg-red-100 hover:bg-red-200 text-red-700 p-2 rounded-lg">
+                        <i data-feather="trash-2" class="w-4 h-4"></i>
                     </button>
-
-                    <button class="bg-red-100 hover:bg-red-200 text-red-700 p-2 rounded-lg">
-
-                        <i class="bi bi-trash"></i>
-
-                    </button>
-
-                </div>
+                </form>
 
             </div>
 
@@ -183,178 +160,46 @@
 
     </div>
 
-    <div class="relative pl-10 jadwal-card">
+    @empty
 
-        <div class="absolute left-0 top-3 w-4 h-4 rounded-full bg-green-600"></div>
-
-        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition">
-
-            <div class="flex justify-between items-center">
-
-                <h3 class="font-semibold text-lg text-slate-800">
-                    dr. Dini
-                </h3>
-
-                <span class="text-sm font-medium text-green-600">
-                    09:00
-                </span>
-
-            </div>
-
-            <div class="mt-4 space-y-2 text-sm">
-
-                <p>
-                    <span class="text-slate-500">
-                        Pasien :
-                    </span>
-
-                    Ardi
-                </p>
-
-                <p>
-                    <span class="text-slate-500">
-                        Tanggal :
-                    </span>
-
-                    10 Juni 2026
-                </p>
-
-            </div>
-
-            <div class="mt-4 flex justify-between items-center">
-
-                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
-
-                    Selesai
-
-                </span>
-
-                <div class="flex gap-2">
-
-                    <button class="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 p-2 rounded-lg">
-
-                        <i class="bi bi-pencil-square"></i>
-
-                    </button>
-
-                    <button class="bg-red-100 hover:bg-red-200 text-red-700 p-2 rounded-lg">
-
-                        <i class="bi bi-trash"></i>
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
+    <div class="bg-white border border-slate-200 rounded-xl p-8 text-center text-slate-500">
+        Belum ada data jadwal konsultasi.
     </div>
 
-</div>
-
-<!-- MODAL TAMBAH -->
-<div id="tambahModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-
-    <div class="bg-white rounded-xl p-6 w-full max-w-lg">
-
-        <h2 class="text-xl font-bold mb-4">
-
-            <i class="bi bi-calendar-plus mr-2"></i>
-
-            Tambah Jadwal
-
-        </h2>
-
-        <form>
-
-            <input type="date" class="w-full border rounded-lg p-3 mb-3">
-
-            <input type="time" class="w-full border rounded-lg p-3 mb-3">
-
-            <select class="w-full border rounded-lg p-3 mb-3">
-
-                <option>Pilih Dokter</option>
-
-            </select>
-
-            <select class="w-full border rounded-lg p-3 mb-4">
-
-                <option>Pilih Pasien</option>
-
-            </select>
-
-            <div class="flex gap-3">
-
-                <button type="submit" class="flex-1 bg-blue-600 text-white py-3 rounded-lg">
-
-                    Simpan
-
-                </button>
-
-                <button type="button" onclick="closeTambahModal()"
-                    class="flex-1 bg-slate-500 text-white py-3 rounded-lg">
-
-                    Batal
-
-                </button>
-
-            </div>
-
-        </form>
-
-    </div>
+    @endforelse
 
 </div>
 
 <script>
-    function openTambahModal() {
+    function filterStatus(status) {
+        const cards = document.querySelectorAll('.jadwal-card');
 
-        document
-            .getElementById('tambahModal')
-            .classList.remove('hidden');
-
-    }
-
-    function closeTambahModal() {
-
-        document
-            .getElementById('tambahModal')
-            .classList.add('hidden');
-
-    }
-
-    document
-        .getElementById('searchJadwal')
-        .addEventListener('keyup', function () {
-
-            let value = this.value.toLowerCase();
-
-            let cards = document.querySelectorAll('.jadwal-card');
-
-            cards.forEach(card => {
-
-                let text = card.innerText.toLowerCase();
-
-                card.style.display =
-                    text.includes(value) ?
-                    '' :
-                    'none';
-
-            });
-
-            rows.forEach(row => {
-
-                let text = row.innerText.toLowerCase();
-
-                row.style.display =
-                    text.includes(value) ?
-                    '' :
-                    'none';
-
-            });
-
+        cards.forEach(card => {
+            if (status === 'semua' || card.dataset.status === status) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
         });
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('bg-blue-600', 'text-white');
+            btn.classList.add('bg-white', 'border', 'border-slate-300', 'text-slate-600');
+        });
+
+        const active = document.getElementById('filter-' + status);
+        if (active) {
+            active.classList.add('bg-blue-600', 'text-white');
+            active.classList.remove('bg-white', 'border', 'border-slate-300', 'text-slate-600');
+        }
+    }
+
+    document.getElementById('searchJadwal').addEventListener('keyup', function () {
+        let value = this.value.toLowerCase();
+        document.querySelectorAll('.jadwal-card').forEach(card => {
+            card.style.display = card.innerText.toLowerCase().includes(value) ? '' : 'none';
+        });
+    });
 </script>
 
 @endsection

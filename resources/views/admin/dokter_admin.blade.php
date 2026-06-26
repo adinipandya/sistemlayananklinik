@@ -2,251 +2,215 @@
 
 @section('content')
 
-<!-- HEADER -->
 <div class="mb-8">
-
     <h1 class="text-3xl font-bold text-slate-800">
         Kelola Dokter
     </h1>
-
     <p class="text-slate-500 mt-1">
-        Tambah, edit dan kelola data dokter Klinik Polibatam.
+        Tambah, edit dan kelola data dokter Klinik.
     </p>
-
 </div>
 
-<!-- STATISTIK -->
+<!-- Statistik -->
 <div class="grid md:grid-cols-3 gap-5 mb-8">
 
-    <div class="bg-white border border-slate-200 rounded-xl p-5">
-
-        <p class="text-sm text-slate-500">
-            Total Dokter
-        </p>
-
+    <div class="bg-white border rounded-xl p-5">
+        <p class="text-sm text-slate-500">Total Dokter</p>
         <h2 class="text-3xl font-bold text-blue-600 mt-2">
-            {{ $dokter->count() }}
+            {{ $dokters->count() }}
         </h2>
-
     </div>
 
-    <div class="bg-white border border-slate-200 rounded-xl p-5">
-
-        <p class="text-sm text-slate-500">
-            Dokter Umum
-        </p>
-
+    <div class="bg-white border rounded-xl p-5">
+        <p class="text-sm text-slate-500">Dokter Umum</p>
         <h2 class="text-3xl font-bold text-green-600 mt-2">
-            {{ $dokter->where('spesialis', 'Umum')->count() }}
+            {{ $dokters->where('spesialis', 'UMUM')->count() }}
         </h2>
-
     </div>
 
-    <div class="bg-white border border-slate-200 rounded-xl p-5">
-
-        <p class="text-sm text-slate-500">
-            Dokter Gigi
-        </p>
-
+    <div class="bg-white border rounded-xl p-5">
+        <p class="text-sm text-slate-500">Dokter Gigi</p>
         <h2 class="text-3xl font-bold text-yellow-500 mt-2">
-            {{ $dokter->where('spesialis', 'Gigi')->count() }}
+            {{ $dokters->where('spesialis', 'GIGI')->count() }}
         </h2>
-
     </div>
 
 </div>
 
-<!-- SEARCH + BUTTON -->
+<!-- Search dan Tombol -->
 <div class="flex flex-col md:flex-row justify-between gap-4 mb-6">
 
-    <input type="text" id="searchDokter" placeholder="Cari dokter..."
+    <input
+        type="text"
+        id="searchDokter"
+        placeholder="Cari dokter..."
         class="border border-slate-300 rounded-xl px-4 py-3 w-full md:w-80">
 
-    <button onclick="openTambahModal()"
-        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl flex items-center gap-2">
-
-        <i class="bi bi-plus-lg"></i>
-
-        Tambah Dokter
-
+    <button
+        onclick="openTambahModal()"
+        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl">
+        + Tambah Dokter
     </button>
 
 </div>
 
-<!-- CARD DOKTER -->
-
+<!-- Card Dokter -->
 <div id="dokterContainer" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
 
-    @forelse($dokter as $item)
+    @forelse($dokters as $item)
 
-    <div
-        class="dokter-card bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-lg transition duration-300">
+        <div class="dokter-card bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-lg transition">
 
-        <!-- HEADER CARD -->
-        <div class="flex justify-between items-start mb-4">
-
-            <div>
-
-                <h3 class="text-xl font-semibold text-slate-800">
-                    {{ $item->nama }}
-                </h3>
-
-                <p class="text-sm text-slate-500 mt-1">
-                    SIP: {{ $item->sip }}
-                </p>
-
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h3 class="text-xl font-semibold text-slate-800">
+                        {{ $item->nama }}
+                    </h3>
+                    <p class="text-sm text-slate-500">
+                        {{ $item->spesialis }}
+                    </p>
+                </div>
+                @if($item->status == 'Aktif')
+                    <span class="bg-green-100 text-green-700 text-xs px-3 py-1 rounded-full">Aktif</span>
+                @else
+                    <span class="bg-red-100 text-red-700 text-xs px-3 py-1 rounded-full">Nonaktif</span>
+                @endif
             </div>
 
-            <span class="bg-green-100 text-green-700 text-xs px-3 py-1 rounded-full">
-                Aktif
-            </span>
-
-        </div>
-
-        <!-- SPESIALIS -->
-        <div class="mb-4">
-
-            <span class="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-lg text-sm">
-
-                {{ $item->spesialis }}
-
-            </span>
-
-        </div>
-
-        <!-- INFO -->
-        <div class="space-y-3 text-sm">
-
-            <div class="flex items-center gap-3">
-
-                <i class="bi bi-telephone text-slate-500"></i>
-
-                <span>{{ $item->no_hp }}</span>
-
+            <div class="space-y-2 text-sm">
+                <div>📞 {{ $item->no_hp }}</div>
+                <div>✉️ {{ $item->email }}</div>
+                <div class="text-slate-400">STR: {{ $item->no_str ?? '-' }} &bull; SIP: {{ $item->sip ?? '-' }}</div>
             </div>
 
-            <div class="flex items-center gap-3">
+            <div class="flex gap-2 mt-6">
 
-                <i class="bi bi-envelope text-slate-500"></i>
-
-                <span>{{ $item->email }}</span>
-
-            </div>
-
-        </div>
-
-        <!-- AKSI -->
-        <div class="flex gap-2 mt-6">
-
-            <button onclick="openEditModal(
-                '{{ $item->id }}',
-                '{{ $item->nama }}',
-                '{{ $item->spesialis }}',
-                '{{ $item->no_hp }}'
-                )" class="flex-1 bg-yellow-100 hover:bg-yellow-200 text-yellow-700 py-2 rounded-xl">
-
-                <i class="bi bi-pencil-square"></i>
-                Edit
-
-            </button>
-
-            <form action="/admin/dokter/{{ $item->id }}" method="POST" class="flex-1">
-
-                @csrf
-                @method('DELETE')
-
-                <button onclick="return confirm('Yakin hapus dokter?')"
-                    class="w-full bg-red-100 hover:bg-red-200 text-red-700 py-2 rounded-xl">
-
-                    <i class="bi bi-trash"></i>
-                    Hapus
-
+                <button
+                    onclick="openEditModal(
+                        '{{ $item->id }}',
+                        '{{ addslashes($item->nama) }}',
+                        '{{ addslashes($item->nik) }}',
+                        '{{ addslashes($item->email) }}',
+                        '{{ addslashes($item->no_str) }}',
+                        '{{ addslashes($item->sip) }}',
+                        '{{ addslashes($item->spesialis) }}',
+                        '{{ addslashes($item->no_hp) }}',
+                        '{{ $item->status }}'
+                    )"
+                    class="flex-1 bg-yellow-100 hover:bg-yellow-200 text-yellow-700 py-2 rounded-xl">
+                    Edit
                 </button>
 
-            </form>
+                <form
+                    action="/admin/dokter/{{ $item->id }}"
+                    method="POST"
+                    class="flex-1">
+                    @csrf
+                    @method('DELETE')
+                    <button
+                        type="submit"
+                        onclick="return confirm('Yakin hapus dokter ini?')"
+                        class="w-full bg-red-100 hover:bg-red-200 text-red-700 py-2 rounded-xl">
+                        Hapus
+                    </button>
+                </form>
+
+            </div>
 
         </div>
-
-    </div>
 
     @empty
 
-    <div class="col-span-full bg-white rounded-xl border p-10 text-center text-slate-500">
-
-        Belum ada data dokter.
-
-    </div>
+        <div class="col-span-full bg-white rounded-xl border p-10 text-center text-slate-500">
+            Belum ada data dokter.
+        </div>
 
     @endforelse
 
 </div>
 
-<!-- MODAL TAMBAH -->
-<div id="tambahModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+<!-- Modal Tambah -->
+<div id="tambahModal"
+     class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
 
-    <div class="bg-white rounded-xl p-6 w-full max-w-lg">
+    <div class="bg-white rounded-xl p-6 w-full max-w-lg max-h-screen overflow-y-auto">
 
-        <h2 class="text-xl font-bold mb-4">
-            Tambah Dokter
-        </h2>
+        <h2 class="text-xl font-bold mb-4">Tambah Dokter</h2>
 
         <form action="/admin/dokter" method="POST">
-
             @csrf
 
-            <input type="text" name="nama"
+            <input
+                type="text"
+                name="nama"
                 placeholder="Nama Dokter"
-                class="w-full border rounded-lg p-3 mb-3">
+                class="w-full border rounded-lg p-3 mb-3"
+                required>
 
-            <input type="text" name="nik"
+            <input
+                type="text"
+                name="nik"
+                placeholder="NIK (16 digit)"
                 maxlength="16"
-                placeholder="NIK"
-                class="w-full border rounded-lg p-3 mb-3">
+                class="w-full border rounded-lg p-3 mb-3"
+                required>
 
-            <input type="email" name="email"
+            <input
+                type="email"
+                name="email"
                 placeholder="Email"
-                class="w-full border rounded-lg p-3 mb-3">
+                class="w-full border rounded-lg p-3 mb-3"
+                required>
 
-            <input type="text" name="no_str"
+            <input
+                type="text"
+                name="no_str"
                 placeholder="Nomor STR"
-                class="w-full border rounded-lg p-3 mb-3">
+                class="w-full border rounded-lg p-3 mb-3"
+                required>
 
-            <input type="text" name="no_sip"
+            <input
+                type="text"
+                name="no_sip"
                 placeholder="Nomor SIP"
-                class="w-full border rounded-lg p-3 mb-3">
+                class="w-full border rounded-lg p-3 mb-3"
+                required>
 
-            <select name="spesialis"
-                class="w-full border rounded-lg p-3 mb-3">
-
-                <option value="Umum">Umum</option>
-                <option value="Gigi">Gigi</option>
-
+            <select
+                name="spesialis"
+                class="w-full border rounded-lg p-3 mb-3"
+                required>
+                <option value="">-- Pilih Spesialis --</option>
+                <option value="UMUM">Umum</option>
+                <option value="GIGI">Gigi</option>
             </select>
 
-            <input type="text" name="no_hp"
+            <input
+                type="text"
+                name="no_hp"
                 placeholder="Nomor HP"
-                class="w-full border rounded-lg p-3 mb-3">
+                class="w-full border rounded-lg p-3 mb-3"
+                required>
 
-            <input type="password" name="password"
-                placeholder="Password"
-                class="w-full border rounded-lg p-3 mb-3">
-
+            <input
+                type="password"
+                name="password"
+                placeholder="Password (min. 8 karakter)"
+                class="w-full border rounded-lg p-3 mb-3"
+                required>
 
             <div class="flex gap-3">
-
-                <button type="submit" class="flex-1 bg-blue-600 text-white py-3 rounded-lg">
-
+                <button
+                    type="submit"
+                    class="flex-1 bg-blue-600 text-white py-3 rounded-lg">
                     Simpan
-
                 </button>
-
-                <button type="button" onclick="closeTambahModal()"
+                <button
+                    type="button"
+                    onclick="closeTambahModal()"
                     class="flex-1 bg-slate-500 text-white py-3 rounded-lg">
-
                     Batal
-
                 </button>
-
             </div>
 
         </form>
@@ -255,45 +219,97 @@
 
 </div>
 
-<!-- MODAL EDIT -->
-<div id="editModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+<!-- Modal Edit -->
+<div id="editModal"
+     class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
 
-    <div class="bg-white rounded-xl p-6 w-full max-w-lg">
+    <div class="bg-white rounded-xl p-6 w-full max-w-lg max-h-screen overflow-y-auto">
 
-        <h2 class="text-xl font-bold mb-4">
-            Edit Dokter
-        </h2>
+        <h2 class="text-xl font-bold mb-4">Edit Dokter</h2>
 
         <form id="editForm" method="POST">
-
             @csrf
             @method('PUT')
 
-            <input id="editNama" type="text" name="nama" class="w-full border rounded-lg p-3 mb-3">
+            <input
+                id="editNama"
+                type="text"
+                name="nama"
+                placeholder="Nama Dokter"
+                class="w-full border rounded-lg p-3 mb-3"
+                required>
 
-            <select id="editSpesialis" name="spesialis" class="w-full border rounded-lg p-3 mb-3">
+            <input
+                id="editNik"
+                type="text"
+                name="nik"
+                placeholder="NIK (16 digit)"
+                maxlength="16"
+                class="w-full border rounded-lg p-3 mb-3 bg-slate-50 text-slate-500"
+                readonly>
 
-                <option>Umum</option>
-                <option>Gigi</option>
+            <input
+                id="editEmail"
+                type="email"
+                name="email"
+                placeholder="Email"
+                class="w-full border rounded-lg p-3 mb-3">
 
+            <input
+                id="editNoStr"
+                type="text"
+                name="no_str"
+                placeholder="Nomor STR"
+                class="w-full border rounded-lg p-3 mb-3">
+
+            <input
+                id="editNoSip"
+                type="text"
+                name="no_sip"
+                placeholder="Nomor SIP"
+                class="w-full border rounded-lg p-3 mb-3">
+
+            <select
+                id="editSpesialis"
+                name="spesialis"
+                class="w-full border rounded-lg p-3 mb-3">
+                <option value="UMUM">Umum</option>
+                <option value="GIGI">Gigi</option>
             </select>
 
-            <input id="editNoHp" type="text" name="no_hp" class="w-full border rounded-lg p-3 mb-4">
+            <input
+                id="editNoHp"
+                type="text"
+                name="no_hp"
+                placeholder="Nomor HP"
+                class="w-full border rounded-lg p-3 mb-3">
+
+            <select
+                id="editStatus"
+                name="status"
+                class="w-full border rounded-lg p-3 mb-3">
+                <option value="Aktif">Aktif</option>
+                <option value="Nonaktif">Nonaktif</option>
+            </select>
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Password baru (kosongkan jika tidak diubah)"
+                class="w-full border rounded-lg p-3 mb-3">
 
             <div class="flex gap-3">
-
-                <button type="submit" class="flex-1 bg-blue-600 text-white py-3 rounded-lg">
-
+                <button
+                    type="submit"
+                    class="flex-1 bg-blue-600 text-white py-3 rounded-lg">
                     Update
-
                 </button>
-
-                <button type="button" onclick="closeEditModal()" class="flex-1 bg-slate-500 text-white py-3 rounded-lg">
-
+                <button
+                    type="button"
+                    onclick="closeEditModal()"
+                    class="flex-1 bg-slate-500 text-white py-3 rounded-lg">
                     Batal
-
                 </button>
-
             </div>
 
         </form>
@@ -303,85 +319,41 @@
 </div>
 
 <script>
+
     function openTambahModal() {
-        document
-            .getElementById('tambahModal')
-            .classList.remove('hidden');
+        document.getElementById('tambahModal').classList.remove('hidden');
     }
 
     function closeTambahModal() {
-        document
-            .getElementById('tambahModal')
-            .classList.add('hidden');
+        document.getElementById('tambahModal').classList.add('hidden');
     }
 
-    function openEditModal(id, nama, spesialis, nohp) {
-        document
-            .getElementById('editForm')
-            .action =
-            '/admin/dokter/' + id;
-
-        document
-            .getElementById('editNama')
-            .value = nama;
-
-        document
-            .getElementById('editSpesialis')
-            .value = spesialis;
-
-        document
-            .getElementById('editNoHp')
-            .value = nohp;
-
-        document
-            .getElementById('editModal')
-            .classList.remove('hidden');
+    function openEditModal(id, nama, nik, email, noStr, noSip, spesialis, noHp, status) {
+        document.getElementById('editForm').action = '/admin/dokter/' + id;
+        document.getElementById('editNama').value      = nama;
+        document.getElementById('editNik').value       = nik;
+        document.getElementById('editEmail').value     = email;
+        document.getElementById('editNoStr').value     = noStr;
+        document.getElementById('editNoSip').value     = noSip;
+        document.getElementById('editSpesialis').value = spesialis;
+        document.getElementById('editNoHp').value      = noHp;
+        document.getElementById('editStatus').value    = status;
+        document.getElementById('editModal').classList.remove('hidden');
     }
 
     function closeEditModal() {
-        document
-            .getElementById('editModal')
-            .classList.add('hidden');
+        document.getElementById('editModal').classList.add('hidden');
     }
-    document
-        .getElementById('searchDokter')
-        .addEventListener('keyup', function() {
 
-            let value = this.value.toLowerCase();
-
-            document
-                .getElementById('searchDokter')
-                .addEventListener('keyup', function() {
-
-                    let value = this.value.toLowerCase();
-
-                    let cards = document.querySelectorAll('.dokter-card');
-
-                    cards.forEach(card => {
-
-                        let text = card.innerText.toLowerCase();
-
-                        card.style.display =
-                            text.includes(value) ?
-                            '' :
-                            'none';
-
-                    });
-
-                });
-
-            rows.forEach(row => {
-
-                let text = row.innerText.toLowerCase();
-
-                row.style.display =
-                    text.includes(value) ?
-                    '' :
-                    'none';
-
-            });
-
+    document.getElementById('searchDokter').addEventListener('keyup', function () {
+        const value = this.value.toLowerCase();
+        const cards = document.querySelectorAll('.dokter-card');
+        cards.forEach(card => {
+            const text = card.innerText.toLowerCase();
+            card.style.display = text.includes(value) ? '' : 'none';
         });
+    });
+
 </script>
 
 @endsection

@@ -15,6 +15,7 @@ use App\Models\User;
 
 class PasienController extends Controller
 {
+    // PASIEN
     public function dashboard()
 {
     $jadwalBerikutnya = JadwalKonsultasi::with('dokter')
@@ -163,10 +164,7 @@ class PasienController extends Controller
 
     public function booking()
     {
-        $dokters = Dokter::where(
-            'status',
-            'Aktif'
-        )->get();
+        $dokters = Dokter::where('status', 'Aktif')->get();
 
         $hariIni = now()->locale('id')->translatedFormat('l');
 
@@ -185,7 +183,6 @@ foreach ($dokters as $dokter) {
             ->where('user_id', Auth::id())
             ->latest()
             ->get();
-
             $bookingAktif = JadwalKonsultasi::where('user_id', Auth::id())
     ->whereIn('status', ['Menunggu', 'Disetujui'])
     ->count();
@@ -411,17 +408,17 @@ public function updatePassword(Request $request)
         'new_password' => 'required|min:8|confirmed'
     ]);
 
-    if (!Hash::check($request->old_password, Auth::user()->password)) {
-        return back()->with('error', 'Password lama salah');
-    }
+ if (!Hash::check($request->old_password, Auth::user()->password)) {
+    return back()->with('error', 'Password lama salah');
+}
 
-    $user = Auth::user();
+$user = Auth::user();
 
-    $user->password = Hash::make($request->new_password);
+$user->password = Hash::make($request->new_password);
 
-    $user->save();
+$user->save();
 
-    return back()->with('success', 'Password berhasil diubah');
+return back()->with('success', 'Password berhasil diubah');
 }
 
 public function feedback()
@@ -454,80 +451,58 @@ public function feedback()
 }
 
     public function storeFeedback(Request $request)
-    {
-        Feedback::create([
+{
+    $feedback = Feedback::create([
+        'user_id'  => Auth::id(),
+        'kategori' => $request->kategori,
+        'rating'   => $request->rating,
+        'komentar' => $request->komentar
+    ]);
 
-            'user_id' => Auth::id(),
-
-            'kategori' => $request->kategori,
-
-            'rating' => $request->rating,
-
-            'komentar' => $request->komentar
-
+    // Notifikasi ke admin
+    $admin = User::where('role', 'admin')->first();
+    if ($admin) {
+        Notification::create([
+            'user_id' => $admin->id,
+            'judul'   => 'Feedback Baru',
+            'pesan'   => Auth::user()->name . ' mengirimkan feedback baru dengan rating ' . $request->rating,
         ]);
-
-        return back()->with(
-            'success',
-            'Feedback berhasil dikirim'
-        );
     }
+
+    return back()->with('success', 'Feedback berhasil dikirim');
+}
 
     public function updateFeedback(Request $request, $id)
     {
-        $feedback = Feedback::where(
-            'id',
-            $id
-        )->where(
-            'user_id',
-            Auth::id()
-        )->firstOrFail();
+        $feedback = Feedback::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
 
         if ($feedback->status == 'Direspon') {
-
-            return back()->with(
-                'error',
-                'Feedback yang sudah direspon tidak dapat diubah'
-            );
+            return back()->with('error', 'Feedback yang sudah direspon tidak dapat diubah');
         }
 
         $feedback->update([
-
             'kategori' => $request->kategori,
-            'rating' => $request->rating,
+            'rating'   => $request->rating,
             'komentar' => $request->komentar
-
         ]);
 
-        return back()->with(
-            'success',
-            'Feedback berhasil diperbarui'
-        );
+        return back()->with('success', 'Feedback berhasil diperbarui');
     }
 
     public function destroyFeedback($id)
     {
-        $feedback = Feedback::where(
-            'id',
-            $id
-        )->where(
-            'user_id',
-            Auth::id()
-        )->firstOrFail();
+        $feedback = Feedback::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
 
         if ($feedback->status == 'Direspon') {
-
-            return back()->with(
-                'error',
-                'Feedback yang sudah direspon tidak dapat dihapus'
-            );
+            return back()->with('error', 'Feedback yang sudah direspon tidak dapat dihapus');
         }
 
         $feedback->delete();
 
-        return back()->with(
-            'success',
-            'Feedback berhasil dihapus'
-        );
+        return back()->with('success', 'Feedback berhasil dihapus');
     }
 }

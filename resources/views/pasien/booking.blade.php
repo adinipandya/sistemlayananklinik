@@ -107,4 +107,21 @@ transition-all duration-300">
 
 </div>
 
+<script>
+function showSuccess() {
+    document.getElementById('popup').classList.remove('hidden');
+}
+
+function closePopup() {
+    document.getElementById('popup').classList.add('hidden');
+}
+</script>
+
+@if(session('success'))
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('popup').classList.remove('hidden');
+});
+</script>
+@endif
 @endsection

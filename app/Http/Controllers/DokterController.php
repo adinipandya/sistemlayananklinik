@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Pasien;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,8 +14,14 @@ use App\Models\Obat;
 use App\Models\ResepObat;
 use App\Models\Notification;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+
 class DokterController extends Controller
 {
+    // ======================================================
+    // DASHBOARD DOKTER
+    // ======================================================
+
     public function dashboard()
     {
         $pasienHariIni = JadwalKonsultasi::whereDate(
@@ -123,6 +130,32 @@ class DokterController extends Controller
             'antrian'
         ));
     }
+
+    // ======================================================
+    // DATA PASIEN DOKTER
+    // ======================================================
+
+    public function pasien()
+    {
+        $pasiens = Pasien::all();
+
+        return view('dokter.pasien_dokter', compact('pasiens'));
+    }
+
+    // SEARCH PASIEN
+    public function searchPasien(Request $request)
+    {
+        $search = $request->search;
+
+        $pasiens = Pasien::where('nama', 'like', '%' . $search . '%')
+                    ->get();
+
+        return view('dokter.pasien_dokter', compact('pasiens'));
+    }
+
+    // ======================================================
+    // KELOLA REKAM MEDIS
+    // ======================================================
 
     public function kelola()
     {
@@ -380,17 +413,25 @@ class DokterController extends Controller
         }
 
         $jadwal->update([
-            'status' => 'Selesai'
-        ]);
-        Notification::create([
+    'status' => 'Selesai'
+]);
 
-            'user_id' => $jadwal->user_id,
+// Notifikasi ke pasien
+Notification::create([
+    'user_id' => $jadwal->user_id,
+    'judul'   => 'Konsultasi Selesai',
+    'pesan'   => 'Rekam medis dan resep obat telah tersedia',
+]);
 
-            'judul' => 'Konsultasi Selesai',
-
-            'pesan' => 'Rekam medis dan resep obat telah tersedia'
-
-        ]);
+// Notifikasi ke admin
+$admin = User::where('role', 'admin')->first();
+if ($admin) {
+    Notification::create([
+        'user_id' => $admin->id,
+        'judul'   => 'Konsultasi Selesai',
+        'pesan'   => 'Jadwal konsultasi pasien ' . $jadwal->pasien->name . ' telah selesai',
+    ]);
+}
 
         return redirect('/dokter/jadwal')
             ->with(
@@ -509,5 +550,27 @@ class DokterController extends Controller
                 'success',
                 'Rekam medis berhasil diperbarui'
             );
+    }
+
+    public function downloadResep($id)
+    {
+        $rekamMedis = RekamMedis::with([
+            'jadwal.pasien',
+            'jadwal.dokter',
+            'resepObat.obat'
+        ])->findOrFail($id);
+
+        return view('dokter.download_resep', compact('rekamMedis'));
+    }
+
+    public function printResep($id)
+    {
+        $rekamMedis = RekamMedis::with([
+            'jadwal.pasien',
+            'jadwal.dokter',
+            'resepObat.obat'
+        ])->findOrFail($id);
+
+        return view('dokter.cetak_resep', compact('rekamMedis'));
     }
 }
