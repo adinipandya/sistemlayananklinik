@@ -194,20 +194,42 @@
 
             @csrf
 
-            <input type="text" name="nama" placeholder="Nama Dokter" class="w-full border rounded-lg p-3 mb-3">
+            <input type="text" name="nama"
+                placeholder="Nama Dokter"
+                class="w-full border rounded-lg p-3 mb-3">
 
-            <input type="text" name="sip" placeholder="Nomor SIP" class="w-full border rounded-lg p-3 mb-3">
+            <input type="text" name="nik"
+                maxlength="16"
+                placeholder="NIK"
+                class="w-full border rounded-lg p-3 mb-3">
 
-            <select name="spesialis" class="w-full border rounded-lg p-3 mb-3">
+            <input type="email" name="email"
+                placeholder="Email"
+                class="w-full border rounded-lg p-3 mb-3">
 
-                <option>Umum</option>
-                <option>Gigi</option>
+            <input type="text" name="no_str"
+                placeholder="Nomor STR"
+                class="w-full border rounded-lg p-3 mb-3">
+
+            <input type="text" name="no_sip"
+                placeholder="Nomor SIP"
+                class="w-full border rounded-lg p-3 mb-3">
+
+            <select name="spesialis"
+                class="w-full border rounded-lg p-3 mb-3">
+
+                <option value="Umum">Umum</option>
+                <option value="Gigi">Gigi</option>
 
             </select>
 
-            <input type="text" name="no_hp" placeholder="Nomor HP" class="w-full border rounded-lg p-3 mb-3">
+            <input type="text" name="no_hp"
+                placeholder="Nomor HP"
+                class="w-full border rounded-lg p-3 mb-3">
 
-            <input type="email" name="email" placeholder="Email" class="w-full border rounded-lg p-3 mb-3">
+            <input type="password" name="password"
+                placeholder="Password"
+                class="w-full border rounded-lg p-3 mb-3">
 
 
             <div class="flex gap-3">
@@ -323,13 +345,13 @@
     }
     document
         .getElementById('searchDokter')
-        .addEventListener('keyup', function () {
+        .addEventListener('keyup', function() {
 
             let value = this.value.toLowerCase();
 
             document
                 .getElementById('searchDokter')
-                .addEventListener('keyup', function () {
+                .addEventListener('keyup', function() {
 
                     let value = this.value.toLowerCase();
 

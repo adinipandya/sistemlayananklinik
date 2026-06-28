@@ -1,4 +1,7 @@
-<?php $__env->startSection('content'); ?>
+
+@extends('layouts.pasien')
+
+@section('content')
 
 <div class="mb-8">
 
@@ -175,28 +178,6 @@
 
             <!-- PASSWORD STRENGTH -->
             <div class="mt-8">
-
-                <div class="flex justify-between mb-2">
-
-                    <span class="text-sm text-slate-500">
-                        Kekuatan Password
-                    </span>
-
-                    <span class="text-sm text-green-600">
-                        Kuat
-                    </span>
-
-                </div>
-
-                <div
-                    class="w-full h-3 bg-slate-200 rounded-full overflow-hidden">
-
-                    <div
-                        class="h-full w-3/4 bg-green-500 rounded-full">
-                    </div>
-
-                </div>
-
             </div>
 
             <div class="flex gap-3 mt-8">
@@ -245,7 +226,5 @@ function togglePassword(id){
 
 </script>
 
-<?php $__env->stopSection(); ?>
+@endsection
 
-
-<?php echo $__env->make('layouts.dokter', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /Users/ardiansyah/laravel/sistemlayananklinik/resources/views/dokter/password.blade.php ENDPATH**/ ?>

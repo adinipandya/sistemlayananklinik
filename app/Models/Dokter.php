@@ -8,13 +8,18 @@ use App\Models\JadwalKonsultasi;
 class Dokter extends Model
 {
     protected $fillable = [
-        'nama',
-        'sip',
-        'spesialis',
-        'no_hp',
-        'email',
-        'status'
-    ];
+
+    'nama',
+    'nik',
+    'email',
+    'no_str',
+    'sip',
+    'spesialis',
+    'no_hp',
+    'password',
+    'status'
+
+];
 
     public function jadwalKonsultasi()
 {

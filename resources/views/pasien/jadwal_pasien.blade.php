@@ -28,7 +28,7 @@
     </p>
 
     <h2 class="text-3xl font-bold text-blue-600 mt-2">
-        1
+        {{ $jadwalAktif }}
     </h2>
 
 </div>
@@ -40,7 +40,7 @@
     </p>
 
     <h2 class="text-3xl font-bold text-green-600 mt-2">
-        8
+        {{ $konsultasiSelesai }}
     </h2>
 
 </div>
@@ -52,7 +52,7 @@
     </p>
 
     <h2 class="text-3xl font-bold text-blue-600 mt-2">
-        9
+        {{ $totalBooking }}
     </h2>
 
 </div>
@@ -76,7 +76,7 @@
             Dokter
         </p>
         <p class="font-medium">
-            Dr. Ihsan
+            Dr. {{ $jadwal->first()?->dokter?->nama }}
         </p>
     </div>
 
@@ -154,87 +154,46 @@
 
     <tbody>
 
-        <tr class="border-t">
+@foreach($jadwal as $item)
 
-            <td class="p-4">
-                Dr. Ihsan
-            </td>
+<tr class="border-t">
 
-            <td class="p-4">
-                25 Juni 2026
-            </td>
+    <td class="p-4">
+        {{ $item->dokter->nama }}
+    </td>
 
-            <td class="p-4">
-                10.00 WIB
-            </td>
+    <td class="p-4">
+        {{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}
+    </td>
 
-            <td class="p-4">
+    <td class="p-4">
+        {{ substr($item->jam,0,5) }} WIB
+    </td>
 
-                <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
-                    Menunggu
-                </span>
+    <td class="p-4">
 
-            </td>
+        <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
 
-            <td class="p-4 flex gap-2">
+            {{ $item->status }}
 
-                <button
-                    onclick="openDetailModal()"
-                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+        </span>
 
-                    Detail
+    </td>
 
-                </button>
+    <td class="p-4">
 
-                <button
-                    onclick="openCancelModal()"
-                    class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+        <a href="{{ route('pasien.jadwal.detail', $item->id) }}"
+   class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+    Detail
+</a>
 
-                    Batalkan
+    </td>
 
-                </button>
+</tr>
 
-            </td>
+@endforeach
 
-        </tr>
-
-        <tr class="border-t">
-
-            <td class="p-4">
-                Dr. Ardi
-            </td>
-
-            <td class="p-4">
-                20 Juni 2026
-            </td>
-
-            <td class="p-4">
-                08.00 WIB
-            </td>
-
-            <td class="p-4">
-
-                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
-                    Selesai
-                </span>
-
-            </td>
-
-            <td class="p-4">
-
-                <button
-                    onclick="openDetailModal()"
-                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-
-                    Detail
-
-                </button>
-
-            </td>
-
-        </tr>
-
-    </tbody>
+</tbody>
 
 </table>
 

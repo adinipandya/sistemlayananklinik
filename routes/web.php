@@ -2,27 +2,28 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DokterController;
 use App\Http\Controllers\PasienController;
 use App\Http\Controllers\AuthController;
+
 use App\Models\User;
 
 
-/* HOME */
+/* ─── HOME ──────────────────────────────────────────────────────── */
 
 Route::get('/', [HomeController::class, 'index']);
 
 
-/* AUTH */
+/* ─── AUTH ──────────────────────────────────────────────────────── */
 
 Route::get('/login', function () {
     return view('auth.login');
-});
+})->name('login');
 
 Route::get('/register', function () {
     return view('auth.register');
@@ -33,7 +34,6 @@ Route::get('/forgot_password', function () {
 });
 
 Route::post('/forgot_password', function (Request $request) {
-
     $user = User::where('email', $request->email)->first();
 
     if (!$user) {
@@ -45,189 +45,118 @@ Route::post('/forgot_password', function (Request $request) {
     }
 
     $user->update([
-        'password' => Hash::make($request->password)
+        'password' => Hash::make($request->password),
     ]);
 
-    return redirect('/login')
-        ->with('success', 'Password berhasil diubah.');
-
+    return redirect('/login')->with('success', 'Password berhasil diubah.');
 });
 
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login',    [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/logout',   [AuthController::class, 'logout'])->name('logout');
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN (wajib login)
+|--------------------------------------------------------------------------
+*/
+
+/* ─── ADMIN ─────────────────────────────────────────────────────── */
+
+Route::get('/admin',           [AdminController::class, 'dashboard']);
+Route::get('/admin/dokter',    [AdminController::class, 'dokter']);
+Route::get('/admin/pasien',    [AdminController::class, 'pasien']);
+Route::get('/admin/jadwal',    [AdminController::class, 'jadwal']);
+Route::get('/admin/obat',      [AdminController::class, 'obat']);
+Route::get('/admin/resep',     [AdminController::class, 'resep']);
+Route::get('/admin/feedback',  [AdminController::class, 'feedback']);
+
+Route::put('/admin/feedback/{id}',         [AdminController::class, 'updateFeedback']);
+Route::post('/admin/dokter',               [AdminController::class, 'storeDokter']);
+Route::put('/admin/pasien/{id}/verifikasi', [AdminController::class, 'verifikasiPasien']);
+
+Route::post('/admin/obat/store', [AdminController::class, 'storeObat'])->name('obat.store');
+Route::put('/admin/obat/{id}',   [AdminController::class, 'updateObat'])->name('obat.update');
+Route::delete('/admin/obat/{id}', [AdminController::class, 'destroyObat'])->name('obat.destroy');
 
 
-/* ADMIN */
+/* ─── DOKTER ────────────────────────────────────────────────────── */
 
-Route::get('/admin', [AdminController::class, 'dashboard']);
-Route::get('/admin/dokter', [AdminController::class, 'dokter']);
-Route::get('/admin/pasien', [AdminController::class, 'pasien']);
-Route::get('/admin/jadwal', [AdminController::class, 'jadwal']);
-Route::get('/admin/obat', [AdminController::class, 'obat']);
-Route::get('/admin/resep', [AdminController::class, 'resep']);
-Route::get(
-    '/admin/feedback',
-    [AdminController::class, 'feedback']
-);
-Route::put(
-    '/admin/feedback/{id}',
-    [AdminController::class, 'updateFeedback']
-);
-Route::get(
-    '/admin/feedback',
-    [AdminController::class, 'feedback']
-);
-Route::post(
-    '/admin/dokter',
-    [AdminController::class, 'storeDokter']
-);
-Route::put(
-    '/admin/pasien/{id}/verifikasi',
-    [AdminController::class, 'verifikasiPasien']
-);
+Route::get('/dokter',              [DokterController::class, 'dashboard']);
+Route::get('/dokter/jadwal',       [DokterController::class, 'jadwal']);
+Route::get('/dokter/data_pasien',  [DokterController::class, 'datapasien'])->name('dokter.data_pasien');;
+Route::get('/dokter/resep',        [DokterController::class, 'resep'])->name('resep.index');
+Route::get('/dokter/kelola', [DokterController::class, 'kelola'])
+    ->name('dokter.kelola');
+Route::get('/dokter/rekam-medis', [DokterController::class, 'kelola'])
+    ->name('dokter.kelola');
 
-Route::post(
-    '/admin/obat/store',
-    [AdminController::class, 'storeObat']
-)->name('obat.store');
-
-Route::put(
-    '/admin/obat/{id}',
-    [AdminController::class, 'updateObat']
-)->name('obat.update');
-
-Route::delete(
-    '/admin/obat/{id}',
-    [AdminController::class, 'destroyObat']
-)->name('obat.destroy');
-
-
-
-/* DOKTER */
-
-Route::get('/dokter', [DokterController::class, 'dashboard']);
-Route::get('/dokter/jadwal', [DokterController::class, 'jadwal']);
-Route::get('/dokter/pasien', [DokterController::class, 'datapasien']);
-Route::get('/dokter/kelola', [DokterController::class, 'kelola']);
-Route::get('/dokter/data_pasien', [DokterController::class, 'datapasien']);
-Route::get('/dokter/profile', [DokterController::class, 'profile']);
-Route::get('/dokter/password', [DokterController::class, 'password']);
-Route::post('/dokter/profile', [DokterController::class, 'updateProfile']);
-Route::get('/dokter/resep', [DokterController::class, 'resep']);
-Route::put('/dokter/rekam_medis/{id}', function () {
-    return back()->with('success', 'Data berhasil diupdate');
-})->name('rekam_medis.update');
-
-Route::delete('/dokter/rekam-medis/{id}', function () {
-    return back()->with('success', 'Data berhasil dihapus');
-})->name('rekam_medis.destroy');
-
-Route::get('/dokter/profile', function () {
-    return view('dokter.profile');
-});
-
+// Profile & pengaturan — pakai controller (hapus closure duplikat)
+Route::get('/dokter/profile',    [DokterController::class, 'profile']);
+Route::post('/dokter/profile',   [DokterController::class, 'updateProfile']);
+Route::post('/dokter/profile/delete-photo', [DokterController::class, 'deletePhoto']);
+Route::get('/dokter/password',   [DokterController::class, 'password']);
 Route::get('/dokter/pengaturan', function () {
     return view('dokter.pengaturan');
 });
 
-Route::get('/dokter/password', function () {
-    return view('dokter.password');
-});
+// Jadwal
+Route::post('/dokter/jadwal/batal/{id}', [DokterController::class, 'batalkanJadwal'])
+    ->name('jadwal.batal');                                                 // ← satu saja
 
-Route::post(
-    '/dokter/profile/delete-photo',
-    [DokterController::class, 'deletePhoto']
-);
+// Konsultasi
+Route::get('/dokter/konsultasi/{id}',        [DokterController::class, 'konsultasi'])
+    ->name('dokter.konsultasi');
+Route::post('/dokter/konsultasi/{id}/simpan', [DokterController::class, 'simpanRekamMedis'])
+    ->name('rekam-medis.store');
 
-Route::get('/dokter/rekam-medis/detail', function () {
-    return view('dokter.detail_rekam');
-});
+// Rekam medis
+Route::get('/dokter/rekam-medis/detail/{id}', [DokterController::class, 'detailRekamMedis'])
+    ->name('rekam-medis.detail');
+Route::get('/dokter/rekam-medis/edit/{id}',   [DokterController::class, 'editRekamMedis'])
+    ->name('rekam-medis.edit');
+Route::put('/dokter/rekam-medis/update/{id}', [DokterController::class, 'updateRekamMedis'])
+    ->name('rekam-medis.update');
+Route::delete('/dokter/rekam-medis/{id}',     [DokterController::class, 'destroyRekamMedis'])
+    ->name('rekam-medis.destroy');
 
-Route::get('/dokter/rekam-medis/edit', function () {
-    return view('dokter.edit_rekam');
-});
+// Resep
+Route::get('/resep/{id}/download', [DokterController::class, 'downloadResep'])
+    ->name('resep.download');
+Route::get('/dokter/resep/{id}', [DokterController::class, 'detailResep'])
+    ->name('resep.detail');
 
-Route::get('/dokter/rekam-medis/print', function () {
-    return view('dokter.print_rekam');
-});
-
-Route::post(
-    '/dokter/jadwal/batal/{id}',
-    [DokterController::class, 'batalkanJadwal']
-)->name('jadwal.batal');
-
+// Print rekam (view saja)
 Route::get(
-    '/dokter/konsultasi/{id}',
-    [DokterController::class, 'konsultasi']
-)->name('dokter.konsultasi');
+    '/dokter/rekam-medis/print/{id}', [DokterController::class, 'printRekam'])
+    ->name('rekam-medis.print');
+Route::get('/resep/{id}/print', [DokterController::class, 'printResep'])
+    ->name('resep.print');
 
-Route::post(
-    '/dokter/jadwal/batal/{id}',
-    [DokterController::class, 'batalkanJadwal']
-)->name('jadwal.batal');
 
-Route::post(
-    '/dokter/konsultasi/{id}/simpan',
-    [DokterController::class, 'simpanRekamMedis']
-)->name('rekam-medis.store');
+/* ─── PASIEN ────────────────────────────────────────────────────── */
 
-Route::get(
-    '/dokter/rekam-medis/detail/{id}',
-    [DokterController::class, 'detailRekamMedis']
-)->name('rekam-medis.detail');
-
-Route::get(
-    '/dokter/rekam-medis/edit/{id}',
-    [DokterController::class, 'editRekamMedis']
-)->name('rekam-medis.edit');
-
-Route::put(
-    '/dokter/rekam-medis/update/{id}',
-    [DokterController::class, 'updateRekamMedis']
-)->name('rekam-medis.update');
-
-Route::get(
-    '/dokter/resep',
-    [DokterController::class, 'resep']
-)->name('resep.index');
-
-Route::get(
-    '/dokter/resep/{id}',
-    [DokterController::class, 'detailResep']
-)->name('resep.detail');
-
-/* PASIEN */
-
-Route::get('/pasien', [PasienController::class, 'dashboard']);
-Route::get('/pasien/booking', [PasienController::class, 'booking']);
-Route::post('/pasien/booking', [PasienController::class, 'simpanBooking'])
-    ->name('booking.store');
-Route::get('/pasien/jadwal', [PasienController::class, 'jadwal']);
-Route::get('/pasien/profile', [PasienController::class, 'profile']);
-Route::get('/pasien/riwayat', [PasienController::class, 'riwayat_konsultasi']);
+Route::get('/pasien',          [PasienController::class, 'dashboard']);
+Route::get('/pasien/profile',  [PasienController::class, 'profile']);
+Route::get('/pasien/riwayat',  [PasienController::class, 'riwayat_konsultasi']);
 Route::get('/pasien/rekam-medis', [PasienController::class, 'rekam_medis']);
-Route::put(
-    '/pasien/feedback/{id}',
-    [PasienController::class, 'updateFeedback']
-);
 
-Route::get(
-    '/pasien/feedback',
-    [PasienController::class, 'feedback']
-);
+// Booking — satu pasang GET/POST dengan satu nama route
+Route::get('/pasien/booking',  [PasienController::class, 'booking']);
+Route::post('/pasien/booking', [PasienController::class, 'storeBooking'])->name('booking.store');
 
-Route::post(
-    '/pasien/feedback',
-    [PasienController::class, 'storeFeedback']
-);
+// Jadwal
+Route::get('/pasien/jadwal', [PasienController::class, 'jadwal'])
+    ->name('pasien.jadwal');
+Route::get('/pasien/jadwal/{id}', [PasienController::class, 'detailJadwal'])
+    ->name('pasien.jadwal.detail');
 
-Route::delete(
-    '/pasien/feedback/{id}',
-    [PasienController::class, 'destroyFeedback']
-);
+// Feedback
+Route::get('/pasien/feedback',         [PasienController::class, 'feedback']);
+Route::post('/pasien/feedback',        [PasienController::class, 'storeFeedback']);
+Route::put('/pasien/feedback/{id}',    [PasienController::class, 'updateFeedback']);
+Route::delete('/pasien/feedback/{id}', [PasienController::class, 'destroyFeedback']);
 
-Route::post(
-    '/pasien/booking',
-    [PasienController::class, 'storeBooking']
-)->name('pasien.booking.store');
+// Profile
+Route::get('/pasien/profile', [PasienController::class, 'profile']);
+Route::get('/pasien/pengaturan', [PasienController::class, 'pengaturan']);

@@ -20,79 +20,87 @@ use Illuminate\Support\Str;
 
     </div>
 
-    <button class="bg-blue-600 text-white px-5 py-3 rounded-2xl">
-
-        Export Data
-
-    </button>
-
 </div>
 
 <!-- STATISTIK -->
-<div class="grid lg:grid-cols-4 gap-6 mb-8">
+<!-- STATISTIK -->
+<div class="grid lg:grid-cols-3 gap-6 mb-8">
 
     <div class="bg-white rounded-3xl shadow-sm p-6">
 
-        <p class="text-slate-500 text-sm">
-            Total Rekam
-        </p>
+        <div class="flex justify-between items-start">
 
-        <h2 class="text-4xl font-bold mt-2">
-            {{ $totalRekam }}
-        </h2>
+            <div>
+
+                <p class="text-slate-500 text-sm">
+                    Total Rekam
+                </p>
+
+                <h2 class="text-4xl font-bold mt-2">
+                    {{ $totalRekam }}
+                </h2>
+
+            </div>
+
+            <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center">
+
+                <i data-feather="file-text" class="text-blue-600"></i>
+
+            </div>
+
+        </div>
 
     </div>
 
     <div class="bg-white rounded-3xl shadow-sm p-6">
 
-        <p class="text-slate-500 text-sm">
-            Hari Ini
-        </p>
+        <div class="flex justify-between items-start">
 
-        <h2 class="text-4xl font-bold mt-2 text-blue-600">
-            {{ $rekamHariIni }}
-        </h2>
+            <div>
+
+                <p class="text-slate-500 text-sm">
+                    Hari Ini
+                </p>
+
+                <h2 class="text-4xl font-bold mt-2 text-blue-600">
+                    {{ $rekamHariIni }}
+                </h2>
+
+            </div>
+
+            <div class="w-14 h-14 rounded-2xl bg-cyan-100 flex items-center justify-center">
+
+                <i data-feather="calendar" class="text-cyan-600"></i>
+
+            </div>
+
+        </div>
 
     </div>
 
     <div class="bg-white rounded-3xl shadow-sm p-6">
 
-        <p class="text-slate-500 text-sm">
-            Selesai
-        </p>
+        <div class="flex justify-between items-start">
 
-        <h2 class="text-4xl font-bold mt-2 text-emerald-600">
-            {{ $totalRekam }}
-        </h2>
+            <div>
 
-    </div>
+                <p class="text-slate-500 text-sm">
+                    Selesai
+                </p>
 
-    <div class="bg-white rounded-3xl shadow-sm p-6">
+                <h2 class="text-4xl font-bold mt-2 text-emerald-600">
+                    {{ $totalRekam }}
+                </h2>
 
-        <p class="text-slate-500 text-sm">
-            Menunggu
-        </p>
+            </div>
 
-        <h2 class="text-4xl font-bold mt-2 text-yellow-500">
-            0
-        </h2>
+            <div class="w-14 h-14 rounded-2xl bg-green-100 flex items-center justify-center">
 
-    </div>
+                <i data-feather="check-circle" class="text-green-600"></i>
 
-</div>
+            </div>
 
-<!-- SEARCH -->
-<div class="bg-white rounded-3xl shadow-sm p-6 mb-6">
-
-    <div class="flex gap-3">
-
-        <input type="text" placeholder="Cari nama pasien..." class="flex-1 border rounded-2xl px-5 py-3">
-
-        <button class="bg-blue-600 text-white px-6 rounded-2xl">
-
-            Cari
-
-        </button>
+        </div>
 
     </div>
 
@@ -103,211 +111,169 @@ use Illuminate\Support\Str;
 
     <div class="p-6 border-b">
 
-        <h2 class="font-bold">
-            Daftar Rekam Medis
-        </h2>
+    <!-- Header + Search -->
 
-    </div>
+        <div class="flex items-center justify-between mb-6">
 
-    <div class="overflow-x-auto">
+            <h2 class="text-xl font-bold text-slate-800">
+                Daftar Rekam Medis
+            </h2>
 
-        <table class="w-full">
+            <form
+                method="GET"
+                action="{{ route('dokter.kelola') }}"
+                class="flex">
 
-            <thead class="bg-slate-50">
+                <div class="relative">
 
-                <tr>
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ request('search') }}"
+                        placeholder="Cari nama pasien..."
+                        class="w-80 border rounded-2xl py-3 pl-5 pr-12
+                   focus:outline-none focus:ring-2
+                   focus:ring-blue-500">
 
-                    <th class="p-5 text-left">
-                        No RM
-                    </th>
+                    <button
+                        type="submit"
+                        class="absolute right-4 top-1/2
+                   -translate-y-1/2 z-10">
 
-                    <th class="p-5 text-left">
-                        Pasien
-                    </th>
+                        <i
+                            data-feather="search"
+                            class="w-5 h-5 text-slate-500 hover:text-blue-600">
+                        </i>
 
-                    <th class="p-5 text-left">
-                        Tanggal
-                    </th>
+                    </button>
 
-                    <th class="p-5 text-left">
-                        Diagnosa
-                    </th>
+                </div>
 
-                    <th class="p-5 text-left">
-                        Status
-                    </th>
+            </form>
 
-                    <th class="p-5 text-left">
-                        Aksi
-                    </th>
+        </div>
 
-                </tr>
+        <div class="h-[650px] overflow-y-auto overflow-x-auto">
 
-            </thead>
+            <table class="w-full">
 
-            <tbody>
+                <thead class="bg-slate-50 sticky top-0 z-10">
 
-                @forelse($rekamMedis as $rekam)
+                    <tr>
 
-                <tr class="border-t hover:bg-slate-50">
+                        <th class="p-5 text-left">
+                            Pasien
+                        </th>
 
-                    <td class="p-5">
+                        <th class="p-5 text-left">
+                            Tanggal
+                        </th>
 
-                        RM{{ str_pad($rekam->jadwal->pasien->id, 3, '0', STR_PAD_LEFT) }}
+                        <th class="p-5 text-left">
+                            Diagnosa
+                        </th>
 
-                    </td>
+                        <th class="p-5 text-left">
+                            Aksi
+                        </th>
 
-                    <td class="p-5 font-medium">
+                    </tr>
 
-                        {{ $rekam->jadwal->pasien->name }}
+                </thead>
 
-                    </td>
+                <tbody>
 
-                    <td class="p-5">
+                    @if(!request('search'))
 
-                        {{ $rekam->created_at->format('d M Y') }}
+                    <tr>
+                        <td colspan="6"
+                            class="text-center p-10 text-slate-500">
 
-                    </td>
+                            Cari pasien terlebih dahulu
 
-                    <td class="p-5">
+                        </td>
+                    </tr>
 
-                        {{ Str::limit($rekam->diagnosa, 40) }}
+                    @elseif($rekamMedis->count())
 
-                    </td>
+                    @forelse($rekamMedis as $rekam)
 
-                    <td class="p-5">
+                    <tr class="border-t hover:bg-slate-50">
 
-                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+                        <td class="p-5">
 
-                            Selesai
+                            <p class="font-semibold">
+                                {{ $rekam->jadwal->pasien->name }}
+                            </p>
 
-                        </span>
+                            <span class="text-xs text-blue-600">
+                                {{ $rekam->jadwal->pasien->no_rm ?? '-' }}
+                            </span>
 
-                    </td>
+                        </td>
 
-                    <td class="p-5">
+                        <td class="p-5">
 
-                        <div class="flex gap-2">
+                            {{ $rekam->created_at->format('d M Y') }}
 
-                            <a href="/dokter/rekam-medis/detail/{{ $rekam->id }}"
-                                class="bg-blue-600 text-white px-5 py-2 rounded-lg">
+                        </td>
 
-                                Detail
+                        <td class="p-5">
 
-                            </a>
+                            {{ Str::limit($rekam->diagnosa, 30) }}
 
-                        </div>
+                        </td>
 
-                    </td>
+                        <td class="p-5">
 
-                </tr>
+                            <div class="flex gap-2">
 
-                @empty
+                                <a href="/dokter/rekam-medis/detail/{{ $rekam->id }}"
+                                    class="border border-blue-600 text-blue-600 px-4 py-2 rounded-xl hover:bg-blue-50">
 
-                <tr>
+                                    Detail
 
-                    <td colspan="6" class="text-center p-8 text-slate-500">
+                                </a>
 
-                        Belum ada rekam medis
+                            </div>
 
-                    </td>
+                        </td>
 
-                </tr>
+                    </tr>
 
-                @endforelse
+                    @empty
 
-            </tbody>
+                    <tr>
 
-        </table>
+                        <td colspan="6" class="text-center p-8 text-slate-500">
 
-    </div>
+                            Belum ada rekam medis
 
-</div>
+                        </td>
 
-<!-- AKTIVITAS -->
-<div class="grid lg:grid-cols-2 gap-6 mt-8">
+                    </tr>
 
-    <div class="bg-white rounded-3xl shadow-sm p-6">
+                    @endforelse
 
-        <h2 class="font-bold mb-5">
-            Diagnosa Terbanyak
-        </h2>
+                    @else
 
-        <div class="space-y-4">
+                    <tr>
+                        <td colspan="6"
+                            class="text-center p-10 text-slate-500">
 
-            <div class="flex justify-between">
+                            Data tidak ditemukan
 
-                <span>Influenza</span>
-                <b>12</b>
+                        </td>
+                    </tr>
 
-            </div>
+                    @endif
 
-            <div class="flex justify-between">
+                </tbody>
 
-                <span>Batuk</span>
-                <b>8</b>
-
-            </div>
-
-            <div class="flex justify-between">
-
-                <span>Sakit Kepala</span>
-                <b>5</b>
-
-            </div>
+            </table>
 
         </div>
 
     </div>
 
-    <div class="bg-white rounded-3xl shadow-sm p-6">
-
-        <h2 class="font-bold mb-5">
-            Aktivitas Terakhir
-        </h2>
-
-        <div class="space-y-4">
-
-            <div class="border-l-4 border-emerald-500 pl-4">
-
-                <p class="font-medium">
-                    Rekam medis Ihsan diperbarui
-                </p>
-
-                <p class="text-sm text-slate-500">
-                    10 menit lalu
-                </p>
-
-            </div>
-
-            <div class="border-l-4 border-blue-500 pl-4">
-
-                <p class="font-medium">
-                    Rekam medis Ardi dibuat
-                </p>
-
-                <p class="text-sm text-slate-500">
-                    30 menit lalu
-                </p>
-
-            </div>
-
-            <div class="border-l-4 border-yellow-500 pl-4">
-
-                <p class="font-medium">
-                    Pemeriksaan Dini selesai
-                </p>
-
-                <p class="text-sm text-slate-500">
-                    1 jam lalu
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-@endsection
+    @endsection

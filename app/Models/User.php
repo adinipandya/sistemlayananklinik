@@ -17,8 +17,10 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'status',
 
         'nik',
+        'no_rm',
         'no_hp',
 
         'tanggal_lahir',
@@ -26,11 +28,7 @@ class User extends Authenticatable
 
         'alamat',
 
-        'golongan_darah',
-
-        'alergi',
-
-        'kontak_darurat'
+        'golongan_darah'
 
     ];
 
