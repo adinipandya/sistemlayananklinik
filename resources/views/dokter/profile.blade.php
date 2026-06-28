@@ -1,4 +1,3 @@
-
 @extends('layouts.dokter')
 
 @section('content')
@@ -60,7 +59,7 @@
             </h2>
 
             <p class="text-slate-500">
-                Dokter Umum
+                Dokter {{ $dokter->spesialis ?? '-' }}
             </p>
 
             <label
@@ -80,49 +79,13 @@
                 <div class="flex justify-between">
 
                     <span class="text-slate-500">
-                        SIP
-                    </span>
-
-                    <span class="font-medium">
-                        SIP-2026-001
-                    </span>
-
-                </div>
-
-                <div class="flex justify-between">
-
-                    <span class="text-slate-500">
-                        Spesialisasi
-                    </span>
-
-                    <span class="font-medium">
-                        Dokter Umum
-                    </span>
-
-                </div>
-
-                <div class="flex justify-between">
-
-                    <span class="text-slate-500">
-                        Praktik
-                    </span>
-
-                    <span class="font-medium">
-                        08:00 - 16:00
-                    </span>
-
-                </div>
-
-                <div class="flex justify-between">
-
-                    <span class="text-slate-500">
                         Status
                     </span>
 
                     <span
                         class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
 
-                        Aktif
+                        {{ auth()->user()->status }}
 
                     </span>
 
@@ -179,6 +142,23 @@
                     <label
                         class="block text-sm text-slate-500 mb-2">
 
+                        NIK
+
+                    </label>
+
+                    <input
+                        type="text"
+                        value="{{ $dokter->nik }}"
+                        readonly
+                        class="w-full border rounded-2xl p-3 bg-slate-100">
+
+                </div>
+
+                <div>
+
+                    <label
+                        class="block text-sm text-slate-500 mb-2">
+
                         Email
 
                     </label>
@@ -202,7 +182,25 @@
 
                     <input
                         type="text"
-                        placeholder="08123456789"
+                        name="no_hp"
+                        value="{{ $dokter->no_hp }}"
+                        class="w-full border rounded-2xl p-3">
+
+                </div>
+
+                <div>
+
+                    <label
+                        class="block text-sm text-slate-500 mb-2">
+
+                        Spesialis
+
+                    </label>
+
+                    <input
+                        type="text"
+                        name="spesialis"
+                        value="{{ $dokter->spesialis }}"
                         class="w-full border rounded-2xl p-3">
 
                 </div>
@@ -218,7 +216,8 @@
 
                     <input
                         type="text"
-                        value="SIP-2026-001"
+                        name="sip"
+                        value="{{ $dokter->sip }}"
                         class="w-full border rounded-2xl p-3">
 
                 </div>
@@ -228,14 +227,15 @@
                     <label
                         class="block text-sm text-slate-500 mb-2">
 
-                        Spesialisasi
+                        Nomor STR
 
                     </label>
 
                     <input
                         type="text"
-                        value="Dokter Umum"
-                        class="w-full border rounded-2xl p-3">
+                        value="{{ $dokter->no_str }}"
+                        readonly
+                        class="w-full border rounded-2xl p-3 bg-slate-100">
 
                 </div>
 
@@ -250,8 +250,9 @@
 
                     <input
                         type="text"
-                        value="08:00 - 16:00"
-                        class="w-full border rounded-2xl p-3">
+                        value="{{ $dokter->jam_praktik ?? '08:00 - 16:00' }}"
+                        readonly
+                        class="w-full border rounded-2xl p-3 bg-slate-100">
 
                 </div>
 
@@ -284,4 +285,3 @@
 </div>
 
 @endsection
-

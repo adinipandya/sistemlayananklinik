@@ -17,57 +17,86 @@
 </div>
 
 <!-- STATISTIK -->
-<div class="grid lg:grid-cols-4 gap-6 mb-8">
+<div class="grid lg:grid-cols-3 gap-6 mb-8">
 
     <div class="bg-white rounded-3xl shadow-sm p-6">
 
-        <p class="text-slate-500 text-sm">
-            Total Resep
-        </p>
+        <div class="flex justify-between items-start">
 
-        <h2 class="text-4xl font-bold mt-2">
-            <?php echo e($totalResep); ?>
+            <div>
 
-        </h2>
+                <p class="text-slate-500 text-sm">
+                    Total Resep
+                </p>
+
+                <h2 class="text-4xl font-bold mt-2">
+                    <?php echo e($totalResep); ?>
+
+                </h2>
+
+            </div>
+
+            <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center">
+
+                <i data-feather="file-text" class="text-blue-600"></i>
+
+            </div>
+
+        </div>
 
     </div>
 
     <div class="bg-white rounded-3xl shadow-sm p-6">
 
-        <p class="text-slate-500 text-sm">
-            Hari Ini
-        </p>
+        <div class="flex justify-between items-start">
 
-        <h2 class="text-4xl font-bold mt-2 text-blue-600">
-            <?php echo e($resepHariIni); ?>
+            <div>
 
-        </h2>
+                <p class="text-slate-500 text-sm">
+                    Resep Hari Ini
+                </p>
+
+                <h2 class="text-4xl font-bold mt-2 text-blue-600">
+                    <?php echo e($resepHariIni); ?>
+
+                </h2>
+
+            </div>
+
+            <div class="w-14 h-14 rounded-2xl bg-cyan-100 flex items-center justify-center">
+
+                <i data-feather="calendar" class="text-cyan-600"></i>
+
+            </div>
+
+        </div>
 
     </div>
 
     <div class="bg-white rounded-3xl shadow-sm p-6">
 
-        <p class="text-slate-500 text-sm">
-            Ditebus
-        </p>
+        <div class="flex justify-between items-start">
 
-        <h2 class="text-4xl font-bold mt-2 text-green-600">
-            <?php echo e($resepMingguIni); ?>
+            <div>
 
-        </h2>
+                <p class="text-slate-500 text-sm">
+                    Pasien Terlayani
+                </p>
 
-    </div>
+                <h2 class="text-4xl font-bold mt-2 text-green-600">
+                    <?php echo e($pasienTerlayani); ?>
 
-    <div class="bg-white rounded-3xl shadow-sm p-6">
+                </h2>
 
-        <p class="text-slate-500 text-sm">
-            Menunggu
-        </p>
+            </div>
 
-        <h2 class="text-4xl font-bold mt-2 text-yellow-500">
-            <?php echo e($resepBulanIni); ?>
+            <div class="w-14 h-14 rounded-2xl bg-green-100 flex items-center justify-center">
 
-        </h2>
+                <i data-feather="users" class="text-green-600"></i>
+
+            </div>
+
+        </div>
 
     </div>
 
@@ -76,106 +105,190 @@
 <!-- TABLE -->
 <div class="bg-white rounded-3xl shadow-sm overflow-hidden">
 
-    <div class="p-6 border-b">
+    <div class="p-6 border-b flex items-center justify-between">
 
-        <h2 class="font-bold">
+        <h2 class="text-xl font-bold text-slate-800">
             Daftar Resep
         </h2>
 
+        <form method="GET" class="relative w-80">
+
+            <input
+                type="text"
+                name="search"
+                value="<?php echo e(request('search')); ?>"
+                placeholder="Cari pasien..."
+                class="w-full border border-slate-200 rounded-xl
+                   pl-4 pr-12 py-3">
+
+            <button
+                class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500">
+
+                <i data-feather="search" class="w-5 h-5"></i>
+
+            </button>
+
+        </form>
+
     </div>
 
-    <table class="w-full">
+    <div class="h-[650px] overflow-y-auto p-6">
 
-        <thead>
+        <?php if(request('search')): ?>
 
-            <tr class="bg-slate-50">
-
-                <th class="p-4 text-left">
-                    No RM
-                </th>
-
-                <th class="p-4 text-left">
-                    Pasien
-                </th>
-
-                <th class="p-4 text-left">
-                    Tanggal
-                </th>
-
-                <th class="p-4 text-left">
-                    Diagnosa
-                </th>
-
-                <th class="p-4 text-left">
-                    Jumlah Obat
-                </th>
-
-                <th class="p-4 text-left">
-                    Aksi
-                </th>
-
-            </tr>
-
-        </thead>
-
-        <tbody>
+        <div class="space-y-4">
 
             <?php $__empty_1 = true; $__currentLoopData = $rekamMedis; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
-            <tr class="border-b hover:bg-slate-50">
+            <div class="border border-slate-200 rounded-3xl p-6
+                        hover:border-blue-400 hover:shadow-md
+                        transition-all duration-300">
 
-                <td class="p-4 font-medium text-blue-600">
-                    <?php echo e($item->no_rekam_medis); ?>
+                <div class="grid lg:grid-cols-12 gap-6 items-start">
 
-                </td>
+                    <!-- INFO PASIEN -->
+                    <div class="lg:col-span-8">
 
-                <td class="p-4">
-                    <?php echo e($item->jadwal->pasien->name); ?>
+                        <div class="flex items-center gap-3 mb-4">
 
-                </td>
+                            <div class="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center">
 
-                <td class="p-4">
-                    <?php echo e($item->created_at->format('d M Y')); ?>
+                                <i data-feather="file-text"
+                                    class="w-6 h-6 text-blue-600">
+                                </i>
 
-                </td>
+                            </div>
 
-                <td class="p-4">
-                    <?php echo e($item->diagnosa); ?>
+                            <div>
 
-                </td>
+                                <h3 class="text-xl font-bold">
+                                    <?php echo e($item->jadwal->pasien->name); ?>
 
-                <td class="p-4">
-                    <?php echo e($item->resepObat->count()); ?> Obat
-                </td>
+                                </h3>
 
-                <td class="p-4">
+                                <p class="text-slate-500 text-sm">
+                                    <?php echo e($item->jadwal->pasien->no_rm); ?>
 
-                    <a href="<?php echo e(route('resep.detail', $item->id)); ?>"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                                    •
+                                    <?php echo e($item->created_at->format('d M Y')); ?>
 
-                        Detail
+                                </p>
 
-                    </a>
+                            </div>
 
-                </td>
+                        </div>
 
-            </tr>
+                        <p class="font-semibold mb-3">
+                            <?php echo e($item->resepObat->count()); ?>
+
+                            Obat Diresepkan
+                        </p>
+
+                        <div class="space-y-2">
+
+                            <?php $__currentLoopData = $item->resepObat->take(3); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $resep): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+
+                            <div class="bg-slate-50 rounded-xl p-3">
+
+                                <div class="flex justify-between items-center">
+
+                                    <p class="font-semibold text-slate-800">
+                                        <?php echo e($resep->nama_obat); ?>
+
+                                    </p>
+
+                                    <span class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
+                                        <?php echo e($resep->jumlah); ?>
+
+                                    </span>
+
+                                </div>
+
+                                <p class="text-sm text-slate-500 mt-1">
+                                    <?php echo e($resep->aturan_pakai); ?>
+
+                                </p>
+
+                            </div>
+
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                            <?php if($item->resepObat->count() > 3): ?>
+
+                            <p class="text-blue-600 text-sm">
+                                +<?php echo e($item->resepObat->count() - 3); ?>
+
+                                obat lainnya
+                            </p>
+
+                            <?php endif; ?>
+
+                        </div>
+
+                    </div>
+
+                    <!-- TOMBOL -->
+                    <div class="lg:col-span-4 flex justify-end">
+
+                        <a
+                            href="<?php echo e(route('resep.print', $item->id)); ?>"
+                            target="_blank"
+                            class="border border-blue-600 text-blue-600 px-4 py-2 rounded-xl hover:bg-blue-50 transition flex items-center gap-2">
+
+                            <i data-feather="printer" class="w-4 h-4"></i>
+                            Cetak Resep
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
 
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
 
-            <tr>
+            <div class="text-center py-20 text-slate-500">
 
-                <td colspan="6" class="text-center py-6 text-slate-500">
-                    Belum ada resep obat
-                </td>
+                Resep tidak ditemukan
 
-            </tr>
+            </div>
 
             <?php endif; ?>
 
-        </tbody>
+        </div>
 
-    </table>
+        <?php else: ?>
+
+        <div class="h-full flex flex-col items-center justify-center text-slate-400">
+
+            <svg
+                class="w-16 h-16 mb-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24">
+
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 105.5 5.5a7.5 7.5 0 0011.15 11.15z" />
+
+            </svg>
+
+            <p class="text-lg font-medium">
+                Cari pasien untuk melihat resep obat
+            </p>
+
+            <p class="text-sm mt-2">
+                Masukkan nama pasien pada kolom pencarian di atas
+            </p>
+
+        </div>
+
+        <?php endif; ?>
+
+    </div>
 
 </div>
 

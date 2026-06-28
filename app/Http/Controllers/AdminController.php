@@ -216,6 +216,15 @@ class AdminController
 
         ]);
 
+        User::create([
+            'name' => $request->nama,
+            'nik' => $request->nik,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'role' => 'dokter',
+            'status' => 'Aktif'
+        ]);
+
         Dokter::create([
 
             'nama'      => $request->nama,
@@ -281,7 +290,6 @@ class AdminController
 
     public function updateObat(Request $request, $id)
     {
-        $obat = Obat::findOrFail($id);
 
         $obat->update([
 
@@ -301,7 +309,6 @@ class AdminController
 
     public function destroyObat($id)
     {
-        $obat = Obat::findOrFail($id);
 
         $obat->delete();
 

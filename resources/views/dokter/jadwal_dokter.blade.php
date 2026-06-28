@@ -21,156 +21,227 @@
 </div>
 
 <!-- STATISTIK -->
-
 <div class="grid lg:grid-cols-4 gap-6 mb-8">
 
 
     <div class="bg-white rounded-3xl shadow-sm p-6">
 
-        <p class="text-slate-500 text-sm">
-            Total Jadwal
-        </p>
+        <div class="flex justify-between items-start">
 
-        <h2 class="text-4xl font-bold mt-2 text-slate-800">
-            {{ $totalJadwal }}
-        </h2>
+            <div>
 
-    </div>
+                <p class="text-slate-500 text-sm">
+                    Total Jadwal
+                </p>
 
-    <div class="bg-white rounded-3xl shadow-sm p-6">
+                <h2 class="text-4xl font-bold mt-2 text-slate-800">
+                    {{ $totalJadwal }}
+                </h2>
 
-        <p class="text-slate-500 text-sm">
-            Menunggu
-        </p>
+            </div>
 
-        <h2 class="text-4xl font-bold mt-2 text-yellow-500">
-            {{ $totalMenunggu }}
-        </h2>
+            <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center">
 
-    </div>
+                <i data-feather="calendar" class="text-blue-600"></i>
 
-    <div class="bg-white rounded-3xl shadow-sm p-6">
-
-        <p class="text-slate-500 text-sm">
-            Sedang Berjalan
-        </p>
-
-        <h2 class="text-4xl font-bold mt-2 text-blue-600">
-            {{ $totalDisetujui }}
-        </h2>
-
-    </div>
-
-    <div class="bg-white rounded-3xl shadow-sm p-6">
-
-        <p class="text-slate-500 text-sm">
-            Selesai
-        </p>
-
-        <h2 class="text-4xl font-bold mt-2 text-emerald-600">
-            {{ $totalSelesai }}
-        </h2>
-
-    </div>
-
-
-</div>
-
-<div class="grid lg:grid-cols-3 gap-6">
-
-
-    <!-- TABEL ANTREAN -->
-    <div class="lg:col-span-2 bg-white rounded-3xl shadow-sm">
-
-        <div class="p-6 border-b">
-
-            <h2 class="font-bold text-lg">
-                Antrean Konsultasi
-            </h2>
+            </div>
 
         </div>
 
-        <div class="overflow-x-auto">
+    </div>
 
-            <table class="w-full">
+    <div class="bg-white rounded-3xl shadow-sm p-6">
 
-                <thead>
+        <div class="flex justify-between items-start">
 
-                    <tr class="bg-slate-50 border-b">
+            <div>
 
-                        <th class="p-4 text-left">
-                            Tanggal
-                        </th>
+                <p class="text-slate-500 text-sm">
+                    Menunggu
+                </p>
 
-                        <th class="p-4 text-left">
-                            Jam
-                        </th>
+                <h2 class="text-4xl font-bold mt-2 text-yellow-500">
+                    {{ $totalMenunggu }}
+                </h2>
 
-                        <th class="p-4 text-left">
-                            Pasien
-                        </th>
+            </div>
 
-                        <th class="p-4 text-left">
-                            Keluhan
-                        </th>
+            <div class="w-14 h-14 rounded-2xl bg-yellow-100 flex items-center justify-center">
 
-                        <th class="p-4 text-left">
-                            Status
-                        </th>
+                <i data-feather="clock" class="text-yellow-600"></i>
 
-                        <th class="p-4 text-left">
-                            Aksi
-                        </th>
+            </div>
 
-                    </tr>
+        </div>
 
-                </thead>
+    </div>
 
-                <tbody>
+    <div class="bg-white rounded-3xl shadow-sm p-6">
 
-                    @forelse($jadwal as $item)
+        <div class="flex justify-between items-start">
 
-                    <tr class="border-b hover:bg-slate-50">
+            <div>
 
-                        <td class="p-4">
+                <p class="text-slate-500 text-sm">
+                    Sedang Berjalan
+                </p>
 
-                            {{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}
+                <h2 class="text-4xl font-bold mt-2 text-blue-600">
+                    {{ $totalDisetujui }}
+                </h2>
 
-                        </td>
+            </div>
 
-                        <td class="p-4 font-semibold text-blue-600">
+            <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center">
 
-                            {{ substr($item->jam,0,5) }}
+                <i data-feather="activity" class="text-blue-600"></i>
 
-                        </td>
+            </div>
 
-                        <td class="p-4 font-medium">
+        </div>
 
-                            {{ $item->pasien->name }}
+    </div>
 
-                        </td>
+    <div class="bg-white rounded-3xl shadow-sm p-6">
 
-                        <td class="p-4">
+        <div class="flex justify-between items-start">
 
-                            {{ $item->keluhan }}
+            <div>
 
-                        </td>
+                <p class="text-slate-500 text-sm">
+                    Selesai
+                </p>
 
-                        <td class="p-4">
+                <h2 class="text-4xl font-bold mt-2 text-emerald-600">
+                    {{ $totalSelesai }}
+                </h2>
 
-                            @php
-                            $terlambat =
-                            $item->status == 'Menunggu' &&
-                            \Carbon\Carbon::parse($item->tanggal . ' ' . $item->jam)->isPast();
-                            @endphp
+            </div>
 
-                            @if($terlambat)
+            <div class="w-14 h-14 rounded-2xl bg-green-100 flex items-center justify-center">
 
-                            <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
-                                Terlambat
-                            </span>
+                <i data-feather="check-circle" class="text-green-600"></i>
 
-                            @elseif($item->status == 'Menunggu')
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="grid lg:grid-cols-4 gap-6">
+
+    <!-- TABEL ANTREAN -->
+    <!-- div class="lg:col-span-2 bg-white rounded-3xl shadow-sm -->
+    <div class="lg:col-span-5">
+
+        <div class="bg-white rounded-3xl shadow-sm p-6 h-[600px] flex flex-col">
+
+            <div class="py-3 border-b flex items-center justify-between">
+
+                <h2 class="text-xl font-bold text-slate-800">
+                    Antrean Konsultasi
+                </h2>
+
+                <form method="GET">
+
+                    <select
+                        name="status"
+                        onchange="this.form.submit()"
+                        class="border border-slate-200 rounded-xl px-4 py-2
+                   text-sm focus:outline-none focus:ring-2
+                   focus:ring-blue-500">
+
+                        <option value="">
+                            Semua Status
+                        </option>
+
+                        <option
+                            value="menunggu"
+                            {{ request('status') == 'menunggu' ? 'selected' : '' }}>
+
+                            Menunggu
+
+                        </option>
+
+                        <option
+                            value="berjalan"
+                            {{ request('status') == 'berjalan' ? 'selected' : '' }}>
+
+                            Sedang Berjalan
+
+                        </option>
+
+                        <option
+                            value="selesai"
+                            {{ request('status') == 'selesai' ? 'selected' : '' }}>
+
+                            Selesai
+
+                        </option>
+
+                    </select>
+
+                </form>
+
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-6 space-y-3">
+
+                @forelse($jadwal as $item)
+
+                <div class="bg-white border border-slate-200 rounded-2xl px-5 py-4">
+
+                    <div class="grid grid-cols-12 gap-4 items-center">
+
+                        <!-- RM -->
+                        <div class="col-span-2">
+
+                            <p class="text-xs text-slate-500">
+                                No RM
+                            </p>
+
+                            <p class="font-bold text-blue-600">
+                                {{ $item->pasien->no_rm ?? '-' }}
+                            </p>
+
+                        </div>
+
+                        <!-- PASIEN -->
+                        <div class="col-span-4">
+
+                            <h3 class="font-bold text-xl text-slate-800">
+                                {{ $item->pasien->name }}
+                            </h3>
+
+                            <p class="text-slate-600 text-sm mt-1">
+                                {{ $item->keluhan }}
+                            </p>
+
+                        </div>
+
+                        <!-- WAKTU -->
+                        <div class="col-span-2">
+
+                            <p class="text-xs text-slate-500">
+                                Waktu
+                            </p>
+
+                            <p class="font-semibold text-slate-700">
+                                {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y') }}
+                            </p>
+
+                            <p class="font-bold text-blue-600 text-xl">
+                                {{ substr($item->jam,0,5) }}
+                            </p>
+
+                        </div>
+
+                        <!-- STATUS -->
+                        <div class="col-span-2">
+
+                            @if($item->status == 'Menunggu')
 
                             <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
                                 Menunggu
@@ -182,173 +253,59 @@
                                 Sedang Berjalan
                             </span>
 
-                            @elseif($item->status == 'Selesai')
+                            @else
 
                             <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
                                 Selesai
                             </span>
 
-                            @elseif($terlambat)
+                            @endif
 
-                            <span class="bg-red-100 text-red-700 px-4 py-2 rounded-xl text-sm">
-                                Jadwal Terlewat
-                            </span>
+                        </div>
 
-                            @elseif($item->status == 'Dibatalkan')
+                        <!-- AKSI -->
+                        <div class="col-span-2">
 
-                            <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
-                                Dibatalkan
-                            </span>
+                            @if($item->status == 'Menunggu')
+
+                            <a href="{{ route('dokter.konsultasi', $item->id) }}"
+                                class="block text-center bg-blue-600 text-white py-2 rounded-xl mb-2">
+
+                                Mulai
+
+                            </a>
+
+                            <form action="{{ route('jadwal.batal', $item->id) }}" method="POST">
+                                @csrf
+
+                                <button
+                                    class="w-full bg-red-500 text-white py-2 rounded-xl">
+
+                                    Batal
+
+                                </button>
+
+                            </form>
 
                             @endif
 
-                        </td>
+                        </div>
 
-                        <td class="p-4">
+                    </div>
 
-                            <div class="flex gap-2">
-
-                                @if($item->status == 'Menunggu')
-
-                                <a href="{{ route('dokter.konsultasi', $item->id) }}"
-                                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl">
-
-                                    Mulai
-
-                                </a>
-
-                                <form action="{{ route('jadwal.batal', $item->id) }}" method="POST">
-
-                                    @csrf
-
-                                    <button type="submit"
-                                        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl">
-
-                                        Batal
-
-                                    </button>
-
-                                </form>
-
-                                @elseif($item->status == 'Selesai')
-
-                                <span class="bg-green-100 text-green-700 px-4 py-2 rounded-xl text-sm">
-
-                                    Konsultasi Selesai
-
-                                </span>
-
-                                @elseif($item->status == 'Dibatalkan')
-
-                                <span class="bg-red-100 text-red-700 px-4 py-2 rounded-xl text-sm">
-
-                                    Dibatalkan
-
-                                </span>
-
-                                @endif
-
-                            </div>
-
-                        </td>
-
-                    </tr>
-
-                    @empty
-
-                    <tr>
-
-                        <td colspan="6"
-                            class="text-center p-8 text-slate-500">
-
-                            Belum ada jadwal konsultasi
-
-                        </td>
-
-                    </tr>
-
-                    @endforelse
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-    <!-- SIDEBAR -->
-    <div class="space-y-6">
-
-        <div class="bg-white rounded-3xl shadow-sm p-6">
-
-            <h2 class="font-bold mb-5">
-                Ringkasan Hari Ini
-            </h2>
-
-            <div class="space-y-4">
-
-                <div class="flex justify-between">
-                    <span>Total Jadwal</span>
-                    <b>{{ $totalJadwal }}</b>
                 </div>
 
-                <div class="flex justify-between">
-                    <span>Selesai</span>
-                    <b class="text-green-600">{{ $totalSelesai }}</b>
+                @empty
+
+                <div class="bg-white rounded-2xl p-10 text-center text-slate-500">
+
+                    Belum ada jadwal konsultasi
+
                 </div>
 
-                <div class="flex justify-between">
-                    <span>Menunggu</span>
-                    <b class="text-yellow-500">{{ $totalMenunggu }}</b>
-                </div>
-
-                <div class="flex justify-between">
-                    <span>Berjalan</span>
-                    <b class="text-blue-600">{{ $totalDisetujui }}</b>
-                </div>
+                @endforelse
 
             </div>
-
-        </div>
-
-        <div class="bg-gradient-to-br from-blue-600 to-blue-800 text-white rounded-3xl p-6">
-
-            <p class="opacity-90">
-                Pasien Berikutnya
-            </p>
-
-            @if($pasienBerikutnya)
-
-            <h2 class="text-2xl font-bold mt-2">
-
-                {{ $pasienBerikutnya->pasien->name }}
-
-            </h2>
-
-            <p class="mt-2 opacity-90">
-
-                {{ \Carbon\Carbon::parse($pasienBerikutnya->tanggal)->format('d M Y') }}
-                •
-                {{ substr($pasienBerikutnya->jam,0,5) }}
-
-            </p>
-
-            <p class="mt-3 text-sm opacity-90">
-
-                {{ $pasienBerikutnya->keluhan }}
-
-            </p>
-
-            @else
-
-            <h2 class="text-xl font-bold mt-2">
-
-                Tidak Ada Antrean
-
-            </h2>
-
-            @endif
 
         </div>
 

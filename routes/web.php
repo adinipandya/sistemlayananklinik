@@ -2,14 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DokterController;
 use App\Http\Controllers\PasienController;
 use App\Http\Controllers\AuthController;
+
 use App\Models\User;
 
 
@@ -22,7 +23,7 @@ Route::get('/', [HomeController::class, 'index']);
 
 Route::get('/login', function () {
     return view('auth.login');
-});
+})->name('login');
 
 Route::get('/register', function () {
     return view('auth.register');
@@ -33,7 +34,6 @@ Route::get('/forgot_password', function () {
 });
 
 Route::post('/forgot_password', function (Request $request) {
-
     $user = User::where('email', $request->email)->first();
 
     if (!$user) {
@@ -55,6 +55,11 @@ Route::post('/login',    [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout',   [AuthController::class, 'logout'])->name('logout');
 
+/*
+|--------------------------------------------------------------------------
+| ADMIN (wajib login)
+|--------------------------------------------------------------------------
+*/
 
 /* ─── ADMIN ─────────────────────────────────────────────────────── */
 
@@ -64,25 +69,27 @@ Route::get('/admin/pasien',    [AdminController::class, 'pasien']);
 Route::get('/admin/jadwal',    [AdminController::class, 'jadwal']);
 Route::get('/admin/obat',      [AdminController::class, 'obat']);
 Route::get('/admin/resep',     [AdminController::class, 'resep']);
-Route::get('/admin/feedback',  [AdminController::class, 'feedback']);      
+Route::get('/admin/feedback',  [AdminController::class, 'feedback']);
 
 Route::put('/admin/feedback/{id}',         [AdminController::class, 'updateFeedback']);
 Route::post('/admin/dokter',               [AdminController::class, 'storeDokter']);
-Route::put('/admin/pasien/{id}/verifikasi',[AdminController::class, 'verifikasiPasien']);
+Route::put('/admin/pasien/{id}/verifikasi', [AdminController::class, 'verifikasiPasien']);
 
 Route::post('/admin/obat/store', [AdminController::class, 'storeObat'])->name('obat.store');
 Route::put('/admin/obat/{id}',   [AdminController::class, 'updateObat'])->name('obat.update');
-Route::delete('/admin/obat/{id}',[AdminController::class, 'destroyObat'])->name('obat.destroy');
+Route::delete('/admin/obat/{id}', [AdminController::class, 'destroyObat'])->name('obat.destroy');
 
 
 /* ─── DOKTER ────────────────────────────────────────────────────── */
 
 Route::get('/dokter',              [DokterController::class, 'dashboard']);
 Route::get('/dokter/jadwal',       [DokterController::class, 'jadwal']);
-Route::get('/dokter/pasien',       [DokterController::class, 'datapasien']);
-Route::get('/dokter/kelola',       [DokterController::class, 'kelola']);
-Route::get('/dokter/data_pasien',  [DokterController::class, 'datapasien']);
+Route::get('/dokter/data_pasien',  [DokterController::class, 'datapasien'])->name('dokter.data_pasien');;
 Route::get('/dokter/resep',        [DokterController::class, 'resep'])->name('resep.index');
+Route::get('/dokter/kelola', [DokterController::class, 'kelola'])
+    ->name('dokter.kelola');
+Route::get('/dokter/rekam-medis', [DokterController::class, 'kelola'])
+    ->name('dokter.kelola');
 
 // Profile & pengaturan — pakai controller (hapus closure duplikat)
 Route::get('/dokter/profile',    [DokterController::class, 'profile']);
@@ -100,7 +107,7 @@ Route::post('/dokter/jadwal/batal/{id}', [DokterController::class, 'batalkanJadw
 // Konsultasi
 Route::get('/dokter/konsultasi/{id}',        [DokterController::class, 'konsultasi'])
     ->name('dokter.konsultasi');
-Route::post('/dokter/konsultasi/{id}/simpan',[DokterController::class, 'simpanRekamMedis'])
+Route::post('/dokter/konsultasi/{id}/simpan', [DokterController::class, 'simpanRekamMedis'])
     ->name('rekam-medis.store');
 
 // Rekam medis
@@ -111,15 +118,20 @@ Route::get('/dokter/rekam-medis/edit/{id}',   [DokterController::class, 'editRek
 Route::put('/dokter/rekam-medis/update/{id}', [DokterController::class, 'updateRekamMedis'])
     ->name('rekam-medis.update');
 Route::delete('/dokter/rekam-medis/{id}',     [DokterController::class, 'destroyRekamMedis'])
-    ->name('rekam_medis.destroy');
+    ->name('rekam-medis.destroy');
 
-// Resep detail
-Route::get('/dokter/resep/{id}', [DokterController::class, 'detailResep'])->name('resep.detail');
+// Resep
+Route::get('/resep/{id}/download', [DokterController::class, 'downloadResep'])
+    ->name('resep.download');
+Route::get('/dokter/resep/{id}', [DokterController::class, 'detailResep'])
+    ->name('resep.detail');
 
 // Print rekam (view saja)
-Route::get('/dokter/rekam-medis/print', function () {
-    return view('dokter.print_rekam');
-});
+Route::get(
+    '/dokter/rekam-medis/print/{id}', [DokterController::class, 'printRekam'])
+    ->name('rekam-medis.print');
+Route::get('/resep/{id}/print', [DokterController::class, 'printResep'])
+    ->name('resep.print');
 
 
 /* ─── PASIEN ────────────────────────────────────────────────────── */

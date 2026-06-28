@@ -117,7 +117,7 @@
                         </td>
 
                         <td class="py-3 font-medium">
-                            {{ $resep->obat->nama_obat }}
+                            {{ $resep->obat->obat_id }}
                         </td>
 
                         <td class="py-3">

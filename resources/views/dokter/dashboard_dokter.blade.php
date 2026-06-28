@@ -16,33 +16,7 @@
 </div>
 
 <!-- STATISTIK -->
-<div class="grid lg:grid-cols-4 gap-6 mb-8">
-
-    <div class="bg-white rounded-3xl p-6 shadow-sm">
-
-        <div class="flex justify-between items-start">
-
-            <div>
-
-                <p class="text-slate-500 text-sm">
-                    Pasien Hari Ini
-                </p>
-
-                <h2 class="text-4xl font-bold mt-2 text-slate-800">
-                    {{ $pasienHariIni }}
-                </h2>
-
-            </div>
-
-            <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center">
-
-                <i data-feather="users" class="text-blue-600"></i>
-
-            </div>
-
-        </div>
-
-    </div>
+<div class="grid lg:grid-cols-3 gap-6 mb-8">
 
     <div class="bg-white rounded-3xl p-6 shadow-sm">
 
@@ -132,7 +106,7 @@
 
         <div class="p-6 border-b">
 
-            <h2 class="font-bold text-lg">
+            <h2 class="text-xl font-bold text-slate-800">
                 Jadwal Konsultasi Hari Ini
             </h2>
 
@@ -158,7 +132,7 @@
                             Keluhan
                         </th>
 
-                        <th class="text-left p-5">
+                        <th class="text-center p-5">
                             Status
                         </th>
 
@@ -184,7 +158,7 @@
                             {{ $jadwal->keluhan }}
                         </td>
 
-                        <td class="p-5">
+                        <td class="text-center p-5">
 
                             <span class="px-3 py-1 rounded-full text-sm
         @if($jadwal->status == 'Selesai')
@@ -252,7 +226,7 @@
             </h3>
 
             <p class="text-slate-500">
-                Dokter Umum
+                Dokter {{ $dokter->spesialis ?? '-' }}
             </p>
 
         </div>
@@ -266,7 +240,7 @@
                 </span>
 
                 <span>
-                    SIP-2026-001
+                    {{ $dokter->sip ?? '-' }}
                 </span>
 
             </div>
@@ -277,8 +251,8 @@
                     Poliklinik
                 </span>
 
-                <span>
-                    Umum
+                <span class="font-semibold">
+                    {{ $dokter->spesialis ?? 'Umum' }}
                 </span>
 
             </div>
@@ -289,8 +263,8 @@
                     Jam Praktik
                 </span>
 
-                <span>
-                    08:00 - 16:00
+                <span class="font-semibold">
+                    {{ $dokter->jam_praktik ?? '08:00 - 16:00' }}
                 </span>
 
             </div>
@@ -298,47 +272,6 @@
         </div>
 
     </div>
-
-</div>
-
-<!-- QUICK ACTION -->
-<div class="grid md:grid-cols-3 gap-6 mt-8">
-
-    <a href="/dokter/konsultasi" class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white p-6 rounded-3xl">
-
-        <h3 class="font-bold text-lg">
-            Konsultasi Pasien
-        </h3>
-
-        <p class="mt-2 opacity-90">
-            Mulai pemeriksaan pasien
-        </p>
-
-    </a>
-
-    <a href="/dokter/jadwal" class="bg-gradient-to-r from-blue-600 to-green-500 text-white p-6 rounded-3xl">
-
-        <h3 class="font-bold text-lg">
-            Jadwal Praktik
-        </h3>
-
-        <p class="mt-2 opacity-90">
-            Kelola jadwal konsultasi
-        </p>
-
-    </a>
-
-    <a href="/dokter/kelola" class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white p-6 rounded-3xl">
-
-        <h3 class="font-bold text-lg">
-            Rekam Medis
-        </h3>
-
-        <p class="mt-2 opacity-90">
-            Lihat riwayat pasien
-        </p>
-
-    </a>
 
 </div>
 

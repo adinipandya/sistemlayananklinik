@@ -26,6 +26,16 @@ class AuthController extends Controller
 
         ]);
 
+        $lastPatient = User::whereNotNull('no_rm')
+            ->orderByDesc('id')
+            ->first();
+
+        $nextNumber = $lastPatient
+            ? ((int) substr($lastPatient->no_rm, 2)) + 1
+            : 1;
+
+        $noRM = 'RM' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+
         User::create([
 
             'name' => $request->name,
@@ -34,11 +44,13 @@ class AuthController extends Controller
 
             'email' => $request->email,
 
-            'password' => Hash::make($request->password),
+            'password' => bcrypt($request->password),
 
             'role' => 'pasien',
 
-            'status' => 'Menunggu'
+            'status' => 'Aktif',
+
+            'no_rm' => $noRM
 
         ]);
 

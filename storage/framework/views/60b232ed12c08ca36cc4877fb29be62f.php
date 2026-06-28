@@ -19,164 +19,236 @@
 </div>
 
 <!-- STATISTIK -->
-
 <div class="grid lg:grid-cols-4 gap-6 mb-8">
 
 
     <div class="bg-white rounded-3xl shadow-sm p-6">
 
-        <p class="text-slate-500 text-sm">
-            Total Jadwal
-        </p>
+        <div class="flex justify-between items-start">
 
-        <h2 class="text-4xl font-bold mt-2 text-slate-800">
-            <?php echo e($totalJadwal); ?>
+            <div>
 
-        </h2>
+                <p class="text-slate-500 text-sm">
+                    Total Jadwal
+                </p>
 
-    </div>
+                <h2 class="text-4xl font-bold mt-2 text-slate-800">
+                    <?php echo e($totalJadwal); ?>
 
-    <div class="bg-white rounded-3xl shadow-sm p-6">
+                </h2>
 
-        <p class="text-slate-500 text-sm">
-            Menunggu
-        </p>
+            </div>
 
-        <h2 class="text-4xl font-bold mt-2 text-yellow-500">
-            <?php echo e($totalMenunggu); ?>
+            <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center">
 
-        </h2>
+                <i data-feather="calendar" class="text-blue-600"></i>
 
-    </div>
-
-    <div class="bg-white rounded-3xl shadow-sm p-6">
-
-        <p class="text-slate-500 text-sm">
-            Sedang Berjalan
-        </p>
-
-        <h2 class="text-4xl font-bold mt-2 text-blue-600">
-            <?php echo e($totalDisetujui); ?>
-
-        </h2>
-
-    </div>
-
-    <div class="bg-white rounded-3xl shadow-sm p-6">
-
-        <p class="text-slate-500 text-sm">
-            Selesai
-        </p>
-
-        <h2 class="text-4xl font-bold mt-2 text-emerald-600">
-            <?php echo e($totalSelesai); ?>
-
-        </h2>
-
-    </div>
-
-
-</div>
-
-<div class="grid lg:grid-cols-3 gap-6">
-
-
-    <!-- TABEL ANTREAN -->
-    <div class="lg:col-span-2 bg-white rounded-3xl shadow-sm">
-
-        <div class="p-6 border-b">
-
-            <h2 class="font-bold text-lg">
-                Antrean Konsultasi
-            </h2>
+            </div>
 
         </div>
 
-        <div class="overflow-x-auto">
+    </div>
 
-            <table class="w-full">
+    <div class="bg-white rounded-3xl shadow-sm p-6">
 
-                <thead>
+        <div class="flex justify-between items-start">
 
-                    <tr class="bg-slate-50 border-b">
+            <div>
 
-                        <th class="p-4 text-left">
-                            Tanggal
-                        </th>
+                <p class="text-slate-500 text-sm">
+                    Menunggu
+                </p>
 
-                        <th class="p-4 text-left">
-                            Jam
-                        </th>
+                <h2 class="text-4xl font-bold mt-2 text-yellow-500">
+                    <?php echo e($totalMenunggu); ?>
 
-                        <th class="p-4 text-left">
-                            Pasien
-                        </th>
+                </h2>
 
-                        <th class="p-4 text-left">
-                            Keluhan
-                        </th>
+            </div>
 
-                        <th class="p-4 text-left">
-                            Status
-                        </th>
+            <div class="w-14 h-14 rounded-2xl bg-yellow-100 flex items-center justify-center">
 
-                        <th class="p-4 text-left">
-                            Aksi
-                        </th>
+                <i data-feather="clock" class="text-yellow-600"></i>
 
-                    </tr>
+            </div>
 
-                </thead>
+        </div>
 
-                <tbody>
+    </div>
 
-                    <?php $__empty_1 = true; $__currentLoopData = $jadwal; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+    <div class="bg-white rounded-3xl shadow-sm p-6">
 
-                    <tr class="border-b hover:bg-slate-50">
+        <div class="flex justify-between items-start">
 
-                        <td class="p-4">
+            <div>
 
-                            <?php echo e(\Carbon\Carbon::parse($item->tanggal)->format('d M Y')); ?>
+                <p class="text-slate-500 text-sm">
+                    Sedang Berjalan
+                </p>
 
+                <h2 class="text-4xl font-bold mt-2 text-blue-600">
+                    <?php echo e($totalDisetujui); ?>
 
-                        </td>
+                </h2>
 
-                        <td class="p-4 font-semibold text-blue-600">
+            </div>
 
-                            <?php echo e(substr($item->jam,0,5)); ?>
+            <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center">
 
+                <i data-feather="activity" class="text-blue-600"></i>
 
-                        </td>
+            </div>
 
-                        <td class="p-4 font-medium">
+        </div>
 
-                            <?php echo e($item->pasien->name); ?>
+    </div>
 
+    <div class="bg-white rounded-3xl shadow-sm p-6">
 
-                        </td>
+        <div class="flex justify-between items-start">
 
-                        <td class="p-4">
+            <div>
 
-                            <?php echo e($item->keluhan); ?>
+                <p class="text-slate-500 text-sm">
+                    Selesai
+                </p>
 
+                <h2 class="text-4xl font-bold mt-2 text-emerald-600">
+                    <?php echo e($totalSelesai); ?>
 
-                        </td>
+                </h2>
 
-                        <td class="p-4">
+            </div>
 
-                            <?php
-                            $terlambat =
-                            $item->status == 'Menunggu' &&
-                            \Carbon\Carbon::parse($item->tanggal . ' ' . $item->jam)->isPast();
-                            ?>
+            <div class="w-14 h-14 rounded-2xl bg-green-100 flex items-center justify-center">
 
-                            <?php if($terlambat): ?>
+                <i data-feather="check-circle" class="text-green-600"></i>
 
-                            <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
-                                Terlambat
-                            </span>
+            </div>
 
-                            <?php elseif($item->status == 'Menunggu'): ?>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="grid lg:grid-cols-4 gap-6">
+
+    <!-- TABEL ANTREAN -->
+    <!-- div class="lg:col-span-2 bg-white rounded-3xl shadow-sm -->
+    <div class="lg:col-span-5">
+
+        <div class="bg-white rounded-3xl shadow-sm p-6 h-[600px] flex flex-col">
+
+            <div class="py-3 border-b flex items-center justify-between">
+
+                <h2 class="text-xl font-bold text-slate-800">
+                    Antrean Konsultasi
+                </h2>
+
+                <form method="GET">
+
+                    <select
+                        name="status"
+                        onchange="this.form.submit()"
+                        class="border border-slate-200 rounded-xl px-4 py-2
+                   text-sm focus:outline-none focus:ring-2
+                   focus:ring-blue-500">
+
+                        <option value="">
+                            Semua Status
+                        </option>
+
+                        <option
+                            value="menunggu"
+                            <?php echo e(request('status') == 'menunggu' ? 'selected' : ''); ?>>
+
+                            Menunggu
+
+                        </option>
+
+                        <option
+                            value="berjalan"
+                            <?php echo e(request('status') == 'berjalan' ? 'selected' : ''); ?>>
+
+                            Sedang Berjalan
+
+                        </option>
+
+                        <option
+                            value="selesai"
+                            <?php echo e(request('status') == 'selesai' ? 'selected' : ''); ?>>
+
+                            Selesai
+
+                        </option>
+
+                    </select>
+
+                </form>
+
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-6 space-y-3">
+
+                <?php $__empty_1 = true; $__currentLoopData = $jadwal; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+
+                <div class="bg-white border border-slate-200 rounded-2xl px-5 py-4">
+
+                    <div class="grid grid-cols-12 gap-4 items-center">
+
+                        <!-- RM -->
+                        <div class="col-span-2">
+
+                            <p class="text-xs text-slate-500">
+                                No RM
+                            </p>
+
+                            <p class="font-bold text-blue-600">
+                                <?php echo e($item->pasien->no_rm ?? '-'); ?>
+
+                            </p>
+
+                        </div>
+
+                        <!-- PASIEN -->
+                        <div class="col-span-4">
+
+                            <h3 class="font-bold text-xl text-slate-800">
+                                <?php echo e($item->pasien->name); ?>
+
+                            </h3>
+
+                            <p class="text-slate-600 text-sm mt-1">
+                                <?php echo e($item->keluhan); ?>
+
+                            </p>
+
+                        </div>
+
+                        <!-- WAKTU -->
+                        <div class="col-span-2">
+
+                            <p class="text-xs text-slate-500">
+                                Waktu
+                            </p>
+
+                            <p class="font-semibold text-slate-700">
+                                <?php echo e(\Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y')); ?>
+
+                            </p>
+
+                            <p class="font-bold text-blue-600 text-xl">
+                                <?php echo e(substr($item->jam,0,5)); ?>
+
+                            </p>
+
+                        </div>
+
+                        <!-- STATUS -->
+                        <div class="col-span-2">
+
+                            <?php if($item->status == 'Menunggu'): ?>
 
                             <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
                                 Menunggu
@@ -188,177 +260,59 @@
                                 Sedang Berjalan
                             </span>
 
-                            <?php elseif($item->status == 'Selesai'): ?>
+                            <?php else: ?>
 
                             <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
                                 Selesai
                             </span>
 
-                            <?php elseif($terlambat): ?>
+                            <?php endif; ?>
 
-                            <span class="bg-red-100 text-red-700 px-4 py-2 rounded-xl text-sm">
-                                Jadwal Terlewat
-                            </span>
+                        </div>
 
-                            <?php elseif($item->status == 'Dibatalkan'): ?>
+                        <!-- AKSI -->
+                        <div class="col-span-2">
 
-                            <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
-                                Dibatalkan
-                            </span>
+                            <?php if($item->status == 'Menunggu'): ?>
+
+                            <a href="<?php echo e(route('dokter.konsultasi', $item->id)); ?>"
+                                class="block text-center bg-blue-600 text-white py-2 rounded-xl mb-2">
+
+                                Mulai
+
+                            </a>
+
+                            <form action="<?php echo e(route('jadwal.batal', $item->id)); ?>" method="POST">
+                                <?php echo csrf_field(); ?>
+
+                                <button
+                                    class="w-full bg-red-500 text-white py-2 rounded-xl">
+
+                                    Batal
+
+                                </button>
+
+                            </form>
 
                             <?php endif; ?>
 
-                        </td>
+                        </div>
 
-                        <td class="p-4">
+                    </div>
 
-                            <div class="flex gap-2">
-
-                                <?php if($item->status == 'Menunggu'): ?>
-
-                                <a href="<?php echo e(route('dokter.konsultasi', $item->id)); ?>"
-                                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl">
-
-                                    Mulai
-
-                                </a>
-
-                                <form action="<?php echo e(route('jadwal.batal', $item->id)); ?>" method="POST">
-
-                                    <?php echo csrf_field(); ?>
-
-                                    <button type="submit"
-                                        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl">
-
-                                        Batal
-
-                                    </button>
-
-                                </form>
-
-                                <?php elseif($item->status == 'Selesai'): ?>
-
-                                <span class="bg-green-100 text-green-700 px-4 py-2 rounded-xl text-sm">
-
-                                    Konsultasi Selesai
-
-                                </span>
-
-                                <?php elseif($item->status == 'Dibatalkan'): ?>
-
-                                <span class="bg-red-100 text-red-700 px-4 py-2 rounded-xl text-sm">
-
-                                    Dibatalkan
-
-                                </span>
-
-                                <?php endif; ?>
-
-                            </div>
-
-                        </td>
-
-                    </tr>
-
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-
-                    <tr>
-
-                        <td colspan="6"
-                            class="text-center p-8 text-slate-500">
-
-                            Belum ada jadwal konsultasi
-
-                        </td>
-
-                    </tr>
-
-                    <?php endif; ?>
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-    <!-- SIDEBAR -->
-    <div class="space-y-6">
-
-        <div class="bg-white rounded-3xl shadow-sm p-6">
-
-            <h2 class="font-bold mb-5">
-                Ringkasan Hari Ini
-            </h2>
-
-            <div class="space-y-4">
-
-                <div class="flex justify-between">
-                    <span>Total Jadwal</span>
-                    <b><?php echo e($totalJadwal); ?></b>
                 </div>
 
-                <div class="flex justify-between">
-                    <span>Selesai</span>
-                    <b class="text-green-600"><?php echo e($totalSelesai); ?></b>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+
+                <div class="bg-white rounded-2xl p-10 text-center text-slate-500">
+
+                    Belum ada jadwal konsultasi
+
                 </div>
 
-                <div class="flex justify-between">
-                    <span>Menunggu</span>
-                    <b class="text-yellow-500"><?php echo e($totalMenunggu); ?></b>
-                </div>
-
-                <div class="flex justify-between">
-                    <span>Berjalan</span>
-                    <b class="text-blue-600"><?php echo e($totalDisetujui); ?></b>
-                </div>
+                <?php endif; ?>
 
             </div>
-
-        </div>
-
-        <div class="bg-gradient-to-br from-blue-600 to-blue-800 text-white rounded-3xl p-6">
-
-            <p class="opacity-90">
-                Pasien Berikutnya
-            </p>
-
-            <?php if($pasienBerikutnya): ?>
-
-            <h2 class="text-2xl font-bold mt-2">
-
-                <?php echo e($pasienBerikutnya->pasien->name); ?>
-
-
-            </h2>
-
-            <p class="mt-2 opacity-90">
-
-                <?php echo e(\Carbon\Carbon::parse($pasienBerikutnya->tanggal)->format('d M Y')); ?>
-
-                •
-                <?php echo e(substr($pasienBerikutnya->jam,0,5)); ?>
-
-
-            </p>
-
-            <p class="mt-3 text-sm opacity-90">
-
-                <?php echo e($pasienBerikutnya->keluhan); ?>
-
-
-            </p>
-
-            <?php else: ?>
-
-            <h2 class="text-xl font-bold mt-2">
-
-                Tidak Ada Antrean
-
-            </h2>
-
-            <?php endif; ?>
 
         </div>
 

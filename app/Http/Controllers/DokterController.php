@@ -3,40 +3,73 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Pasien;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\User;
+use App\Models\Dokter;
 use App\Models\JadwalKonsultasi;
 use App\Models\RekamMedis;
 use App\Models\Obat;
 use App\Models\ResepObat;
 use App\Models\Notification;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+
 class DokterController extends Controller
 {
+    // ======================================================
+    // DASHBOARD DOKTER
+    // ======================================================
+
     public function dashboard()
     {
-        $pasienHariIni = JadwalKonsultasi::whereDate(
-            'tanggal',
-            today()
-        )->count();
+        $dokter = Dokter::where(
+            'email',
+            auth()->user()->email
+        )->first();
 
-        $jadwalHariIni = JadwalKonsultasi::whereDate(
-            'tanggal',
-            today()
-        )->count();
+        $pasienHariIni = JadwalKonsultasi::where(
+            'dokter_id',
+            $dokter->id
+        )
+            ->whereDate(
+                'tanggal',
+                today()
+            )
+            ->count();
+
+        $jadwalHariIni = JadwalKonsultasi::where(
+            'dokter_id',
+            $dokter->id
+        )
+            ->whereDate(
+                'tanggal',
+                today()
+            )
+            ->count();
 
         $konsultasiAktif = JadwalKonsultasi::where(
-            'status',
-            'Disetujui'
-        )->count();
+            'dokter_id',
+            $dokter->id
+        )
+            ->where(
+                'status',
+                'Disetujui'
+            )
+            ->count();
 
         $totalRekamMedis = RekamMedis::count();
 
         $jadwalHariIniList = JadwalKonsultasi::with([
             'pasien'
         ])
+            ->where(
+                'dokter_id',
+                $dokter->id
+            )
             ->whereDate(
                 'tanggal',
                 today()
@@ -47,6 +80,7 @@ class DokterController extends Controller
         return view(
             'dokter.dashboard_dokter',
             compact(
+                'dokter',
                 'pasienHariIni',
                 'jadwalHariIni',
                 'konsultasiAktif',
@@ -56,36 +90,62 @@ class DokterController extends Controller
         );
     }
 
-    public function jadwal()
+    public function jadwal(Request $request)
     {
-        $jadwal = JadwalKonsultasi::with([
+        $dokter = Dokter::where(
+            'email',
+            auth()->user()->email
+        )->first();
+
+        $query = JadwalKonsultasi::with([
             'pasien',
             'dokter'
         ])
+            ->where('dokter_id', $dokter->id)
+            ->whereDate('tanggal', '>=', today());
+
+        // FILTER STATUS
+        if ($request->filled('status')) {
+
+            if ($request->status == 'berjalan') {
+                $query->where('status', 'Disetujui');
+            } else {
+                $query->where('status', ucfirst($request->status));
+            }
+        }
+
+        $jadwal = $query
+            ->orderBy('tanggal', 'asc')
+            ->orderBy('jam', 'asc')
+            ->get();
+
+        // Statistik tetap ambil semua data, bukan hasil filter
+        $allJadwal = JadwalKonsultasi::where(
+            'dokter_id',
+            $dokter->id
+        )
             ->whereDate(
                 'tanggal',
                 '>=',
                 today()
             )
-            ->orderBy('tanggal', 'asc')
-            ->orderBy('jam', 'asc')
             ->get();
 
-        $totalJadwal = $jadwal->count();
+        $totalJadwal = $allJadwal->count();
 
-        $totalMenunggu = $jadwal
+        $totalMenunggu = $allJadwal
             ->where('status', 'Menunggu')
             ->count();
 
-        $totalSelesai = $jadwal
+        $totalSelesai = $allJadwal
             ->where('status', 'Selesai')
             ->count();
 
-        $totalDisetujui = $jadwal
+        $totalDisetujui = $allJadwal
             ->where('status', 'Disetujui')
             ->count();
 
-        $pasienBerikutnya = $jadwal
+        $pasienBerikutnya = $allJadwal
             ->where('status', 'Menunggu')
             ->first();
 
@@ -124,34 +184,94 @@ class DokterController extends Controller
         ));
     }
 
-    public function kelola()
+    // ======================================================
+    // DATA PASIEN DOKTER
+    // ======================================================
+
+    public function pasien()
     {
-        $rekamMedis = RekamMedis::with([
-            'jadwal.pasien',
-            'jadwal.dokter'
-        ])
-            ->latest()
+        $pasiens = Pasien::all();
+
+        return view('dokter.pasien_dokter', compact('pasiens'));
+    }
+
+    // SEARCH PASIEN
+    public function searchPasien(Request $request)
+    {
+        $search = $request->search;
+
+        $pasiens = Pasien::where('nama', 'like', '%' . $search . '%')
             ->get();
 
-        $totalRekam = $rekamMedis->count();
+        return view('dokter.pasien_dokter', compact('pasiens'));
+    }
 
-        $rekamHariIni = $rekamMedis
-            ->where('created_at', '>=', now()->startOfDay())
-            ->count();
+    // ======================================================
+    // KELOLA REKAM MEDIS
+    // ======================================================
+
+    public function kelola(Request $request)
+    {
+        $search = $request->search;
+
+        $rekamMedis = collect();
+
+        if ($search) {
+
+            $rekamMedis = RekamMedis::with([
+                'jadwal.pasien',
+                'jadwal.dokter'
+            ])
+
+                ->whereHas('jadwal.pasien', function ($q) use ($search) {
+
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('nik', 'like', "%{$search}%");
+                })
+
+                ->latest()
+                ->get();
+        }
+
+        $totalRekam = RekamMedis::count();
+
+        $rekamHariIni = RekamMedis::whereDate(
+            'created_at',
+            today()
+        )->count();
+
+        $diagnosaTerbanyak = RekamMedis::select(
+            'diagnosa',
+            DB::raw('count(*) as total')
+        )
+            ->groupBy('diagnosa')
+            ->orderByDesc('total')
+            ->take(5)
+            ->get();
+
+        $aktivitasTerakhir = RekamMedis::with('jadwal.pasien')
+            ->latest()
+            ->take(5)
+            ->get();
 
         return view(
             'dokter.kelola_rekam',
             compact(
                 'rekamMedis',
+                'search',
                 'totalRekam',
-                'rekamHariIni'
+                'rekamHariIni',
+                'diagnosaTerbanyak',
+                'aktivitasTerakhir'
             )
         );
     }
 
     public function profile()
     {
-        return view('dokter.profile');
+        $dokter = Dokter::where('email', auth()->user()->email)->first();
+
+        return view('dokter.profile', compact('dokter'));
     }
 
     public function password()
@@ -161,30 +281,21 @@ class DokterController extends Controller
 
     public function updateProfile(Request $request)
     {
-        $user = Auth::user();
-
         $request->validate([
-            'name' => 'required',
             'email' => 'required|email',
-            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+            'no_hp' => 'required'
         ]);
 
-        if ($request->hasFile('photo')) {
+        $user = Auth::user();
 
-            if ($user->photo) {
-                Storage::disk('public')
-                    ->delete($user->photo);
-            }
+        $user->update([
+            'email' => $request->email
+        ]);
 
-            $user->photo = $request
-                ->file('photo')
-                ->store('profile', 'public');
-        }
-
-        $user->name = $request->name;
-        $user->email = $request->email;
-
-        $user->save();
+        Dokter::where('email', $user->email)
+            ->update([
+                'no_hp' => $request->no_hp
+            ]);
 
         return back()->with(
             'success',
@@ -216,21 +327,44 @@ class DokterController extends Controller
 
         $search = $request->search;
 
-        $pasien = User::where('role', 'pasien')
-            ->when($search, function ($query) use ($search) {
-                $query->where(
-                    'name',
-                    'like',
-                    "%{$search}%"
-                );
-            })
-            ->get();
+        $search = $request->search;
+
+        if ($search) {
+
+            $pasien = User::where('role', 'pasien')
+                ->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('nik', 'like', "%{$search}%");
+                })
+                ->get()
+                ->map(function ($item) {
+
+                    $diagnosaTerakhir = \App\Models\RekamMedis::whereHas(
+                        'jadwal',
+                        function ($q) use ($item) {
+                            $q->where('user_id', $item->id);
+                        }
+                    )
+                        ->latest()
+                        ->value('diagnosa');
+
+                    $item->diagnosa_terakhir = $diagnosaTerakhir ?? '-';
+
+                    return $item;
+                });
+        } else {
+
+            $pasien = collect();
+        }
+
+        $totalPasien = User::where('role', 'pasien')->count();
 
         return view(
             'dokter.data_pasien',
             compact(
                 'pasien',
                 'search',
+                'totalPasien',
                 'pasienHariIni',
                 'pasienBaru',
                 'kunjunganBulanIni'
@@ -258,37 +392,60 @@ class DokterController extends Controller
         );
     }
 
-    public function resep()
+    public function resep(Request $request)
     {
-        $rekamMedis = RekamMedis::with([
+        $search = $request->search;
+
+        if ($search) {
+
+            $rekamMedis = RekamMedis::with([
+                'jadwal.pasien',
+                'resepObat'
+            ])
+
+                ->whereHas('jadwal.pasien', function ($q) use ($search) {
+
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('nik', 'like', "%{$search}%");
+                })
+
+                ->latest()
+                ->get();
+        } else {
+
+            $rekamMedis = RekamMedis::with([
+                'jadwal.pasien',
+                'resepObat'
+            ])
+                ->latest()
+                ->get();
+        }
+
+        // Statistik tetap ambil semua data
+        $allRekamMedis = RekamMedis::with([
             'jadwal.pasien',
             'resepObat'
-        ])
-            ->latest()
-            ->get();
+        ])->get();
 
-        $totalResep = $rekamMedis->count();
+        $totalResep = $allRekamMedis->count();
 
-        $resepHariIni = $rekamMedis
+        $resepHariIni = $allRekamMedis
             ->where('created_at', '>=', now()->startOfDay())
             ->count();
 
-        $resepMingguIni = $rekamMedis
-            ->where('created_at', '>=', now()->startOfWeek())
-            ->count();
-
-        $resepBulanIni = $rekamMedis
-            ->where('created_at', '>=', now()->startOfMonth())
+        $pasienTerlayani = $allRekamMedis
+            ->pluck('jadwal.pasien.id')
+            ->unique()
             ->count();
 
         return view(
             'dokter.resep_obat',
             compact(
                 'rekamMedis',
+                'search',
                 'totalResep',
                 'resepHariIni',
-                'resepMingguIni',
-                'resepBulanIni'
+                'pasienTerlayani'
             )
         );
     }
@@ -298,7 +455,7 @@ class DokterController extends Controller
         $rekamMedis = RekamMedis::with([
             'jadwal.pasien',
             'jadwal.dokter',
-            'resepObat.obat'
+            'resepObat'
         ])->findOrFail($id);
 
         return view(
@@ -347,11 +504,11 @@ class DokterController extends Controller
 
         ]);
 
-        if ($request->obat_id) {
+        if ($request->nama_obat) {
 
-            foreach ($request->obat_id as $index => $obatId) {
+            foreach ($request->nama_obat as $index => $namaObat) {
 
-                if (!$obatId) {
+                if (!$namaObat) {
                     continue;
                 }
 
@@ -359,23 +516,13 @@ class DokterController extends Controller
 
                     'rekam_medis_id' => $rekamMedis->id,
 
-                    'obat_id' => $obatId,
+                    'nama_obat' => $namaObat,
 
                     'jumlah' => $request->jumlah[$index],
 
                     'aturan_pakai' => $request->aturan_pakai[$index]
 
                 ]);
-
-                $obat = Obat::find($obatId);
-
-                if ($obat) {
-
-                    $obat->decrement(
-                        'stok',
-                        $request->jumlah[$index]
-                    );
-                }
             }
         }
 
@@ -404,7 +551,7 @@ class DokterController extends Controller
         $rekamMedis = RekamMedis::with([
             'jadwal.pasien',
             'jadwal.dokter',
-            'resepObat.obat'
+            'resepObat'
         ])->findOrFail($id);
 
         return view(
@@ -417,17 +564,12 @@ class DokterController extends Controller
     {
         $rekamMedis = RekamMedis::with([
             'jadwal.pasien',
-            'resepObat.obat'
+            'resepObat'
         ])->findOrFail($id);
-
-        $obat = Obat::orderBy('nama_obat')->get();
 
         return view(
             'dokter.edit_rekam',
-            compact(
-                'rekamMedis',
-                'obat'
-            )
+            compact('rekamMedis')
         );
     }
 
@@ -447,20 +589,6 @@ class DokterController extends Controller
 
         ]);
 
-        // Kembalikan stok obat lama
-        foreach ($rekamMedis->resepObat as $resep) {
-
-            $obat = Obat::find($resep->obat_id);
-
-            if ($obat) {
-
-                $obat->increment(
-                    'stok',
-                    $resep->jumlah
-                );
-            }
-        }
-
         // Hapus resep lama
         ResepObat::where(
             'rekam_medis_id',
@@ -468,11 +596,11 @@ class DokterController extends Controller
         )->delete();
 
         // Simpan resep baru
-        if ($request->obat_id) {
+        if ($request->nama_obat) {
 
-            foreach ($request->obat_id as $index => $obatId) {
+            foreach ($request->nama_obat as $index => $namaObat) {
 
-                if (!$obatId) {
+                if (!$namaObat) {
                     continue;
                 }
 
@@ -480,23 +608,13 @@ class DokterController extends Controller
 
                     'rekam_medis_id' => $rekamMedis->id,
 
-                    'obat_id' => $obatId,
+                    'nama_obat' => $namaObat,
 
                     'jumlah' => $request->jumlah[$index],
 
                     'aturan_pakai' => $request->aturan_pakai[$index]
 
                 ]);
-
-                $obat = Obat::find($obatId);
-
-                if ($obat) {
-
-                    $obat->decrement(
-                        'stok',
-                        $request->jumlah[$index]
-                    );
-                }
             }
         }
 
@@ -509,5 +627,41 @@ class DokterController extends Controller
                 'success',
                 'Rekam medis berhasil diperbarui'
             );
+    }
+
+    public function printRekam($id)
+    {
+        $rekamMedis = RekamMedis::with([
+            'jadwal.pasien',
+            'jadwal.dokter',
+            'resepObat'
+        ])->findOrFail($id);
+
+        return view(
+            'dokter.print_rekam',
+            compact('rekamMedis')
+        );
+    }
+
+    public function downloadResep($id)
+    {
+        $rekamMedis = RekamMedis::with([
+            'jadwal.pasien',
+            'jadwal.dokter',
+            'resepObat'
+        ])->findOrFail($id);
+
+        return view('dokter.download_resep', compact('rekamMedis'));
+    }
+
+    public function printResep($id)
+    {
+        $rekamMedis = RekamMedis::with([
+            'jadwal.pasien',
+            'jadwal.dokter',
+            'resepObat'
+        ])->findOrFail($id);
+
+        return view('dokter.cetak_resep', compact('rekamMedis'));
     }
 }
