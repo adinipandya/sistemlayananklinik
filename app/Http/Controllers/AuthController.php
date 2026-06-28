@@ -8,22 +8,17 @@ use Illuminate\Support\Facades\Hash;
 
 use App\Models\User;
 use App\Models\Dokter;
+use App\Models\Notification;
 
 class AuthController extends Controller
 {
-    // REGISTER
     public function register(Request $request)
     {
         $request->validate([
-
-            'name' => 'required',
-
-            'nik' => 'required|digits:16|unique:users,nik',
-
-            'email' => 'required|email|unique:users,email',
-
+            'name'     => 'required',
+            'nik'      => 'required|digits:16|unique:users,nik',
+            'email'    => 'required|email|unique:users,email',
             'password' => 'required|min:8'
-
         ]);
 
         $lastPatient = User::whereNotNull('no_rm')
@@ -54,15 +49,22 @@ class AuthController extends Controller
 
         ]);
 
+        // Notifikasi ke admin
+        $admin = User::where('role', 'admin')->first();
+        if ($admin) {
+            Notification::create([
+                'user_id' => $admin->id,
+                'judul'   => 'Pasien Baru',
+                'pesan'   => $pasien->name . ' baru saja mendaftar dan menunggu verifikasi',
+            ]);
+        }
+
         return redirect('/login');
     }
 
     public function login(Request $request)
     {
-        $credentials = $request->only(
-            'email',
-            'password'
-        );
+        $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
 
@@ -71,36 +73,26 @@ class AuthController extends Controller
             $user = Auth::user();
 
             if ($user->role == 'admin') {
-
                 return redirect('/admin');
             }
 
             if ($user->role == 'dokter') {
-
                 return redirect('/dokter');
             }
 
             if ($user->role == 'pasien') {
-
                 return redirect('/pasien');
             }
         }
 
-        return back()->with(
-            'error',
-            'Email atau password salah'
-        );
+        return back()->with('error', 'Email atau password salah');
     }
 
-    // LOGOUT
     public function logout(Request $request)
     {
         Auth::logout();
-
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
-
         return redirect('/');
     }
 }

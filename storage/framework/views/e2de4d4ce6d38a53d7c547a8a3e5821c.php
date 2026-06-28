@@ -1,1 +1,0 @@
-<?php /**PATH C:\laragon\www\sistemlayananklinik\resources\views/pasien/profile.blade.php ENDPATH**/ ?>

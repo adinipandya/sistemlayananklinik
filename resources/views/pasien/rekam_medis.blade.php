@@ -2,17 +2,28 @@
 
 @section('content')
 
-<div class="mb-8">
+<div class="flex items-center gap-4 mb-8"
+     data-aos="fade-right">
 
+    <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center">
 
-<h1 class="text-3xl font-bold text-slate-800">
-    Riwayat Pemeriksaan
-</h1>
+        <i data-feather="file-text"
+           class="w-7 h-7 text-blue-600">
+        </i>
 
-<p class="text-slate-500 mt-1">
-    Lihat riwayat kunjungan dan status pemeriksaan Anda
-</p>
+    </div>
 
+    <div>
+
+        <h1 class="text-4xl font-bold text-slate-800">
+            Riwayat Pemeriksaan
+        </h1>
+
+        <p class="text-slate-500">
+            Lihat riwayat kunjungan dan status pemeriksaan Anda
+        </p>
+
+    </div>
 
 </div>
 
@@ -21,38 +32,53 @@
 <div class="grid md:grid-cols-3 gap-5 mb-8">
 
 
-<div class="bg-white border border-slate-200 rounded-xl p-5">
+<div
+data-aos="zoom-in"
+class="bg-white border border-slate-200 rounded-xl p-5
+hover:-translate-y-1
+hover:shadow-xl
+transition-all duration-300">
 
     <p class="text-sm text-slate-500">
         Total Pemeriksaan
     </p>
 
     <h2 class="text-3xl font-bold text-blue-600 mt-2">
-        8
+        {{ $totalPemeriksaan }}
     </h2>
 
 </div>
 
-<div class="bg-white border border-slate-200 rounded-xl p-5">
+<div
+data-aos="zoom-in"
+class="bg-white border border-slate-200 rounded-xl p-5
+hover:-translate-y-1
+hover:shadow-xl
+transition-all duration-300">
 
     <p class="text-sm text-slate-500">
         Selesai
     </p>
 
     <h2 class="text-3xl font-bold text-green-600 mt-2">
-        7
+        {{ $selesai }}
     </h2>
 
 </div>
 
-<div class="bg-white border border-slate-200 rounded-xl p-5">
+<div
+data-aos="zoom-in"
+class="bg-white border border-slate-200 rounded-xl p-5
+hover:-translate-y-1
+hover:shadow-xl
+transition-all duration-300">
 
     <p class="text-sm text-slate-500">
         Menunggu Pemeriksaan
     </p>
 
     <h2 class="text-3xl font-bold text-yellow-500 mt-2">
-        1
+        {{ $menunggu }}
     </h2>
 
 </div>
@@ -62,7 +88,10 @@
 
 <!-- TABEL -->
 
-<div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
+<div
+data-aos="fade-up"
+data-aos-delay="200"
+class="bg-white border border-slate-200 rounded-xl overflow-hidden">
 
 
 <div class="p-5 border-b">
@@ -75,7 +104,7 @@
 
 <table class="w-full">
 
-    <thead class="bg-slate-50">
+   <thead class="bg-green-100 text-green-800">
 
         <tr>
     <th class="p-4 text-left">Tanggal</th>
@@ -89,76 +118,78 @@
 
     <tbody>
 
-        <tr class="border-t">
+        @forelse($riwayat as $item)
 
-            <td class="p-4">
-                20 Juni 2026
-            </td>
+<tr class="border-t">
 
-            <td class="p-4">
-                Dr. Ardi
-            </td>
+    <td class="p-4">
+        {{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}
+    </td>
 
-            <td class="p-4">
-                Poli Umum
-            </td>
+    <td class="p-4">
+        Dr. {{ $item->dokter->nama }}
+    </td>
 
-            <td class="p-4">
+    <td class="p-4">
+        Poli {{ $item->dokter->spesialis }}
+    </td>
 
-                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
-                    Selesai
-                </span>
+    <td class="p-4">
 
-            </td>
+        @if($item->status == 'Selesai')
 
-            <td class="p-4">
+        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+            Selesai
+        </span>
 
-                <button
-                    onclick="openDetailModal()"
-                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+        @elseif($item->status == 'Disetujui')
 
-                    Detail
+        <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
+            Disetujui
+        </span>
 
-                </button>
+        @else
 
-            </td>
+        <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
+            Menunggu
+        </span>
 
-        </tr>
+        @endif
 
-        <tr class="border-t">
+    </td>
 
-            <td class="p-4">
-                25 Juni 2026
-            </td>
+    <td class="p-4">
 
-            <td class="p-4">
-                Dr. Ihsan
-            </td>
+        @if($item->status == 'Selesai')
 
-            <td class="p-4">
-                -
-            </td>
+        <button
+class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all duration-300 hover:shadow-lg">
 
-            <td class="p-4">
+    Detail
 
-                <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
-                    Menunggu
-                </span>
+</button>
 
-            </td>
+        @else
 
-            <td class="p-4">
+        <span class="bg-slate-200 text-slate-600 px-4 py-2 rounded-lg">
+            Belum Ada
+        </span>
 
-                <button
-                    class="bg-slate-300 text-slate-600 px-4 py-2 rounded-lg cursor-not-allowed">
+        @endif
 
-                    Belum Ada
+    </td>
 
-                </button>
+</tr>
 
-            </td>
+@empty
 
-        </tr>
+<tr>
+    <td colspan="5" class="p-4 text-center">
+        Belum ada riwayat konsultasi
+    </td>
+</tr>
+
+@endforelse
 
     </tbody>
 
@@ -228,7 +259,7 @@ class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-
                         Status
                     </p>
 
-                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+                    <span class="bg-green-100 text-green-700 px-4 py-1 rounded-full text-sm font-medium">
                         Selesai
                     </span>
                 </div>
@@ -244,7 +275,7 @@ class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-
                 <p class="text-sm text-blue-700">
                     Detail rekam medis dan resep obat hanya dapat diakses oleh dokter sesuai kebijakan klinik.
                 </p>
-
+    
             </div>
 
             <button

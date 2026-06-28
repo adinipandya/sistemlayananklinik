@@ -527,17 +527,25 @@ class DokterController extends Controller
         }
 
         $jadwal->update([
-            'status' => 'Selesai'
-        ]);
-        Notification::create([
+    'status' => 'Selesai'
+]);
 
-            'user_id' => $jadwal->user_id,
+// Notifikasi ke pasien
+Notification::create([
+    'user_id' => $jadwal->user_id,
+    'judul'   => 'Konsultasi Selesai',
+    'pesan'   => 'Rekam medis dan resep obat telah tersedia',
+]);
 
-            'judul' => 'Konsultasi Selesai',
-
-            'pesan' => 'Rekam medis dan resep obat telah tersedia'
-
-        ]);
+// Notifikasi ke admin
+$admin = User::where('role', 'admin')->first();
+if ($admin) {
+    Notification::create([
+        'user_id' => $admin->id,
+        'judul'   => 'Konsultasi Selesai',
+        'pesan'   => 'Jadwal konsultasi pasien ' . $jadwal->pasien->name . ' telah selesai',
+    ]);
+}
 
         return redirect('/dokter/jadwal')
             ->with(

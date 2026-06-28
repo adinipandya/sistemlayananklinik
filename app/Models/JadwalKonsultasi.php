@@ -21,7 +21,8 @@ class JadwalKonsultasi extends Model
 
         'keluhan',
 
-        'status'
+        'status',
+        'nomor_antrian',
 
     ];
 

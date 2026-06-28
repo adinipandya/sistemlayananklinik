@@ -234,7 +234,7 @@
 
 <!-- MODAL DETAIL PASIEN -->
 <div
-    id="patientModal"
+    id="pasienModal"
     class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
 
     <div class="bg-white rounded-3xl w-full max-w-3xl overflow-hidden">

@@ -81,6 +81,21 @@
                         placeholder="contoh@gmail.com" required>
                 </div>
 
+                <div class="mb-4">
+    <label class="block text-gray-700 font-semibold mb-1 text-sm">
+        <i class="fas fa-id-card text-gray-400 mr-2"></i> NIK
+    </label>
+
+    <input
+        type="text"
+        name="nik"
+        maxlength="16"
+        value="{{ old('nik') }}"
+        class="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50"
+        placeholder="Masukkan 16 digit NIK"
+        required>
+</div>
+
                 <!-- PASSWORD BARU -->
                 <div class="mb-4">
                     <label class="block text-gray-700 font-semibold mb-1 text-sm">

@@ -2,17 +2,28 @@
 
 @section('content')
 
-<div class="mb-8">
+<div class="flex items-center gap-4 mb-8"
+     data-aos="fade-right">
 
+    <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center">
 
-    <h1 class="text-3xl font-bold text-slate-800">
-        Feedback Pasien
-    </h1>
+        <i data-feather="message-square"
+           class="w-7 h-7 text-blue-600">
+        </i>
 
-    <p class="text-slate-500 mt-1">
-        Berikan masukan dan penilaian terhadap layanan Klinik Polibatam
-    </p>
+    </div>
 
+    <div>
+
+        <h1 class="text-4xl font-bold text-slate-800">
+            Feedback Pasien
+        </h1>
+
+        <p class="text-slate-500">
+            Berikan masukan dan penilaian terhadap layanan Klinik Polibatam
+        </p>
+
+    </div>
 
 </div>
 
@@ -21,38 +32,53 @@
 <div class="grid md:grid-cols-3 gap-5 mb-8">
 
 
-    <div class="bg-white border border-slate-200 rounded-xl p-5">
+    <div
+data-aos="zoom-in"
+class="bg-white border border-slate-200 rounded-xl p-5
+hover:-translate-y-1
+hover:shadow-xl
+transition-all duration-300">
 
         <p class="text-sm text-slate-500">
             Feedback Dikirim
         </p>
 
         <h2 class="text-3xl font-bold text-blue-600 mt-2">
-            3
+            {{ $feedbackDikirim }}
         </h2>
 
     </div>
 
-    <div class="bg-white border border-slate-200 rounded-xl p-5">
+    <div
+data-aos="zoom-in"
+class="bg-white border border-slate-200 rounded-xl p-5
+hover:-translate-y-1
+hover:shadow-xl
+transition-all duration-300">
 
         <p class="text-sm text-slate-500">
             Rating Rata-rata
         </p>
 
         <h2 class="text-3xl font-bold text-green-600 mt-2">
-            4.8
+            {{ $ratingRataRata }}
         </h2>
 
     </div>
 
-    <div class="bg-white border border-slate-200 rounded-xl p-5">
+    <div
+data-aos="zoom-in"
+class="bg-white border border-slate-200 rounded-xl p-5
+hover:-translate-y-1
+hover:shadow-xl
+transition-all duration-300">
 
         <p class="text-sm text-slate-500">
             Feedback Direspon
         </p>
 
         <h2 class="text-3xl font-bold text-blue-600 mt-2">
-            2
+            {{ $feedbackDirespon }}
         </h2>
 
     </div>
@@ -64,7 +90,11 @@
 
 
     <!-- FORM FEEDBACK -->
-    <div class="bg-white border border-slate-200 rounded-xl p-6">
+    <div
+data-aos="fade-right"
+class="bg-white border border-slate-200 rounded-xl p-6
+hover:shadow-lg
+transition-all duration-300">
 
         <h2 class="font-semibold text-lg mb-5">
             Kirim Feedback
@@ -119,7 +149,10 @@
 </textarea>
             </div>
 
-            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg">
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl
+hover:shadow-lg
+hover:scale-[1.02]
+transition-all duration-300">
                 Kirim Feedback
             </button>
 
@@ -128,7 +161,11 @@
     </div>
 
     <!-- INFORMASI -->
-    <div class="bg-white border border-slate-200 rounded-xl p-6">
+    <div
+data-aos="fade-left"
+class="bg-white border border-slate-200 rounded-xl p-6
+hover:shadow-lg
+transition-all duration-300">
 
         <h2 class="font-semibold text-lg mb-5">
             Kenapa Feedback Penting?
@@ -163,8 +200,11 @@
 
 <!-- RIWAYAT FEEDBACK -->
 
-<div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
 
+<div
+data-aos="fade-up"
+data-aos-delay="200"
+class="bg-white border border-slate-200 rounded-xl overflow-hidden">
 
     <div class="p-5 border-b">
 
@@ -194,6 +234,10 @@
 
                 <th class="text-left p-4">
                     Status
+                </th>
+
+                <th class="text-left p-4">
+                    Komentar
                 </th>
 
                 <th class="text-left p-4">
@@ -239,6 +283,9 @@
                     @endif
 
                 </td>
+                <td class="p-4 max-w-xs">
+    {{ \Illuminate\Support\Str::limit($item->komentar, 50) }}
+</td>       
 
                 <td class="p-4">
 
@@ -249,7 +296,9 @@
         '{{ $item->rating }}',
         '{{ addslashes($item->komentar) }}',
         '{{ addslashes($item->respon ?? 'Belum ada respon') }}'
-        )" class="bg-blue-100 hover:bg-blue-200 p-2 rounded-lg">
+        )" class="bg-blue-100 hover:bg-blue-200 p-2 rounded-lg
+hover:scale-110
+transition-all duration-300">
 
                             <i data-feather="eye" class="w-4 h-4 text-blue-600"></i>
 
@@ -263,7 +312,9 @@
         '{{ $item->kategori }}',
         '{{ $item->rating }}',
         '{{ addslashes($item->komentar) }}'
-        )" class="bg-yellow-100 hover:bg-yellow-200 p-2 rounded-lg">
+        )" class="bg-yellow-100 hover:bg-yellow-200 p-2 rounded-lg
+hover:scale-110
+transition-all duration-300">
 
                             <i data-feather="edit-2" class="w-4 h-4 text-yellow-600"></i>
 
@@ -276,7 +327,9 @@
                             @csrf
                             @method('DELETE')
 
-                            <button class="bg-red-100 hover:bg-red-200 p-2 rounded-lg">
+                            <button class="bg-red-100 hover:bg-red-200 p-2 rounded-lg
+hover:scale-110
+transition-all duration-300">
 
                                 <i data-feather="trash-2" class="w-4 h-4 text-red-600"></i>
 

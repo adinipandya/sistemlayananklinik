@@ -248,6 +248,7 @@
         }
         row.remove();
     }
+
 </script>
 
 @endsection

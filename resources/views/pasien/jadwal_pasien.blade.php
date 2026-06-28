@@ -2,26 +2,41 @@
 
 @section('content')
 
-<div class="mb-8">
+<div class="flex items-center gap-4 mb-8"
+     data-aos="fade-right">
 
+    <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center">
 
-<h1 class="text-3xl font-bold text-slate-800">
-    Jadwal Konsultasi
-</h1>
+        <i data-feather="calendar"
+           class="w-7 h-7 text-blue-600">
+        </i>
 
-<p class="text-slate-500 mt-1">
-    Kelola jadwal konsultasi Anda
-</p>
+    </div>
 
+    <div>
+
+        <h1 class="text-4xl font-bold text-slate-800">
+            Jadwal Konsultasi
+        </h1>
+
+        <p class="text-slate-500">
+            Kelola jadwal konsultasi Anda
+        </p>
+
+    </div>
 
 </div>
-
 <!-- STATISTIK -->
 
 <div class="grid md:grid-cols-3 gap-5 mb-8">
 
 
-<div class="bg-white border border-slate-200 rounded-xl p-5">
+<div
+data-aos="zoom-in"
+class="bg-white border border-slate-200 rounded-xl p-5
+hover:-translate-y-1
+hover:shadow-xl
+transition-all duration-300">
 
     <p class="text-sm text-slate-500">
         Jadwal Aktif
@@ -33,7 +48,12 @@
 
 </div>
 
-<div class="bg-white border border-slate-200 rounded-xl p-5">
+<div
+data-aos="zoom-in"
+class="bg-white border border-slate-200 rounded-xl p-5
+hover:-translate-y-1
+hover:shadow-xl
+transition-all duration-300">
 
     <p class="text-sm text-slate-500">
         Konsultasi Selesai
@@ -45,7 +65,12 @@
 
 </div>
 
-<div class="bg-white border border-slate-200 rounded-xl p-5">
+<div
+data-aos="zoom-in"
+class="bg-white border border-slate-200 rounded-xl p-5
+hover:-translate-y-1
+hover:shadow-xl
+transition-all duration-300">
 
     <p class="text-sm text-slate-500">
         Total Booking
@@ -62,7 +87,12 @@
 
 <!-- JADWAL BERIKUTNYA -->
 
-<div class="bg-white border border-slate-200 rounded-xl p-6 mb-8">
+<div
+data-aos="fade-up"
+class="bg-green-600 text-white rounded-xl p-6 mb-8
+hover:bg-green-700
+hover:shadow-lg
+transition-all duration-300">
 
 
 <h2 class="font-semibold text-lg mb-4">
@@ -72,21 +102,21 @@
 <div class="grid md:grid-cols-4 gap-4">
 
     <div>
-        <p class="text-sm text-slate-500">
+        <p class="text-sm text-green-100">
             Dokter
         </p>
         <p class="font-medium">
-            Dr. {{ $jadwal->first()?->dokter?->nama }}
+            Dr. {{ $jadwalTerdekat?->dokter?->nama }}
         </p>
     </div>
 
     <div>
-        <p class="text-sm text-slate-500">
+        <p class="text-sm text-green-100">
             Tanggal
         </p>
-        <p class="font-medium">
-            25 Juni 2026
-        </p>
+       <p class="font-medium text-white">
+    {{ \Carbon\Carbon::parse($jadwalTerdekat?->tanggal)->format('d M Y') }}
+</p>
     </div>
 
     <div>
@@ -94,15 +124,15 @@
             Jam
         </p>
         <p class="font-medium">
-            10.00 WIB
-        </p>
+    {{ substr($jadwalTerdekat?->jam,0,5) }} WIB
+</p>
     </div>
 
     <div>
-        <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
-            Menunggu
-        </span>
-    </div>
+    <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
+        {{ $jadwalTerdekat?->status ?? '-' }}
+    </span>
+</div>
 
 </div>
 
@@ -111,7 +141,10 @@
 
 <!-- TABEL -->
 
-<div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
+<div
+data-aos="fade-up"
+data-aos-delay="200"
+class="bg-white border border-slate-200 rounded-xl overflow-hidden">
 
 
 <div class="p-5 border-b">
@@ -127,6 +160,8 @@
     <thead class="bg-slate-50">
 
         <tr>
+
+        <th class="p-4 text-center">No Antrian</th>
 
             <th class="text-left p-4">
                 Dokter
@@ -144,22 +179,20 @@
                 Status
             </th>
 
-            <th class="text-left p-4">
-                Aksi
-            </th>
-
         </tr>
 
     </thead>
 
     <tbody>
+        @foreach($jadwal as $item)
+        <tr class="border-t">
 
-@foreach($jadwal as $item)
-
-<tr class="border-t">
+    <td class="p-4 text-center font-semibold text-blue-600">
+        {{ $item->nomor_antrian }}
+    </td>
 
     <td class="p-4">
-        {{ $item->dokter->nama }}
+        Dr. {{ $item->dokter->nama }}
     </td>
 
     <td class="p-4">
@@ -172,64 +205,37 @@
 
     <td class="p-4">
 
-        <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
+@if(
+    $item->status == 'Menunggu' &&
+    $item->tanggal < now()->toDateString()
+)
 
-            {{ $item->status }}
+<span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
+    Tidak Hadir
+</span>
 
-        </span>
+@elseif($item->status == 'Selesai')
 
-    </td>
+<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+    Selesai
+</span>
 
-    <td class="p-4">
+@else
 
-        <a href="{{ route('pasien.jadwal.detail', $item->id) }}"
-   class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-    Detail
-</a>
+<span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
+    {{ $item->status }}
+</span>
 
-    </td>
+@endif
+
+</td>
 
 </tr>
-
 @endforeach
 
 </tbody>
 
 </table>
-
-
-</div>
-
-<!-- MODAL DETAIL -->
-
-<div id="detailModal"
-class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-
-
-<div class="bg-white rounded-2xl p-6 w-full max-w-lg">
-
-    <h2 class="text-xl font-semibold mb-4">
-        Detail Konsultasi
-    </h2>
-
-    <div class="space-y-3">
-
-        <p><b>Dokter :</b> Dr. Ihsan</p>
-        <p><b>Tanggal :</b> 25 Juni 2026</p>
-        <p><b>Jam :</b> 10.00 WIB</p>
-        <p><b>Status :</b> Menunggu</p>
-
-    </div>
-
-    <button
-        onclick="closeDetailModal()"
-        class="mt-6 w-full border border-slate-300 py-3 rounded-lg">
-
-        Tutup
-
-    </button>
-
-</div>
 
 
 </div>
