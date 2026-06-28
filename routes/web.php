@@ -35,6 +35,11 @@ Route::get('/forgot_password', function () {
 });
 
 Route::post('/forgot_password', function (Request $request) {
+    $user = User::where('email', $request->email)->first();
+
+    if (!$user) {
+        return back()->with('error', 'Email tidak ditemukan.');
+    }
 
     $user = User::where('email', $request->email)
             ->where('nik', $request->nik)
@@ -66,6 +71,11 @@ Route::post('/login',    [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout',   [AuthController::class, 'logout'])->name('logout');
 
+/*
+|--------------------------------------------------------------------------
+| ADMIN (wajib login)
+|--------------------------------------------------------------------------
+*/
 
 /* ─── NOTIFIKASI ─────────────────────────────────────────────────── */
 
@@ -87,6 +97,13 @@ Route::get('/admin/obat',      [AdminController::class, 'obat']);
 Route::get('/admin/resep',     [AdminController::class, 'resep']);
 Route::get('/admin/feedback',  [AdminController::class, 'feedback']);
 
+Route::put('/admin/feedback/{id}',         [AdminController::class, 'updateFeedback']);
+Route::post('/admin/dokter',               [AdminController::class, 'storeDokter']);
+Route::put('/admin/pasien/{id}/verifikasi', [AdminController::class, 'verifikasiPasien']);
+
+Route::post('/admin/obat/store', [AdminController::class, 'storeObat'])->name('obat.store');
+Route::put('/admin/obat/{id}',   [AdminController::class, 'updateObat'])->name('obat.update');
+Route::delete('/admin/obat/{id}', [AdminController::class, 'destroyObat'])->name('obat.destroy');
 Route::get('/admin/pengaturan',       [AdminController::class, 'pengaturan']);
 Route::put('/admin/pengaturan',       [AdminController::class, 'updatePengaturan']);
 Route::post('/admin/pengaturan/foto', [AdminController::class, 'updateFoto']);
@@ -112,10 +129,12 @@ Route::delete('/admin/jadwal/{id}',     [AdminController::class, 'destroyJadwal'
 
 Route::get('/dokter',              [DokterController::class, 'dashboard']);
 Route::get('/dokter/jadwal',       [DokterController::class, 'jadwal']);
-Route::get('/dokter/pasien',       [DokterController::class, 'datapasien']);
-Route::get('/dokter/kelola',       [DokterController::class, 'kelola']);
-Route::get('/dokter/data_pasien',  [DokterController::class, 'datapasien']);
+Route::get('/dokter/data_pasien',  [DokterController::class, 'datapasien'])->name('dokter.data_pasien');;
 Route::get('/dokter/resep',        [DokterController::class, 'resep'])->name('resep.index');
+Route::get('/dokter/kelola', [DokterController::class, 'kelola'])
+    ->name('dokter.kelola');
+Route::get('/dokter/rekam-medis', [DokterController::class, 'kelola'])
+    ->name('dokter.kelola');
 
 Route::get('/dokter/profile',    [DokterController::class, 'profile']);
 Route::post('/dokter/profile',   [DokterController::class, 'updateProfile']);
@@ -140,8 +159,18 @@ Route::get('/dokter/rekam-medis/edit/{id}',   [DokterController::class, 'editRek
 Route::put('/dokter/rekam-medis/update/{id}', [DokterController::class, 'updateRekamMedis'])
     ->name('rekam-medis.update');
 Route::delete('/dokter/rekam-medis/{id}',     [DokterController::class, 'destroyRekamMedis'])
-    ->name('rekam_medis.destroy');
+    ->name('rekam-medis.destroy');
 
+// Resep
+Route::get('/resep/{id}/download', [DokterController::class, 'downloadResep'])
+    ->name('resep.download');
+Route::get('/dokter/resep/{id}', [DokterController::class, 'detailResep'])
+    ->name('resep.detail');
+
+// Print rekam (view saja)
+Route::get(
+    '/dokter/rekam-medis/print/{id}', [DokterController::class, 'printRekam'])
+    ->name('rekam-medis.print');
 Route::get('/resep/{id}/download', [DokterController::class, 'downloadResep'])
     ->name('resep.download');
 
@@ -189,6 +218,7 @@ Route::post('/pasien/password', [PasienController::class, 'updatePassword'])
 
 // Profile
 Route::get('/pasien/profile', [PasienController::class, 'profile']);
+Route::get('/pasien/pengaturan', [PasienController::class, 'pengaturan']);
 Route::post('/pasien/profile', [PasienController::class, 'updateProfile'])
     ->name('pasien.profile.update');
 Route::get('/pasien/pengaturan', [PasienController::class, 'pengaturan']);

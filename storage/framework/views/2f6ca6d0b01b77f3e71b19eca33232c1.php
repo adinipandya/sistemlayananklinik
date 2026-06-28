@@ -1,6 +1,4 @@
-@extends('layouts.dokter')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 <div class="flex justify-between items-center mb-8">
 
@@ -32,7 +30,8 @@
                 </p>
 
                 <h2 class="text-4xl font-bold mt-2">
-                    {{ $totalPasien }}
+                    <?php echo e($totalPasien); ?>
+
                 </h2>
 
             </div>
@@ -58,7 +57,8 @@
                 </p>
 
                 <h2 class="text-4xl font-bold mt-2 text-blue-600">
-                    {{ $pasienHariIni }}
+                    <?php echo e($pasienHariIni); ?>
+
                 </h2>
 
             </div>
@@ -84,7 +84,8 @@
                 </p>
 
                 <h2 class="text-4xl font-bold mt-2 text-purple-600">
-                    {{ $kunjunganBulanIni }}
+                    <?php echo e($kunjunganBulanIni); ?>
+
                 </h2>
 
             </div>
@@ -117,7 +118,7 @@
                 <input
                     type="text"
                     name="search"
-                    value="{{ request('search') }}"
+                    value="<?php echo e(request('search')); ?>"
                     placeholder="Cari nama atau NIK..."
                     class="w-80 border rounded-2xl py-3 pl-5 pr-12
                            focus:outline-none focus:ring-2
@@ -140,13 +141,13 @@
 
     </div>
 
-    @if(request('search'))
+    <?php if(request('search')): ?>
 
     <div class="flex-1 overflow-y-auto pr-2">
 
         <div class="grid gap-4">
 
-            @forelse($pasien as $item)
+            <?php $__empty_1 = true; $__currentLoopData = $pasien; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
             <div class="border rounded-2xl p-5 flex justify-between items-center hover:border-blue-500 transition">
 
@@ -157,17 +158,20 @@
                     </p>
 
                     <p class="font-bold text-blue-600">
-                        {{ $item->no_rm ?? '-' }}
+                        <?php echo e($item->no_rm ?? '-'); ?>
+
                     </p>
 
                     <h3 class="text-lg font-semibold mt-2">
-                        {{ $item->name }}
+                        <?php echo e($item->name); ?>
+
                     </h3>
 
                     <p class="text-sm text-slate-500">
                         Status :
                         <span class="text-green-600 font-medium">
-                            {{ $item->status }}
+                            <?php echo e($item->status); ?>
+
                         </span>
                     </p>
 
@@ -175,16 +179,16 @@
 
                 <button
                     onclick="openPatientModal(
-                    '{{ $item->no_rm ?? '-' }}',
-                    '{{ $item->name }}',
-                    '{{ $item->nik ?? '-' }}',
-                    '{{ $item->email ?? '-' }}',
-                    '{{ $item->no_hp ?? '-' }}',
-                    '{{ $item->jenis_kelamin ?? '-' }}',
-                    '{{ $item->tanggal_lahir ?? '-' }}',
-                    '{{ $item->alamat ?? '-' }}',
-                    '{{ $item->golongan_darah ?? '-' }}',
-                    '{{ $item->diagnosa_terakhir ?? '-' }}'
+                    '<?php echo e($item->no_rm ?? '-'); ?>',
+                    '<?php echo e($item->name); ?>',
+                    '<?php echo e($item->nik ?? '-'); ?>',
+                    '<?php echo e($item->email ?? '-'); ?>',
+                    '<?php echo e($item->no_hp ?? '-'); ?>',
+                    '<?php echo e($item->jenis_kelamin ?? '-'); ?>',
+                    '<?php echo e($item->tanggal_lahir ?? '-'); ?>',
+                    '<?php echo e($item->alamat ?? '-'); ?>',
+                    '<?php echo e($item->golongan_darah ?? '-'); ?>',
+                    '<?php echo e($item->diagnosa_terakhir ?? '-'); ?>'
                     )"
                     class="border border-blue-600 text-blue-600 px-4 py-2 rounded-xl hover:bg-blue-50">
 
@@ -194,19 +198,19 @@
 
             </div>
 
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
 
             <div class="text-center py-10 text-slate-500">
                 Data pasien tidak ditemukan
             </div>
 
-            @endforelse
+            <?php endif; ?>
 
         </div>
 
     </div>
 
-    @else
+    <?php else: ?>
 
     <div class="flex-1 flex flex-col items-center justify-center">
 
@@ -228,13 +232,13 @@
 
     </div>
 
-    @endif
+    <?php endif; ?>
 
 </div>
 
 <!-- MODAL DETAIL PASIEN -->
 <div
-    id="pasienModal"
+    id="patientModal"
     class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
 
     <div class="bg-white rounded-3xl w-full max-w-3xl overflow-hidden">
@@ -390,4 +394,5 @@
     }
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.dokter', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /Users/ardiansyah/laravel/sistemlayananklinik/resources/views/dokter/data_pasien.blade.php ENDPATH**/ ?>
