@@ -1,6 +1,4 @@
-@extends('layouts.dokter')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 <div class="flex justify-between items-center mb-8">
 
@@ -32,7 +30,8 @@
                 </p>
 
                 <h2 class="text-4xl font-bold mt-2">
-                    {{ $totalResep }}
+                    <?php echo e($totalResep); ?>
+
                 </h2>
 
             </div>
@@ -58,7 +57,8 @@
                 </p>
 
                 <h2 class="text-4xl font-bold mt-2 text-blue-600">
-                    {{ $resepHariIni }}
+                    <?php echo e($resepHariIni); ?>
+
                 </h2>
 
             </div>
@@ -84,7 +84,8 @@
                 </p>
 
                 <h2 class="text-4xl font-bold mt-2 text-green-600">
-                    {{ $pasienTerlayani }}
+                    <?php echo e($pasienTerlayani); ?>
+
                 </h2>
 
             </div>
@@ -115,7 +116,7 @@
             <input
                 type="text"
                 name="search"
-                value="{{ request('search') }}"
+                value="<?php echo e(request('search')); ?>"
                 placeholder="Cari pasien..."
                 class="w-full border border-slate-200 rounded-xl
                    pl-4 pr-12 py-3">
@@ -133,11 +134,11 @@
 
     <div class="h-[650px] overflow-y-auto p-6">
 
-        @if(request('search'))
+        <?php if(request('search')): ?>
 
         <div class="space-y-4">
 
-            @forelse($rekamMedis as $item)
+            <?php $__empty_1 = true; $__currentLoopData = $rekamMedis; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
             <div class="border border-slate-200 rounded-3xl p-6
                         hover:border-blue-400 hover:shadow-md
@@ -161,13 +162,16 @@
                             <div>
 
                                 <h3 class="text-xl font-bold">
-                                    {{ $item->jadwal->pasien->name }}
+                                    <?php echo e($item->jadwal->pasien->name); ?>
+
                                 </h3>
 
                                 <p class="text-slate-500 text-sm">
-                                    {{ $item->jadwal->pasien->no_rm }}
+                                    <?php echo e($item->jadwal->pasien->no_rm); ?>
+
                                     •
-                                    {{ $item->created_at->format('d M Y') }}
+                                    <?php echo e($item->created_at->format('d M Y')); ?>
+
                                 </p>
 
                             </div>
@@ -175,44 +179,49 @@
                         </div>
 
                         <p class="font-semibold mb-3">
-                            {{ $item->resepObat->count() }}
+                            <?php echo e($item->resepObat->count()); ?>
+
                             Obat Diresepkan
                         </p>
 
                         <div class="space-y-2">
 
-                            @foreach($item->resepObat->take(3) as $resep)
+                            <?php $__currentLoopData = $item->resepObat->take(3); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $resep): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
                             <div class="bg-slate-50 rounded-xl p-3">
 
                                 <div class="flex justify-between items-center">
 
                                     <p class="font-semibold text-slate-800">
-                                        {{ $resep->nama_obat }}
+                                        <?php echo e($resep->nama_obat); ?>
+
                                     </p>
 
                                     <span class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
-                                        {{ $resep->jumlah }}
+                                        <?php echo e($resep->jumlah); ?>
+
                                     </span>
 
                                 </div>
 
                                 <p class="text-sm text-slate-500 mt-1">
-                                    {{ $resep->aturan_pakai }}
+                                    <?php echo e($resep->aturan_pakai); ?>
+
                                 </p>
 
                             </div>
 
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                            @if($item->resepObat->count() > 3)
+                            <?php if($item->resepObat->count() > 3): ?>
 
                             <p class="text-blue-600 text-sm">
-                                +{{ $item->resepObat->count() - 3 }}
+                                +<?php echo e($item->resepObat->count() - 3); ?>
+
                                 obat lainnya
                             </p>
 
-                            @endif
+                            <?php endif; ?>
 
                         </div>
 
@@ -222,7 +231,7 @@
                     <div class="lg:col-span-4 flex justify-end">
 
                         <a
-                            href="{{ route('resep.print', $item->id) }}"
+                            href="<?php echo e(route('resep.print', $item->id)); ?>"
                             target="_blank"
                             class="border border-blue-600 text-blue-600 px-4 py-2 rounded-xl hover:bg-blue-50 transition flex items-center gap-2">
 
@@ -237,7 +246,7 @@
 
             </div>
 
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
 
             <div class="text-center py-20 text-slate-500">
 
@@ -245,11 +254,11 @@
 
             </div>
 
-            @endforelse
+            <?php endif; ?>
 
         </div>
 
-        @else
+        <?php else: ?>
 
         <div class="h-full flex flex-col items-center justify-center text-slate-400">
 
@@ -277,10 +286,11 @@
 
         </div>
 
-        @endif
+        <?php endif; ?>
 
     </div>
 
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.dokter', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /Users/ardiansyah/laravel/sistemlayananklinik/resources/views/dokter/resep_obat.blade.php ENDPATH**/ ?>

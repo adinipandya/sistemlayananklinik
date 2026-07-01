@@ -11,7 +11,7 @@ class ResepObat extends Model
     protected $fillable = [
 
         'rekam_medis_id',
-        'obat_id',
+        'nama_obat',
         'jumlah',
         'aturan_pakai'
     ];
@@ -24,12 +24,4 @@ class ResepObat extends Model
         );
     }
 
-    public function obat()
-    {
-        return $this->belongsTo(
-            Obat::class,
-            'obat_id'
-        );
-    }
-    
 }

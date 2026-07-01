@@ -21,13 +21,32 @@ class AuthController extends Controller
             'password' => 'required|min:8'
         ]);
 
-        $pasien = User::create([
-            'name'     => $request->name,
-            'nik'      => $request->nik,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'role'     => 'pasien',
-            'status'   => 'Menunggu'
+        $lastPatient = User::whereNotNull('no_rm')
+            ->orderByDesc('id')
+            ->first();
+
+        $nextNumber = $lastPatient
+            ? ((int) substr($lastPatient->no_rm, 2)) + 1
+            : 1;
+
+        $noRM = 'RM' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+
+        User::create([
+
+            'name' => $request->name,
+
+            'nik' => $request->nik,
+
+            'email' => $request->email,
+
+            'password' => bcrypt($request->password),
+
+            'role' => 'pasien',
+
+            'status' => 'Aktif',
+
+            'no_rm' => $noRM
+
         ]);
 
         // Notifikasi ke admin

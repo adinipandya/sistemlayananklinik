@@ -37,7 +37,7 @@
             </h2>
 
             <p class="text-slate-500">
-                RM{{ str_pad($rekamMedis->jadwal->pasien->id, 3, '0', STR_PAD_LEFT) }}
+                {{ $rekamMedis->jadwal->pasien->no_rm }}
             </p>
 
         </div>
@@ -152,133 +152,162 @@
 </div>
 
 <!-- KONTEN -->
-<div class="grid lg:grid-cols-2 gap-6">
+<!-- DETAIL REKAM -->
+<div class="bg-white rounded-3xl shadow-sm p-8">
 
-    <!-- KIRI -->
-    <div class="space-y-6">
+    <!-- Keluhan -->
+    <div class="pb-8 border-b border-slate-200">
 
-        <div class="bg-white rounded-3xl shadow-sm p-6">
+        <h3 class="text-lg font-bold text-slate-800 mb-4">
+            Keluhan Utama
+        </h3>
 
-            <h3 class="font-bold text-lg mb-4">
-                Keluhan Utama
-            </h3>
+        <p class="text-slate-700 leading-7">
+            {{ $rekamMedis->jadwal->keluhan }}
+        </p>
 
-            <p class="leading-relaxed text-slate-700">
-                {{ $rekamMedis->jadwal->keluhan }}
-            </p>
+    </div>
 
-        </div>
 
-        <div class="bg-white rounded-3xl shadow-sm p-6">
+    <!-- Pemeriksaan Fisik -->
+    <div class="py-8 border-b border-slate-200">
 
-            <h3 class="font-bold text-lg mb-4">
-                Diagnosis
-            </h3>
+        <h3 class="text-lg font-bold text-slate-800 mb-5">
+            
+        Pemeriksaan Fisik
+        </h3>
 
-            <p class="leading-relaxed text-slate-700">
-                {{ $rekamMedis->diagnosa }}
-            </p>
+        <div class="grid md:grid-cols-4 gap-4">
 
-        </div>
+            <div>
+                <p class="text-sm text-slate-500">
+                    Tekanan Darah
+                </p>
 
-        <div class="bg-white rounded-3xl shadow-sm p-6">
+                <p class="font-semibold text-lg">
+                    {{ $rekamMedis->tekanan_darah ?? '-' }}
+                </p>
+            </div>
 
-            <h3 class="font-bold text-lg mb-4">
-                Tindakan Medis
-            </h3>
 
-            <p class="leading-relaxed text-slate-700">
-                {{ $rekamMedis->tindakan }}
-            </p>
+            <div>
+                <p class="text-sm text-slate-500">
+                    Suhu Tubuh
+                </p>
+
+                <p class="font-semibold text-lg">
+                    {{ $rekamMedis->suhu_tubuh ?? '-' }} °C
+                </p>
+            </div>
+
+
+            <div>
+                <p class="text-sm text-slate-500">
+                    Berat Badan
+                </p>
+
+                <p class="font-semibold text-lg">
+                    {{ $rekamMedis->berat_badan ?? '-' }} Kg
+                </p>
+            </div>
+
+
+            <div>
+                <p class="text-sm text-slate-500">
+                    Tinggi Badan
+                </p>
+
+                <p class="font-semibold text-lg">
+                    {{ $rekamMedis->tinggi_badan ?? '-' }} Cm
+                </p>
+            </div>
 
         </div>
 
     </div>
 
-    <!-- KANAN -->
-    <div class="space-y-6">
 
-        <div class="bg-white rounded-3xl shadow-sm p-6">
+    <!-- Diagnosis -->
+    <div class="py-8 border-b border-slate-200">
 
-            <h3 class="font-bold text-lg mb-4">
-                Resep Obat
-            </h3>
+        <h3 class="text-lg font-bold text-slate-800 mb-4">
+            Diagnosis
+        </h3>
 
-            <div class="overflow-hidden border rounded-2xl">
+        <p class="text-slate-700 leading-7">
+            {{ $rekamMedis->diagnosa }}
+        </p>
 
-                <table class="w-full">
+    </div>
 
-                    <thead class="bg-slate-50">
 
-                        <tr>
+    <!-- Tindakan -->
+    <div class="py-8 border-b border-slate-200">
 
-                            <th class="p-4 text-left">
-                                Obat
-                            </th>
+        <h3 class="text-lg font-bold text-slate-800 mb-4">
+            Tindakan Medis
+        </h3>
 
-                            <th class="p-4 text-left">
-                                Dosis
-                            </th>
+        <p class="text-slate-700 leading-7">
+            {{ $rekamMedis->tindakan }}
+        </p>
 
-                            <th class="p-4 text-left">
-                                Aturan
-                            </th>
+    </div>
 
-                        </tr>
 
-                    </thead>
+    <!-- Resep -->
+    <div class="py-8 border-b border-slate-200">
 
-                    <tbody>
+        <h3 class="text-lg font-bold text-slate-800 mb-5">
+            Resep Obat
+        </h3>
 
-                        @forelse($rekamMedis->resepObat as $resep)
+        @forelse($rekamMedis->resepObat as $resep)
 
-                        <tr class="border-t">
+        <div class="border border-slate-200 rounded-2xl p-5 mb-4">
 
-                            <td class="p-4">
-                                {{ $resep->obat->nama_obat }}
-                            </td>
+            <h4 class="font-semibold text-slate-800">
+                {{ $resep->nama_obat }}
+            </h4>
 
-                            <td class="p-4">
-                                {{ $resep->jumlah }}
-                            </td>
+            <div class="flex gap-8 mt-3 text-sm text-slate-600">
 
-                            <td class="p-4">
-                                {{ $resep->aturan_pakai }}
-                            </td>
+                <span>
+                    Jumlah:
+                    <b>{{ $resep->jumlah }}</b>
+                </span>
 
-                        </tr>
-
-                        @empty
-
-                        <tr>
-
-                            <td colspan="3" class="p-4 text-center text-slate-500">
-                                Tidak ada resep obat
-                            </td>
-
-                        </tr>
-
-                        @endforelse
-
-                    </tbody>
-
-                </table>
+                <span>
+                    {{ $resep->aturan_pakai }}
+                </span>
 
             </div>
 
         </div>
 
-        <div class="bg-white rounded-3xl shadow-sm p-6">
+        @empty
 
-            <h3 class="font-bold text-lg mb-4">
-                Catatan Dokter
-            </h3>
+        <div class="text-slate-500">
 
-            <p class="leading-relaxed text-slate-700">
-                {{ $rekamMedis->catatan }}
-            </p>
+            Tidak ada resep obat
 
         </div>
+
+        @endforelse
+
+    </div>
+
+
+    <!-- Catatan -->
+    <div class="pt-8">
+
+        <h3 class="text-lg font-bold text-slate-800 mb-4">
+            Catatan Dokter
+        </h3>
+
+        <p class="text-slate-700 leading-7">
+            {{ $rekamMedis->catatan ?? '-' }}
+        </p>
 
     </div>
 
@@ -302,7 +331,7 @@
 
         </a>
 
-        <a href="/dokter/rekam-medis/print"
+        <a href="{{ route('rekam-medis.print', $rekamMedis->id) }}"
             class="bg-blue-600 text-white px-5 py-3 rounded-2xl flex items-center gap-2">
 
             <i data-feather="printer" class="w-4 h-4"></i>

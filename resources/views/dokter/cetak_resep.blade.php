@@ -6,183 +6,290 @@
     <title>Resep Obat</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        @media print {
+
+            .no-print {
+                display: none;
+            }
+
+            body {
+                background: white !important;
+            }
+
+            .print-area {
+                box-shadow: none !important;
+            }
+
+        }
+    </style>
+
 </head>
 
-<body class="bg-white">
+<body class="bg-slate-100 py-10">
 
-    <div class="max-w-4xl mx-auto p-10">
+    <div class="max-w-4xl mx-auto">
 
-        {{-- Header --}}
-        <div class="border-b-2 border-slate-300 pb-5 mb-8">
+        <!-- BUTTON -->
+        <div class="no-print flex justify-end mb-6">
 
-            <div class="flex justify-between items-center">
+            <button
+                onclick="window.print()"
+                class="bg-blue-600 text-white px-6 py-3 rounded-xl">
 
-                <div class="flex items-center gap-4">
+                Cetak Resep
 
-                    <img
-                        src="{{ asset('images/poltek.png') }}"
-                        class="w-14 h-14 object-contain">
+            </button>
 
+        </div>
 
-                    <div>
+        <!-- DOKUMEN -->
+        <div class="print-area bg-white shadow-lg rounded-2xl overflow-hidden">
 
-                        <h1 class="font-bold text-xl">
-                            KLINIK POLIBATAM
-                        </h1>
+            <!-- HEADER -->
+            <div class="border-b-4 border-black p-6">
 
-                        <p class="text-sm text-slate-600">
-                            Sistem Layanan Klinik Digital
-                        </p>
+                <div class="flex items-center justify-between">
 
-                        <p class="text-sm text-slate-600">
-                            Politeknik Negeri Batam
+                    <div class="flex items-center gap-4">
+
+                        <img
+                            src="{{ asset('images/poltek.png') }}"
+                            class="w-16 h-16 object-contain">
+
+                        <div>
+
+                            <h1 class="text-2xl font-bold">
+                                KLINIK POLIBATAM
+                            </h1>
+
+                            <p class="text-slate-600">
+                                Sistem Layanan Klinik Digital
+                            </p>
+
+                            <p class="text-sm text-slate-500">
+                                Politeknik Negeri Batam
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="text-right">
+
+                        <h2 class="text-2xl font-bold">
+                            RESEP
+                        </h2>
+
+                        <p class="text-sm text-slate-500">
+                            No. {{ $rekamMedis->id }}/KLP/{{ date('Y') }}
                         </p>
 
                     </div>
 
                 </div>
 
-                <div class="text-right">
+            </div>
 
-                    <p class="text-sm text-slate-500">
-                        No. Resep
-                    </p>
+            <!-- JUDUL -->
+            <div class="py-6 text-center">
 
-                    <p class="text-2xl font-bold">
-                        RSP{{ str_pad($rekamMedis->id, 3, '0', STR_PAD_LEFT) }}
-                    </p>
+                <h2 class="text-xl font-bold">
+
+                    RESEP OBAT PASIEN
+
+                </h2>
+
+            </div>
+
+            <!-- IDENTITAS PASIEN -->
+            <div class="px-8">
+
+                <div class="border rounded-xl p-6 bg-slate-50">
+
+                    <h3 class="font-bold mb-5">
+
+                        Informasi Pasien
+
+                    </h3>
+
+                    <div class="grid grid-cols-2 gap-4">
+
+                        <div>
+
+                            <span class="text-slate-500">
+                                Nama Pasien
+                            </span>
+
+                            <p class="font-semibold">
+                                {{ $rekamMedis->jadwal->pasien->name }}
+                            </p>
+
+                        </div>
+
+                        <div>
+
+                            <span class="text-slate-500">
+                                Nomor Rekam Medis
+                            </span>
+
+                            <p class="font-semibold">
+                                {{ $rekamMedis->jadwal->pasien->no_rm }}
+                            </p>
+
+                        </div>
+
+                        <div>
+
+                            <span class="text-slate-500">
+                                Tanggal Pemeriksaan
+                            </span>
+
+                            <p class="font-semibold">
+                                {{ $rekamMedis->created_at->format('d F Y') }}
+                            </p>
+
+                        </div>
+
+                        <div>
+
+                            <span class="text-slate-500">
+                                Dokter
+                            </span>
+
+                            <p class="font-semibold">
+                                Dr. {{ Auth::user()->name }}
+                            </p>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
             </div>
 
-        </div>
+            <!-- RESEP -->
+            <div class="p-8">
 
-        {{-- Judul --}}
-        <h2 class="text-center font-bold text-lg uppercase mb-8">
-            Resep Obat
-        </h2>
+                <h3 class="font-bold border-b pb-3 mb-5">
 
-        {{-- Informasi Pasien --}}
-        <div class="border rounded-xl p-6 mb-8">
+                    Daftar Obat
 
-            <h3 class="font-bold mb-4">
-                Informasi Pasien
-            </h3>
+                </h3>
 
-            <div class="grid grid-cols-2 gap-5">
+                <table class="w-full border">
 
-                <div>
-                    <p class="text-sm text-slate-500">Nama Pasien</p>
-                    <p class="font-semibold">
-                        {{ $rekamMedis->jadwal->pasien->name }}
-                    </p>
-                </div>
+                    <thead class="bg-slate-100">
 
-                <div>
-                    <p class="text-sm text-slate-500">Tanggal Resep</p>
-                    <p class="font-semibold">
-                        {{ $rekamMedis->created_at->format('d F Y') }}
-                    </p>
-                </div>
+                        <tr>
 
-                <div>
-                    <p class="text-sm text-slate-500">Dokter</p>
-                    <p class="font-semibold">
-                        {{ $rekamMedis->jadwal->dokter->nama }}
-                    </p>
-                </div>
+                            <th class="border p-3 text-left">
+                                No
+                            </th>
 
-                <div>
-                    <p class="text-sm text-slate-500">Jumlah Obat</p>
-                    <p class="font-semibold">
-                        {{ $rekamMedis->resepObat->count() }} Obat
-                    </p>
-                </div>
+                            <th class="border p-3 text-left">
+                                Nama Obat
+                            </th>
+
+                            <th class="border p-3 text-left">
+                                Dosis / Jumlah
+                            </th>
+
+                            <th class="border p-3 text-left">
+                                Aturan Pakai
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach($rekamMedis->resepObat as $index => $resep)
+
+                        <tr>
+
+                            <td class="border p-3">
+                                {{ $index + 1 }}
+                            </td>
+
+                            <td class="border p-3 font-serif italic text-lg">
+                                {{ $resep->nama_obat }}
+                            </td>
+
+                            <td class="border p-3">
+                                {{ $resep->jumlah }}
+                            </td>
+
+                            <td class="border p-3">
+                                {{ $resep->aturan_pakai }}
+                            </td>
+
+                        </tr>
+
+                        @endforeach
+
+                    </tbody>
+
+                </table>
 
             </div>
 
-        </div>
+            <!-- CATATAN -->
+            <div class="px-8 pb-6">
 
-        {{-- Daftar Resep --}}
-        <h3 class="font-bold mb-3">
-            Daftar Resep Obat
-        </h3>
+                <h3 class="font-bold border-b pb-3 mb-3">
 
-        <table class="w-full border border-slate-300 mb-10">
+                    Catatan Dokter
 
-            <thead>
+                </h3>
 
-                <tr class="bg-slate-100">
+                <p class="text-slate-700">
 
-                    <th class="border p-3 text-left">No</th>
-                    <th class="border p-3 text-left">Nama Obat</th>
-                    <th class="border p-3 text-left">Jumlah</th>
-                    <th class="border p-3 text-left">Aturan Pakai</th>
+                    Obat dapat ditebus di apotek sesuai resep yang diberikan.
+                    Apabila keluhan tidak membaik, pasien dianjurkan untuk melakukan kontrol ulang.
 
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                @foreach($rekamMedis->resepObat as $resep)
-
-                <tr>
-
-                    <td class="border p-3">
-                        {{ $loop->iteration }}
-                    </td>
-
-                    <td class="border p-3">
-                        {{ $resep->obat->nama_obat }}
-                    </td>
-
-                    <td class="border p-3">
-                        {{ $resep->jumlah }}
-                    </td>
-
-                    <td class="border p-3">
-                        {{ $resep->aturan_pakai }}
-                    </td>
-
-                </tr>
-
-                @endforeach
-
-            </tbody>
-
-        </table>
-
-        {{-- TTD --}}
-        <div class="flex justify-end mt-16">
-
-            <div class="text-center">
-
-                <p>
-                    Batam,
-                    {{ now()->translatedFormat('d F Y') }}
                 </p>
 
-                <p class="mb-20">
-                    Dokter Pemeriksa
-                </p>
+            </div>
 
-                <p class="font-bold">
-                    {{ $rekamMedis->jadwal->dokter->nama }}
-                </p>
+            <!-- TTD -->
+            <div class="px-8 pb-10">
+
+                <div class="flex justify-end">
+
+                    <div class="text-center">
+
+                        <p>
+
+                            Batam,
+                            {{ date('d F Y') }}
+
+                        </p>
+
+                        <p class="mt-16 font-semibold">
+
+                            Dr. {{ Auth::user()->name }}
+
+                        </p>
+
+                        <p class="text-sm text-slate-500">
+
+                            Dokter Pemeriksa
+
+                        </p>
+
+                    </div>
+
+                </div>
 
             </div>
 
         </div>
 
     </div>
-
-    <script>
-        window.onload = function() {
-            window.print();
-        }
-    </script>
 
 </body>
 

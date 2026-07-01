@@ -1,6 +1,4 @@
-@extends('layouts.dokter')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 <div class="flex justify-between items-center mb-8">
 
@@ -35,7 +33,8 @@
                 </p>
 
                 <h2 class="text-4xl font-bold mt-2 text-slate-800">
-                    {{ $totalJadwal }}
+                    <?php echo e($totalJadwal); ?>
+
                 </h2>
 
             </div>
@@ -61,7 +60,8 @@
                 </p>
 
                 <h2 class="text-4xl font-bold mt-2 text-yellow-500">
-                    {{ $totalMenunggu }}
+                    <?php echo e($totalMenunggu); ?>
+
                 </h2>
 
             </div>
@@ -87,7 +87,8 @@
                 </p>
 
                 <h2 class="text-4xl font-bold mt-2 text-blue-600">
-                    {{ $totalDisetujui }}
+                    <?php echo e($totalDisetujui); ?>
+
                 </h2>
 
             </div>
@@ -113,7 +114,8 @@
                 </p>
 
                 <h2 class="text-4xl font-bold mt-2 text-emerald-600">
-                    {{ $totalSelesai }}
+                    <?php echo e($totalSelesai); ?>
+
                 </h2>
 
             </div>
@@ -159,7 +161,7 @@
 
                         <option
                             value="menunggu"
-                            {{ request('status') == 'menunggu' ? 'selected' : '' }}>
+                            <?php echo e(request('status') == 'menunggu' ? 'selected' : ''); ?>>
 
                             Menunggu
 
@@ -167,7 +169,7 @@
 
                         <option
                             value="berjalan"
-                            {{ request('status') == 'berjalan' ? 'selected' : '' }}>
+                            <?php echo e(request('status') == 'berjalan' ? 'selected' : ''); ?>>
 
                             Sedang Berjalan
 
@@ -175,7 +177,7 @@
 
                         <option
                             value="selesai"
-                            {{ request('status') == 'selesai' ? 'selected' : '' }}>
+                            <?php echo e(request('status') == 'selesai' ? 'selected' : ''); ?>>
 
                             Selesai
 
@@ -189,7 +191,7 @@
 
             <div class="flex-1 overflow-y-auto p-6 space-y-3">
 
-                @forelse($jadwal as $item)
+                <?php $__empty_1 = true; $__currentLoopData = $jadwal; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
                 <div class="bg-white border border-slate-200 rounded-2xl px-5 py-4">
 
@@ -203,7 +205,8 @@
                             </p>
 
                             <p class="font-bold text-blue-600">
-                                {{ $item->pasien->no_rm ?? '-' }}
+                                <?php echo e($item->pasien->no_rm ?? '-'); ?>
+
                             </p>
 
                         </div>
@@ -212,11 +215,13 @@
                         <div class="col-span-4">
 
                             <h3 class="font-bold text-xl text-slate-800">
-                                {{ $item->pasien->name }}
+                                <?php echo e($item->pasien->name); ?>
+
                             </h3>
 
                             <p class="text-slate-600 text-sm mt-1">
-                                {{ $item->keluhan }}
+                                <?php echo e($item->keluhan); ?>
+
                             </p>
 
                         </div>
@@ -229,11 +234,13 @@
                             </p>
 
                             <p class="font-semibold text-slate-700">
-                                {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y') }}
+                                <?php echo e(\Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y')); ?>
+
                             </p>
 
                             <p class="font-bold text-blue-600 text-xl">
-                                {{ substr($item->jam,0,5) }}
+                                <?php echo e(substr($item->jam,0,5)); ?>
+
                             </p>
 
                         </div>
@@ -241,42 +248,42 @@
                         <!-- STATUS -->
                         <div class="col-span-2">
 
-                            @if($item->status == 'Menunggu')
+                            <?php if($item->status == 'Menunggu'): ?>
 
                             <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
                                 Menunggu
                             </span>
 
-                            @elseif($item->status == 'Disetujui')
+                            <?php elseif($item->status == 'Disetujui'): ?>
 
                             <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
                                 Sedang Berjalan
                             </span>
 
-                            @else
+                            <?php else: ?>
 
                             <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
                                 Selesai
                             </span>
 
-                            @endif
+                            <?php endif; ?>
 
                         </div>
 
                         <!-- AKSI -->
                         <div class="col-span-2">
 
-                            @if($item->status == 'Menunggu')
+                            <?php if($item->status == 'Menunggu'): ?>
 
-                            <a href="{{ route('dokter.konsultasi', $item->id) }}"
+                            <a href="<?php echo e(route('dokter.konsultasi', $item->id)); ?>"
                                 class="block text-center bg-blue-600 text-white py-2 rounded-xl mb-2">
 
                                 Mulai
 
                             </a>
 
-                            <form action="{{ route('jadwal.batal', $item->id) }}" method="POST">
-                                @csrf
+                            <form action="<?php echo e(route('jadwal.batal', $item->id)); ?>" method="POST">
+                                <?php echo csrf_field(); ?>
 
                                 <button
                                     class="w-full bg-red-500 text-white py-2 rounded-xl">
@@ -287,7 +294,7 @@
 
                             </form>
 
-                            @endif
+                            <?php endif; ?>
 
                         </div>
 
@@ -295,7 +302,7 @@
 
                 </div>
 
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
 
                 <div class="bg-white rounded-2xl p-10 text-center text-slate-500">
 
@@ -303,7 +310,7 @@
 
                 </div>
 
-                @endforelse
+                <?php endif; ?>
 
             </div>
 
@@ -314,4 +321,5 @@
 
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.dokter', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /Users/ardiansyah/laravel/sistemlayananklinik/resources/views/dokter/jadwal_dokter.blade.php ENDPATH**/ ?>

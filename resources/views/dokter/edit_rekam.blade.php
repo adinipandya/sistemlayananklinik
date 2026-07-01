@@ -38,7 +38,7 @@
                     No Rekam Medis
                 </label>
 
-                <input value="RM{{ str_pad($rekamMedis->jadwal->pasien->id, 3, '0', STR_PAD_LEFT) }}" readonly
+                <input value="{{ $rekamMedis->jadwal->pasien->no_rm }}" readonly
                     class="w-full mt-2 bg-slate-100 border rounded-2xl p-3">
 
             </div>
@@ -192,52 +192,72 @@
 
             @forelse($rekamMedis->resepObat as $resep)
 
-            <div class="grid md:grid-cols-3 gap-4 mb-4">
+            <div class="grid md:grid-cols-4 gap-4 items-end mb-4 obat-row">
 
-                <select name="obat_id[]" class="border rounded-2xl p-3">
+                <input
+                    type="text"
+                    name="nama_obat[]"
+                    value="{{ $resep->nama_obat }}"
+                    placeholder="Nama Obat"
+                    class="rounded-xl p-3 border">
 
-                    @foreach($obat as $item)
+                <input
+                    type="text"
+                    name="jumlah[]"
+                    value="{{ $resep->jumlah }}"
+                    placeholder="Jumlah / Dosis"
+                    class="rounded-xl p-3 border">
 
-                    <option value="{{ $item->id }}" {{ $item->id == $resep->obat_id ? 'selected' : '' }}>
+                <input
+                    type="text"
+                    name="aturan_pakai[]"
+                    value="{{ $resep->aturan_pakai }}"
+                    placeholder="Aturan Pakai"
+                    class="rounded-xl p-3 border">
 
-                        {{ $item->nama_obat }}
-
-                    </option>
-
-                    @endforeach
-
-                </select>
-
-                <input type="number" name="jumlah[]" value="{{ $resep->jumlah }}" class="border rounded-2xl p-3">
-
-                <input type="text" name="aturan_pakai[]" value="{{ $resep->aturan_pakai }}"
-                    class="border rounded-2xl p-3">
+                <div class="flex justify-end">
+                    <button type="button" onclick="hapusObat(this)"
+                        class="text-red-500 hover:text-red-700 border border-red-300 hover:border-red-500 rounded-xl px-4 py-2 text-sm flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        Hapus
+                    </button>
+                </div>
 
             </div>
 
             @empty
 
-            <div class="grid md:grid-cols-3 gap-4 mb-4">
+            <div class="grid md:grid-cols-4 gap-4 mb-4">
 
-                <select name="obat_id[]" class="border rounded-2xl p-3">
+                <input
+                    type="text"
+                    name="nama_obat[]"
+                    placeholder="Nama Obat"
+                    class="border rounded-2xl p-3">
 
-                    <option value="">
-                        Pilih Obat
-                    </option>
+                <input
+                    type="text"
+                    name="jumlah[]"
+                    placeholder="Jumlah / Dosis"
+                    class="border rounded-2xl p-3">
 
-                    @foreach($obat as $item)
+                <input
+                    type="text"
+                    name="aturan_pakai[]"
+                    placeholder="Aturan Pakai"
+                    class="border rounded-2xl p-3">
 
-                    <option value="{{ $item->id }}">
-                        {{ $item->nama_obat }}
-                    </option>
-
-                    @endforeach
-
-                </select>
-
-                <input type="number" name="jumlah[]" placeholder="Jumlah" class="border rounded-2xl p-3">
-
-                <input type="text" name="aturan_pakai[]" placeholder="Aturan Pakai" class="border rounded-2xl p-3">
+                <div class="flex justify-end">
+                    <button type="button" onclick="hapusObat(this)"
+                        class="text-red-500 hover:text-red-700 border border-red-300 hover:border-red-500 rounded-xl px-4 py-2 text-sm flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        Hapus
+                    </button>
+                </div>
 
             </div>
 
@@ -280,47 +300,53 @@
 <script>
     function tambahObat() {
         let html = `
-        <div class="grid md:grid-cols-3 gap-4 mb-4">
+    <div class="grid md:grid-cols-4 gap-4 items-end mb-4 obat-row">
 
-            <select
-                name="obat_id[]"
-                class="border rounded-2xl p-3">
+        <input
+            type="text"
+            name="nama_obat[]"
+            placeholder="Nama Obat"
+            class="rounded-xl p-3 border">
 
-                <option value="">
-                    Pilih Obat
-                </option>
+        <input
+            type="text"
+            name="jumlah[]"
+            placeholder="Jumlah / Dosis"
+            class="rounded-xl p-3 border">
 
-                @foreach($obat as $item)
+        <input
+            type="text"
+            name="aturan_pakai[]"
+            placeholder="Aturan Pakai"
+            class="rounded-xl p-3 border">
 
-                    <option value="{{ $item->id }}">
-                        {{ $item->nama_obat }}
-                    </option>
+        <div class="flex justify-end">
+            <button
+                type="button"
+                onclick="hapusObat(this)"
+                class="text-red-500 hover:text-red-700 border border-red-300 rounded-xl px-4 py-2">
 
-                @endforeach
+                Hapus
 
-            </select>
-
-            <input
-                type="number"
-                name="jumlah[]"
-                placeholder="Jumlah"
-                class="border rounded-2xl p-3">
-
-            <input
-                type="text"
-                name="aturan_pakai[]"
-                placeholder="Aturan Pakai"
-                class="border rounded-2xl p-3">
-
+            </button>
         </div>
+
+    </div>
     `;
 
         document
             .getElementById('obatContainer')
-            .insertAdjacentHTML(
-                'beforeend',
-                html
-            );
+            .insertAdjacentHTML('beforeend', html);
+    }
+
+    function hapusObat(btn) {
+        const row = btn.closest('.obat-row');
+        const container = document.getElementById('obatContainer');
+        if (container.children.length <= 1) {
+            alert('Minimal harus ada satu baris obat.');
+            return;
+        }
+        row.remove();
     }
 </script>
 

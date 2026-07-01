@@ -1,10 +1,10 @@
-@php
+<?php
 use Illuminate\Support\Str;
-@endphp
+?>
 
-@extends('layouts.dokter')
 
-@section('content')
+
+<?php $__env->startSection('content'); ?>
 
 <div class="flex justify-between items-center mb-8">
 
@@ -37,7 +37,8 @@ use Illuminate\Support\Str;
                 </p>
 
                 <h2 class="text-4xl font-bold mt-2">
-                    {{ $totalRekam }}
+                    <?php echo e($totalRekam); ?>
+
                 </h2>
 
             </div>
@@ -63,7 +64,8 @@ use Illuminate\Support\Str;
                 </p>
 
                 <h2 class="text-4xl font-bold mt-2 text-blue-600">
-                    {{ $rekamHariIni }}
+                    <?php echo e($rekamHariIni); ?>
+
                 </h2>
 
             </div>
@@ -89,7 +91,8 @@ use Illuminate\Support\Str;
                 </p>
 
                 <h2 class="text-4xl font-bold mt-2 text-emerald-600">
-                    {{ $totalRekam }}
+                    <?php echo e($totalRekam); ?>
+
                 </h2>
 
             </div>
@@ -121,7 +124,7 @@ use Illuminate\Support\Str;
 
             <form
                 method="GET"
-                action="{{ route('dokter.kelola') }}"
+                action="<?php echo e(route('dokter.kelola')); ?>"
                 class="flex">
 
                 <div class="relative">
@@ -129,7 +132,7 @@ use Illuminate\Support\Str;
                     <input
                         type="text"
                         name="search"
-                        value="{{ request('search') }}"
+                        value="<?php echo e(request('search')); ?>"
                         placeholder="Cari nama pasien..."
                         class="w-80 border rounded-2xl py-3 pl-5 pr-12
                    focus:outline-none focus:ring-2
@@ -183,7 +186,7 @@ use Illuminate\Support\Str;
 
                 <tbody>
 
-                    @if(!request('search'))
+                    <?php if(!request('search')): ?>
 
                     <tr>
                         <td colspan="6"
@@ -194,33 +197,37 @@ use Illuminate\Support\Str;
                         </td>
                     </tr>
 
-                    @elseif($rekamMedis->count())
+                    <?php elseif($rekamMedis->count()): ?>
 
-                    @forelse($rekamMedis as $rekam)
+                    <?php $__empty_1 = true; $__currentLoopData = $rekamMedis; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $rekam): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
                     <tr class="border-t hover:bg-slate-50">
 
                         <td class="p-5">
 
                             <p class="font-semibold">
-                                {{ $rekam->jadwal->pasien->name }}
+                                <?php echo e($rekam->jadwal->pasien->name); ?>
+
                             </p>
 
                             <span class="text-xs text-blue-600">
-                                {{ $rekam->jadwal->pasien->no_rm ?? '-' }}
+                                <?php echo e($rekam->jadwal->pasien->no_rm ?? '-'); ?>
+
                             </span>
 
                         </td>
 
                         <td class="p-5">
 
-                            {{ $rekam->created_at->format('d M Y') }}
+                            <?php echo e($rekam->created_at->format('d M Y')); ?>
+
 
                         </td>
 
                         <td class="p-5">
 
-                            {{ Str::limit($rekam->diagnosa, 30) }}
+                            <?php echo e(Str::limit($rekam->diagnosa, 30)); ?>
+
 
                         </td>
 
@@ -228,7 +235,7 @@ use Illuminate\Support\Str;
 
                             <div class="flex gap-2">
 
-                                <a href="/dokter/rekam-medis/detail/{{ $rekam->id }}"
+                                <a href="/dokter/rekam-medis/detail/<?php echo e($rekam->id); ?>"
                                     class="border border-blue-600 text-blue-600 px-4 py-2 rounded-xl hover:bg-blue-50">
 
                                     Detail
@@ -241,7 +248,7 @@ use Illuminate\Support\Str;
 
                     </tr>
 
-                    @empty
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
 
                     <tr>
 
@@ -253,9 +260,9 @@ use Illuminate\Support\Str;
 
                     </tr>
 
-                    @endforelse
+                    <?php endif; ?>
 
-                    @else
+                    <?php else: ?>
 
                     <tr>
                         <td colspan="6"
@@ -266,7 +273,7 @@ use Illuminate\Support\Str;
                         </td>
                     </tr>
 
-                    @endif
+                    <?php endif; ?>
 
                 </tbody>
 
@@ -276,4 +283,5 @@ use Illuminate\Support\Str;
 
     </div>
 
-    @endsection
+    <?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.dokter', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /Users/ardiansyah/laravel/sistemlayananklinik/resources/views/dokter/kelola_rekam.blade.php ENDPATH**/ ?>

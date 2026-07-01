@@ -156,6 +156,15 @@ class AdminController extends Controller
             'password'  => 'required|min:8'
         ]);
 
+        User::create([
+            'name' => $request->nama,
+            'nik' => $request->nik,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'role' => 'dokter',
+            'status' => 'Aktif'
+        ]);
+
         Dokter::create([
             'nama'      => $request->nama,
             'nik'       => $request->nik,
@@ -270,7 +279,6 @@ class AdminController extends Controller
 
     public function updateObat(Request $request, $id)
     {
-        $obat = Obat::findOrFail($id);
         $obat->update([
             'nama_obat'  => $request->nama_obat,
             'jenis_obat' => $request->jenis_obat,
@@ -284,7 +292,6 @@ class AdminController extends Controller
 
     public function destroyObat($id)
     {
-        Obat::findOrFail($id)->delete();
 
         return back()->with('success', 'Data obat berhasil dihapus');
     }
