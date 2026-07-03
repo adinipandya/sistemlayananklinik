@@ -25,7 +25,11 @@ class User extends Authenticatable
         'jenis_kelamin',
         'alamat',
 
-        'golongan_darah'
+        'golongan_darah',
+        'alergi',
+        'kontak_darurat',
+        'foto',
+        'photo',
 
     ];
 

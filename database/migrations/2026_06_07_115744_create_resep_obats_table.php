@@ -17,8 +17,9 @@ return new class extends Migration
                 ->cascadeOnDelete();
 
             $table->foreignId('obat_id')
+                ->nullable()
                 ->constrained('obat')
-                ->cascadeOnDelete();
+                ->nullOnDelete();
 
             $table->integer('jumlah');
 

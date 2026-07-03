@@ -31,7 +31,7 @@ class AuthController extends Controller
 
         $noRM = 'RM' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
 
-        User::create([
+        $pasienBaru = User::create([
 
             'name' => $request->name,
 
@@ -55,7 +55,7 @@ class AuthController extends Controller
             Notification::create([
                 'user_id' => $admin->id,
                 'judul'   => 'Pasien Baru',
-                'pesan'   => $pasien->name . ' baru saja mendaftar dan menunggu verifikasi',
+                'pesan'   => $pasienBaru->name . ' baru saja mendaftar dan menunggu verifikasi',
             ]);
         }
 
