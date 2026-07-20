@@ -136,48 +136,56 @@ class="bg-white border border-slate-200 rounded-xl overflow-hidden">
 
     <td class="p-4">
 
-        @if($item->status == 'Selesai')
+    @if($item->status == 'Selesai')
 
         <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
             Selesai
         </span>
 
-        @elseif($item->status == 'Disetujui')
+    @elseif($item->status == 'Dibatalkan')
 
-        <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
-            Disetujui
+        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
+            Dibatalkan
         </span>
 
-        @else
+    @else
 
         <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
             Menunggu
         </span>
 
-        @endif
+    @endif
 
-    </td>
-
+</td>
     <td class="p-4">
 
-        @if($item->status == 'Selesai')
+    @if($item->status == 'Selesai')
 
         <button
-class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all duration-300 hover:shadow-lg">
-
+    onclick="openDetailModal(this)"
+    data-dokter="Dr. {{ $item->dokter->nama }}"
+    data-poli="Poli {{ $item->dokter->spesialis }}"
+    data-tanggal="{{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}"
+    data-status="{{ $item->status }}"
+    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
     Detail
-
 </button>
 
-        @else
+    @elseif($item->status == 'Dibatalkan')
 
-        <span class="bg-slate-200 text-slate-600 px-4 py-2 rounded-lg">
+        <span class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm">
+            Dibatalkan
+        </span>
+
+    @else
+
+        <span class="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-lg text-sm">
             Belum Ada
         </span>
 
-        @endif
+    @endif
 
-    </td>
+</td>
 
 </tr>
 
@@ -229,9 +237,7 @@ class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-
                         Dokter
                     </p>
 
-                    <p class="font-medium">
-                        Dr. Ardi
-                    </p>
+                    <p id="modalDokter" class="font-medium"></p>
                 </div>
 
                 <div>
@@ -239,9 +245,7 @@ class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-
                         Tanggal Kunjungan
                     </p>
 
-                    <p class="font-medium">
-                        20 Juni 2026
-                    </p>
+                    <p id="modalTanggal" class="font-medium"></p>
                 </div>
 
                 <div>
@@ -249,9 +253,7 @@ class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-
                         Poli
                     </p>
 
-                    <p class="font-medium">
-                        Poli Umum
-                    </p>
+                    <p id="modalPoli" class="font-medium"></p>
                 </div>
 
                 <div>
@@ -259,24 +261,24 @@ class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-
                         Status
                     </p>
 
-                    <span class="bg-green-100 text-green-700 px-4 py-1 rounded-full text-sm font-medium">
-                        Selesai
-                    </span>
+                    <span id="modalStatus"
+      class="bg-green-100 text-green-700 px-4 py-1 rounded-full text-sm font-medium">
+</span>
                 </div>
 
             </div>
 
-            <div class="mt-6 bg-blue-50 border border-blue-200 rounded-xl p-4">
+           <div class="mt-6 bg-green-50 border border-green-200 rounded-xl p-4">
 
-                <h3 class="font-medium text-blue-800 mb-2">
-                    Informasi
-                </h3>
+    <h3 class="font-medium text-green-800 mb-2">
+        Pemeriksaan Selesai
+    </h3>
 
-                <p class="text-sm text-blue-700">
-                    Detail rekam medis dan resep obat hanya dapat diakses oleh dokter sesuai kebijakan klinik.
-                </p>
-    
-            </div>
+    <p class="text-sm text-green-700 leading-relaxed">
+        Pemeriksaan Anda telah selesai. Silakan mengikuti anjuran dan tindak lanjut yang telah diberikan oleh dokter selama konsultasi.
+    </p>
+
+</div>
 
             <button
                 onclick="closeDetailModal()"
@@ -294,10 +296,22 @@ class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-
 
 <script>
 
-function openDetailModal() {
+function openDetailModal(button){
+
+    document.getElementById('modalDokter').innerText =
+        button.dataset.dokter;
+
+    document.getElementById('modalTanggal').innerText =
+        button.dataset.tanggal;
+
+    document.getElementById('modalPoli').innerText =
+        button.dataset.poli;
+
+    document.getElementById('modalStatus').innerText =
+        button.dataset.status;
+
     document.getElementById('detailModal').classList.remove('hidden');
 }
-
 function closeDetailModal() {
     document.getElementById('detailModal').classList.add('hidden');
 }

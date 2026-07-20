@@ -72,34 +72,18 @@ transition-all duration-300">
 </div>
 
     <p class="text-sm text-slate-400 mt-2">
-        {{ $dokter->hari_praktek }}
-    </p>
+    {{ $dokter->hari_praktek }}
+</p>
 
-    <p class="text-sm text-slate-400">
-        {{ $dokter->jam_praktek }}
-    </p>
-
-    @if($dokter->tersedia)
+<p class="text-sm text-slate-400">
+    {{ $dokter->jam_praktek }}
+</p>
 
 <a
     href="{{ route('booking.dokter',$dokter->id) }}"
     class="mt-5 inline-block bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700">
-
     Pilih Dokter
-
 </a>
-
-@else
-
-<button
-    disabled
-    class="mt-5 bg-slate-300 text-slate-500 px-5 py-2 rounded-lg cursor-not-allowed">
-
-    Tidak Tersedia
-
-</button>
-
-@endif
 
 </div>
 

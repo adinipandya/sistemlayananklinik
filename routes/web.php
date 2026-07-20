@@ -13,6 +13,7 @@ use App\Http\Controllers\AuthController;
 
 use App\Models\User;
 use App\Models\Notification;
+use App\Models\JadwalKonsultasi;
 
 
 /* ─── HOME ──────────────────────────────────────────────────────── */
@@ -170,9 +171,10 @@ Route::post('/pasien/booking', [PasienController::class, 'storeBooking'])
 
 Route::get('/pasien/jadwal', [PasienController::class, 'jadwal'])
     ->name('pasien.jadwal');
-
 Route::get('/pasien/jadwal/{id}', [PasienController::class, 'detailJadwal'])
     ->name('pasien.jadwal.detail');
+Route::post('/pasien/jadwal/{id}/batal', [PasienController::class, 'batalkanJadwal'])
+    ->name('pasien.jadwal.batal');
 
 Route::get('/pasien/feedback', [PasienController::class, 'feedback']);
 Route::post('/pasien/feedback', [PasienController::class, 'storeFeedback']);
@@ -186,12 +188,3 @@ Route::get('/pasien/pengaturan', [PasienController::class, 'pengaturan']);
 
 Route::post('/pasien/password', [PasienController::class, 'updatePassword'])
     ->name('pasien.password.update');
-
-// Profile
-Route::get('/pasien/profile', [PasienController::class, 'profile']);
-Route::post('/pasien/profile', [PasienController::class, 'updateProfile'])
-    ->name('pasien.profile.update');
-Route::get('/pasien/pengaturan', [PasienController::class, 'pengaturan']);
-Route::post('/pasien/password', [PasienController::class, 'updatePassword'])
-    ->name('pasien.password.update');
-Route::get('/pasien/pengaturan', [PasienController::class, 'pengaturan']);
