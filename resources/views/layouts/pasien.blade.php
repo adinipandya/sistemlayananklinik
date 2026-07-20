@@ -28,6 +28,11 @@ $notifications = \App\Models\Notification::where(
     'user_id',
     Auth::id()
 )->latest()->get();
+
+$unreadCount = \App\Models\Notification::where(
+    'user_id',
+    Auth::id()
+)->where('is_read', false)->count();
 @endphp
 
     <!-- HEADER -->
@@ -66,16 +71,20 @@ $notifications = \App\Models\Notification::where(
 
                         <i data-feather="bell"></i>
 
-                        <span class="absolute -top-2 -right-2
-                            bg-red-500 text-white
-                            text-[10px] font-bold
-                            rounded-full
-                            min-w-[18px]
-                            h-[18px]
-                            flex items-center justify-center">
-    {{ $notifications->count() }}
+                        @if($unreadCount > 0)
+<span id="notifBadge"
+    class="absolute -top-2 -right-2
+    bg-red-500 text-white
+    text-[10px] font-bold
+    rounded-full
+    min-w-[18px]
+    h-[18px]
+    flex items-center justify-center">
 
-                        </span>
+    {{ $unreadCount }}
+
+</span>
+@endif
 
                     </button>
 

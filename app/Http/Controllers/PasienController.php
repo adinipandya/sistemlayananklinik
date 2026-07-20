@@ -62,30 +62,21 @@ class PasienController extends Controller
 {
     $jadwal = JadwalKonsultasi::with('dokter')
         ->where('user_id', Auth::id())
+        ->whereIn('status', ['Menunggu', 'Disetujui'])
+        ->whereDate('tanggal', '>=', now()->toDateString())
         ->orderBy('tanggal')
         ->orderBy('jam')
         ->get();
 
-    $jadwalAktif = $jadwal
-    ->filter(function ($item) {
-        return in_array($item->status, ['Menunggu', 'Disetujui'])
-            && $item->tanggal >= now()->toDateString();
-    })
-    ->count();
+    $jadwalAktif = $jadwal->count();
 
-    $konsultasiSelesai = $jadwal
+    $konsultasiSelesai = JadwalKonsultasi::where('user_id', Auth::id())
         ->where('status', 'Selesai')
         ->count();
 
-    $totalBooking = $jadwal->count();
+    $totalBooking = JadwalKonsultasi::where('user_id', Auth::id())->count();
 
-    $jadwalTerdekat = $jadwal
-    ->filter(function ($item) {
-        return in_array($item->status, ['Menunggu', 'Disetujui'])
-            && $item->tanggal >= now()->toDateString();
-    })
-    ->sortBy('tanggal')
-    ->first();
+    $jadwalTerdekat = $jadwal->first();
 
     return view(
         'pasien.jadwal_pasien',
@@ -97,6 +88,17 @@ class PasienController extends Controller
             'jadwalTerdekat'
         )
     );
+}
+public function batalkanJadwal($id)
+{
+    $jadwal = JadwalKonsultasi::where('id', $id)
+        ->where('user_id', auth()->id())
+        ->firstOrFail();
+
+    $jadwal->status = 'Dibatalkan';
+    $jadwal->save();
+
+    return redirect()->back()->with('success', 'Jadwal berhasil dibatalkan.');
 }
     public function rekam_medis()
 {
@@ -148,8 +150,11 @@ class PasienController extends Controller
         ->count();
 
     $menunggu = $riwayat
-        ->whereIn('status', ['Menunggu', 'Disetujui'])
-        ->count();
+    ->filter(function ($item) {
+        return in_array($item->status, ['Menunggu', 'Disetujui'])
+            && \Carbon\Carbon::parse($item->tanggal)->gte(now()->startOfDay());
+    })
+    ->count();
 
     return view(
         'pasien.riwayat_konsultasi',
@@ -266,7 +271,21 @@ if (
         'keluhan' => 'required'
 
     ]);
+$dokter = Dokter::findOrFail($request->dokter_id);
 
+$hariBooking = \Carbon\Carbon::parse($request->tanggal)
+    ->locale('id')
+    ->translatedFormat('l');
+
+if (!str_contains(
+    strtolower($dokter->hari_praktek),
+    strtolower($hariBooking)
+)) {
+    return back()->with(
+        'error',
+        'Dokter tidak praktik pada hari yang dipilih.'
+    );
+}
     $cekJadwal = JadwalKonsultasi::where(
         'dokter_id',
         $request->dokter_id

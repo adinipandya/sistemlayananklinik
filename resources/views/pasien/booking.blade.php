@@ -116,7 +116,6 @@
         @endif
 
     </div>
-
     @empty
     <p class="text-slate-500 col-span-3 text-center py-6">
         Belum ada data dokter aktif.

@@ -95,9 +95,7 @@ hover:shadow-lg
 transition-all duration-300">
 
 
-<h2 class="font-semibold text-lg mb-4">
-    Jadwal Terdekat
-</h2>
+@if($jadwalTerdekat)
 
 <div class="grid md:grid-cols-4 gap-4">
 
@@ -120,7 +118,7 @@ transition-all duration-300">
     </div>
 
     <div>
-        <p class="text-sm text-slate-500">
+        <p class="text-sm text-green-500">
             Jam
         </p>
         <p class="font-medium">
@@ -135,7 +133,21 @@ transition-all duration-300">
 </div>
 
 </div>
+@else
 
+<div class="text-center py-8">
+
+    <p class="text-xl font-semibold">
+        Tidak ada jadwal terdekat
+    </p>
+
+    <p class="text-green-100 mt-2">
+        Silakan melakukan booking konsultasi terlebih dahulu.
+    </p>
+
+</div>
+
+@endif
 
 </div>
 
@@ -178,13 +190,16 @@ class="bg-white border border-slate-200 rounded-xl overflow-hidden">
             <th class="text-left p-4">
                 Status
             </th>
+            <th class="text-center p-4">
+    Aksi
+</th>
 
         </tr>
 
     </thead>
 
     <tbody>
-        @foreach($jadwal as $item)
+        @forelse($jadwal as $item)
         <tr class="border-t">
 
     <td class="p-4 text-center font-semibold text-blue-600">
@@ -229,9 +244,37 @@ class="bg-white border border-slate-200 rounded-xl overflow-hidden">
 @endif
 
 </td>
+<td class="p-4 text-center">
 
+@if($item->status == 'Menunggu')
+
+<button
+    onclick="openCancelModal({{ $item->id }})"
+    class="bg-red-500 hover:bg-red-600 text-white font-medium
+           px-4 py-2 rounded-lg
+           transition-all duration-300
+           hover:scale-105 hover:shadow-xl">
+    Batalkan
+</button>
+@else
+
+<span class="text-slate-400">
+    -
+</span>
+
+@endif
+
+</td>
 </tr>
-@endforeach
+@empty
+
+<tr>
+    <td colspan="5" class="text-center py-8 text-slate-500">
+        Tidak ada jadwal konsultasi.    
+    </td>
+</tr>
+
+@endforelse
 
 </tbody>
 
@@ -245,8 +288,8 @@ class="bg-white border border-slate-200 rounded-xl overflow-hidden">
 <div id="cancelModal"
 class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
 
-
-<div class="bg-white rounded-2xl p-6 w-full max-w-md text-center">
+    <div id="cancelModalContent"
+    class="bg-white rounded-2xl p-6 w-full max-w-md text-center">
 
     <h2 class="text-xl font-bold mb-2">
         Batalkan Jadwal?
@@ -258,23 +301,23 @@ class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
 
     <div class="flex gap-3">
 
+    <button
+        onclick="closeCancelModal()"
+        class="flex-1 border border-slate-300 py-3 rounded-lg">
+        Kembali
+    </button>
+
+    <form id="cancelForm" method="POST" class="flex-1">
+        @csrf
+
         <button
-            onclick="closeCancelModal()"
-            class="flex-1 border border-slate-300 py-3 rounded-lg">
-
-            Kembali
-
-        </button>
-
-        <button
-            onclick="closeCancelModal()"
-            class="flex-1 bg-red-500 text-white py-3 rounded-lg">
-
+            type="submit"
+            class="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-lg">
             Ya, Batalkan
-
         </button>
+    </form>
 
-    </div>
+</div>
 
 </div>
 
@@ -283,22 +326,17 @@ class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
 
 <script>
 
-function openDetailModal() {
-    document.getElementById('detailModal').classList.remove('hidden');
-}
+function openCancelModal(id) {
 
-function closeDetailModal() {
-    document.getElementById('detailModal').classList.add('hidden');
-}
-
-function openCancelModal() {
     document.getElementById('cancelModal').classList.remove('hidden');
+
+    document.getElementById('cancelForm').action =
+        "/pasien/jadwal/" + id + "/batal";
 }
 
 function closeCancelModal() {
     document.getElementById('cancelModal').classList.add('hidden');
 }
-
 </script>
 
 @endsection
