@@ -92,7 +92,7 @@
 
             <div>
                 <h3 class="font-semibold text-lg text-slate-800">
-                    {{ $jadwal->dokter->nama ?? '-' }}
+                    dr. {{ $jadwal->dokter->nama ?? '-' }}
                 </h3>
                 <p class="text-sm text-slate-500">{{ $jadwal->dokter->spesialis ?? '-' }}</p>
             </div>
@@ -124,15 +124,7 @@
             <div class="flex gap-2">
 
                 @if($jadwal->status == 'Menunggu')
-                    <form action="/admin/jadwal/{{ $jadwal->id }}/status" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="status" value="Disetujui">
-                        <button type="submit"
-                            class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-2 rounded-lg text-sm">
-                            Setujui
-                        </button>
-                    </form>
+                    
                     <form action="/admin/jadwal/{{ $jadwal->id }}/status" method="POST">
                         @csrf
                         @method('PUT')

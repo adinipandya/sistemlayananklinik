@@ -250,7 +250,7 @@
 
                     <input
                         type="text"
-                        value="{{ $dokter->jam_praktik ?? '08:00 - 16:00' }}"
+                        value="{{ $dokter->jam_praktek ?? '08:00 - 16:00' }}"
                         readonly
                         class="w-full border rounded-2xl p-3 bg-slate-100">
 

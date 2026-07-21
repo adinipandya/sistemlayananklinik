@@ -22,7 +22,7 @@
     </style>
 </head>
 
-<body class="bg-slate-100">
+<body class="min-h-dvh bg-slate-100 overflow-x-hidden">
 
     <!-- HEADER -->
     <header class="fixed top-0 left-0 right-0 h-16 bg-white border-b border-slate-200 z-50">

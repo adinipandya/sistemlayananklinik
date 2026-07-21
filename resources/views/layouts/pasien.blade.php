@@ -21,7 +21,7 @@
     <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
 </head>
 
-<body class="bg-slate-100">
+<body class="min-h-dvh bg-slate-100 overflow-x-hidden">
 
 @php
 $notifications = \App\Models\Notification::where(
