@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="flex justify-between items-center mb-8">
+<div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
 
     <div>
 
@@ -234,7 +234,7 @@
 
 <!-- MODAL DETAIL PASIEN -->
 <div
-    id="pasienModal"
+    id="patientModal"
     class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
 
     <div class="bg-white rounded-3xl w-full max-w-3xl overflow-hidden">

@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="flex justify-between items-center mb-8">
+<div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
 
     <div>
 
@@ -98,59 +98,6 @@
 
 </div>
 
-<!-- PEMERIKSAAN -->
-<div class="grid lg:grid-cols-4 gap-6 mb-6">
-
-    <div class="bg-white rounded-3xl shadow-sm p-6">
-
-        <p class="text-slate-500 text-sm">
-            Tekanan Darah
-        </p>
-
-        <h2 class="text-2xl font-bold mt-2">
-            {{ $rekamMedis->tekanan_darah }}
-        </h2>
-
-    </div>
-
-    <div class="bg-white rounded-3xl shadow-sm p-6">
-
-        <p class="text-slate-500 text-sm">
-            Suhu
-        </p>
-
-        <h2 class="text-2xl font-bold mt-2">
-            {{ $rekamMedis->suhu_tubuh }}°C
-        </h2>
-
-    </div>
-
-    <div class="bg-white rounded-3xl shadow-sm p-6">
-
-        <p class="text-slate-500 text-sm">
-            Berat Badan
-        </p>
-
-        <h2 class="text-2xl font-bold mt-2">
-            {{ $rekamMedis->berat_badan }} Kg
-        </h2>
-
-    </div>
-
-    <div class="bg-white rounded-3xl shadow-sm p-6">
-
-        <p class="text-slate-500 text-sm">
-            Tinggi Badan
-        </p>
-
-        <h2 class="text-2xl font-bold mt-2">
-            {{ $rekamMedis->tinggi_badan }} Cm
-        </h2>
-
-    </div>
-
-</div>
-
 <!-- KONTEN -->
 <!-- DETAIL REKAM -->
 <div class="bg-white rounded-3xl shadow-sm p-8">
@@ -173,53 +120,70 @@
     <div class="py-8 border-b border-slate-200">
 
         <h3 class="text-lg font-bold text-slate-800 mb-5">
-            
-        Pemeriksaan Fisik
+
+            Pemeriksaan Fisik
         </h3>
 
-        <div class="grid md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
 
-            <div>
-                <p class="text-sm text-slate-500">
+            <div class="bg-white rounded-3xl shadow-sm p-6">
+                <p class="text-slate-500 text-sm">
                     Tekanan Darah
                 </p>
 
-                <p class="font-semibold text-lg">
+                <h2 class="text-2xl font-bold mt-2">
                     {{ $rekamMedis->tekanan_darah ?? '-' }}
-                </p>
+                </h2>
             </div>
 
-
-            <div>
-                <p class="text-sm text-slate-500">
-                    Suhu Tubuh
+            <div class="bg-white rounded-3xl shadow-sm p-6">
+                <p class="text-slate-500 text-sm">
+                    Suhu
                 </p>
 
-                <p class="font-semibold text-lg">
-                    {{ $rekamMedis->suhu_tubuh ?? '-' }} °C
-                </p>
+                <h2 class="text-2xl font-bold mt-2">
+                    {{ $rekamMedis->suhu_tubuh ?? '-' }}°C
+                </h2>
             </div>
 
-
-            <div>
-                <p class="text-sm text-slate-500">
+            <div class="bg-white rounded-3xl shadow-sm p-6">
+                <p class="text-slate-500 text-sm">
                     Berat Badan
                 </p>
 
-                <p class="font-semibold text-lg">
+                <h2 class="text-2xl font-bold mt-2">
                     {{ $rekamMedis->berat_badan ?? '-' }} Kg
-                </p>
+                </h2>
             </div>
 
-
-            <div>
-                <p class="text-sm text-slate-500">
+            <div class="bg-white rounded-3xl shadow-sm p-6">
+                <p class="text-slate-500 text-sm">
                     Tinggi Badan
                 </p>
 
-                <p class="font-semibold text-lg">
+                <h2 class="text-2xl font-bold mt-2">
                     {{ $rekamMedis->tinggi_badan ?? '-' }} Cm
+                </h2>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-sm p-6">
+                <p class="text-slate-500 text-sm">
+                    Nadi
                 </p>
+
+                <h2 class="text-2xl font-bold mt-2">
+                    {{ $rekamMedis->nadi ?? '-' }} x/menit
+                </h2>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-sm p-6">
+                <p class="text-slate-500 text-sm">
+                    Respirasi
+                </p>
+
+                <h2 class="text-2xl font-bold mt-2">
+                    {{ $rekamMedis->respirasi ?? '-' }} x/menit
+                </h2>
             </div>
 
         </div>
@@ -264,21 +228,22 @@
 
         @forelse($rekamMedis->resepObat as $resep)
 
-        <div class="border border-slate-200 rounded-2xl p-5 mb-4">
+        <div class="border border-slate-200 rounded-2xl p-5 mb-4 bg-slate-50/60">
 
-            <h4 class="font-semibold text-slate-800">
+            <h4 class="font-bold text-slate-800 text-lg">
                 {{ $resep->nama_obat }}
             </h4>
 
-            <div class="flex gap-8 mt-3 text-sm text-slate-600">
+            <div class="flex flex-wrap gap-x-6 gap-y-2 mt-3 text-sm text-slate-600">
 
                 <span>
-                    Jumlah:
-                    <b>{{ $resep->jumlah }}</b>
+                    <b>Jumlah / Dosis</b>
+                    {{ $resep->jumlah ?: '-' }}
                 </span>
 
                 <span>
-                    {{ $resep->aturan_pakai }}
+                    <b>Aturan Pakai</b>
+                    {{ $resep->aturan_pakai ?: '-' }}
                 </span>
 
             </div>
@@ -287,10 +252,8 @@
 
         @empty
 
-        <div class="text-slate-500">
-
+        <div class="border border-dashed border-slate-300 rounded-2xl p-5 text-slate-500 bg-slate-50">
             Tidak ada resep obat
-
         </div>
 
         @endforelse

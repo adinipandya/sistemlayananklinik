@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 
 @section('content')
 
-<div class="flex justify-between items-center mb-8">
+<div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
 
     <div>
 
@@ -170,7 +170,7 @@ use Illuminate\Support\Str;
                         </th>
 
                         <th class="p-5 text-left">
-                            Diagnosa
+                            Keluhan
                         </th>
 
                         <th class="p-5 text-left">
@@ -220,7 +220,7 @@ use Illuminate\Support\Str;
 
                         <td class="p-5">
 
-                            {{ Str::limit($rekam->diagnosa, 30) }}
+                            {{ Str::limit($rekam->jadwal->keluhan ?? '-', 30) }}
 
                         </td>
 

@@ -21,15 +21,22 @@
     </style>
 </head>
 
-<body class="bg-slate-100">
+<body class="min-h-dvh bg-slate-100 overflow-x-hidden">
 
     <!-- HEADER -->
     <header class="fixed top-0 left-0 right-0 h-16 bg-white border-b border-slate-200 z-50">
 
-        <div class="h-full px-6 flex items-center justify-between">
+        <div class="h-full px-4 md:px-6 flex items-center justify-between">
 
             <!-- LOGO -->
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-3 md:gap-4">
+
+                <button
+                    type="button"
+                    onclick="openSidebar()"
+                    class="lg:hidden w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center text-slate-700">
+                    <i data-feather="menu" class="w-5 h-5"></i>
+                </button>
 
                 <img src="{{ asset('images/poltek.png') }}" class="w-8 h-8 object-contain">
 
@@ -78,8 +85,7 @@
 
                     <div
                         id="notifMenu"
-                        class="hidden absolute right-0 mt-3 w-80
-    bg-white rounded-xl shadow-xl border z-50">
+                        class="hidden absolute right-0 mt-3 w-[calc(100vw-2rem)] sm:w-80 bg-white rounded-xl shadow-xl border z-50">
 
                         <div class="p-4 border-b">
 
@@ -126,7 +132,7 @@
 
                     <button id="profileButton" onclick="toggleProfileMenu()" class="flex items-center gap-3">
 
-                        <div class="text-right">
+                        <div class="hidden sm:block text-right">
 
                             <p class="font-medium text-slate-700">
                                 {{ Auth::user()->name }}
@@ -212,12 +218,23 @@
 
             </div>
 
-        </div>
+            </div>
 
     </header>
 
+    <!-- OVERLAY MOBILE -->
+    <div
+        id="sidebarOverlay"
+        onclick="closeSidebar()"
+        class="hidden fixed inset-0 bg-black/40 z-40 lg:hidden">
+    </div>
+
     <!-- SIDEBAR -->
-    <aside class="fixed top-16 left-0 bottom-0 w-64 bg-white border-r border-slate-200 z-40">
+    <aside
+        id="sidebar"
+        class="fixed top-16 left-0 bottom-0 w-64 bg-white border-r border-slate-200 z-50
+           transform -translate-x-full lg:translate-x-0
+           transition-transform duration-300 overflow-y-auto">
 
         <div class="h-full flex flex-col p-5">
 
@@ -292,9 +309,9 @@
     </aside>
 
     <!-- CONTENT -->
-    <div class="pt-16 ml-64 min-h-screen">
+    <div class="pt-16 min-h-dvh lg:ml-64">
 
-        <main class="p-8">
+        <main class="min-h-dvh p-4 sm:p-5 md:p-6 lg:p-8">
 
             @yield('content')
 
@@ -303,6 +320,38 @@
     </div>
 
     <script>
+        function openSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        }
+
+        document.querySelectorAll('#sidebar a').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth < 1024) {
+                    closeSidebar();
+                }
+            });
+        });
+
+        function toggleNotifMenu() {
+            document.getElementById('notifMenu').classList.toggle('hidden');
+        }
+
+        function toggleProfileMenu() {
+            document.getElementById('profileMenu').classList.toggle('hidden');
+        }
+
         function toggleNotifMenu() {
             document
                 .getElementById('notifMenu')

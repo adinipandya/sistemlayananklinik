@@ -9,17 +9,16 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $feedback = Feedback::with('user')
+        $feedbacks = Feedback::with('user')
             ->where('status', 'Direspon')
             ->latest()
-            ->take(6)
             ->get();
 
-        $totalDokter  = User::where('role', 'dokter')->count();
-        $totalPasien  = User::where('role', 'pasien')->count();
+        $totalDokter = User::where('role', 'dokter')->count();
+        $totalPasien = User::where('role', 'pasien')->count();
 
         return view('pages.home', compact(
-            'feedback',
+            'feedbacks',
             'totalDokter',
             'totalPasien'
         ));

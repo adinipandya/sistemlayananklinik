@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use App\Models\Pasien;
 use App\Models\Dokter;
 use App\Models\Feedback;
@@ -146,35 +147,42 @@ class AdminController extends Controller
     public function storeDokter(Request $request)
     {
         $request->validate([
-            'nama'      => 'required',
-            'nik'       => 'required|digits:16|unique:dokters,nik',
-            'email'     => 'required|email|unique:dokters,email',
-            'no_str'    => 'required|unique:dokters,no_str',
-            'no_sip'    => 'required|unique:dokters,sip',
-            'spesialis' => 'required',
-            'no_hp'     => 'required',
-            'password'  => 'required|min:8'
+            'nama'          => 'required|string|max:255',
+            'nik'           => 'required|digits:16|unique:dokters,nik|unique:users,nik',
+            'email'         => 'required|email|unique:dokters,email|unique:users,email',
+            'no_str'        => 'required|unique:dokters,no_str',
+            'no_sip'        => 'required|unique:dokters,sip',
+            'spesialis'     => 'required',
+            'no_hp'         => 'required',
+            'hari_praktek'  => 'required|string|max:255',
+            'jam_praktek'   => 'required|string|max:255',
+            'password'      => 'required|min:8'
         ]);
 
         User::create([
-            'name' => $request->nama,
-            'nik' => $request->nik,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'role' => 'dokter',
-            'status' => 'Aktif'
+            'name'          => $request->nama,
+            'nik'           => $request->nik,
+            'email'         => $request->email,
+            'no_hp'         => $request->no_hp,
+            'password'      => bcrypt($request->password),
+            'role'          => 'dokter',
+            'status'        => 'Aktif',
+            'hari_praktek'  => $request->hari_praktek,
+            'jam_praktek'   => $request->jam_praktek,
         ]);
 
         Dokter::create([
-            'nama'      => $request->nama,
-            'nik'       => $request->nik,
-            'email'     => $request->email,
-            'no_str'    => $request->no_str,
-            'sip'       => $request->no_sip,
-            'spesialis' => $request->spesialis,
-            'no_hp'     => $request->no_hp,
-            'password'  => bcrypt($request->password),
-            'status'    => 'Aktif'
+            'nama'          => $request->nama,
+            'nik'           => $request->nik,
+            'email'         => $request->email,
+            'no_str'        => $request->no_str,
+            'sip'           => $request->no_sip,
+            'spesialis'     => $request->spesialis,
+            'no_hp'         => $request->no_hp,
+            'password'      => bcrypt($request->password),
+            'status'        => 'Aktif',
+            'hari_praktek'  => $request->hari_praktek,
+            'jam_praktek'   => $request->jam_praktek,
         ]);
 
         return back()->with('success', 'Dokter berhasil ditambahkan');
@@ -184,21 +192,68 @@ class AdminController extends Controller
     {
         $dokter = Dokter::findOrFail($id);
 
-        $data = [
-            'nama'      => $request->nama,
-            'email'     => $request->email,
-            'no_str'    => $request->no_str,
-            'sip'       => $request->no_sip,
-            'spesialis' => $request->spesialis,
-            'no_hp'     => $request->no_hp,
-            'status'    => $request->status,
+        $akunDokter = User::where('role', 'dokter')
+            ->where(function ($query) use ($dokter) {
+                $query->where('nik', $dokter->nik)
+                    ->orWhere('email', $dokter->email);
+            })
+            ->first();
+
+        $request->validate([
+            'nama'          => 'required|string|max:255',
+            'email'         => [
+                'required',
+                'email',
+                Rule::unique('dokters', 'email')->ignore($dokter->id),
+                Rule::unique('users', 'email')->ignore($akunDokter?->id),
+            ],
+            'no_str'        => [
+                'required',
+                Rule::unique('dokters', 'no_str')->ignore($dokter->id),
+            ],
+            'no_sip'        => [
+                'required',
+                Rule::unique('dokters', 'sip')->ignore($dokter->id),
+            ],
+            'spesialis'     => 'required',
+            'no_hp'         => 'required',
+            'hari_praktek'  => 'required|string|max:255',
+            'jam_praktek'   => 'required|string|max:255',
+            'status'        => 'required',
+            'password'      => 'nullable|min:8',
+        ]);
+
+        $dataDokter = [
+            'nama'          => $request->nama,
+            'email'         => $request->email,
+            'no_str'        => $request->no_str,
+            'sip'           => $request->no_sip,
+            'spesialis'     => $request->spesialis,
+            'no_hp'         => $request->no_hp,
+            'status'        => $request->status,
+            'hari_praktek'  => $request->hari_praktek,
+            'jam_praktek'   => $request->jam_praktek,
+        ];
+
+        $dataUser = [
+            'name'          => $request->nama,
+            'email'         => $request->email,
+            'no_hp'         => $request->no_hp,
+            'status'        => $request->status,
+            'hari_praktek'  => $request->hari_praktek,
+            'jam_praktek'   => $request->jam_praktek,
         ];
 
         if ($request->filled('password')) {
-            $data['password'] = bcrypt($request->password);
+            $dataDokter['password'] = bcrypt($request->password);
+            $dataUser['password'] = bcrypt($request->password);
         }
 
-        $dokter->update($data);
+        $dokter->update($dataDokter);
+
+        if ($akunDokter) {
+            $akunDokter->update($dataUser);
+        }
 
         return redirect('/admin/dokter')->with('success', 'Dokter berhasil diupdate');
     }
@@ -227,7 +282,13 @@ class AdminController extends Controller
         $pasiens     = User::where('role', 'pasien')->get();
 
         return view('admin.jadwal_admin', compact(
-            'jadwals', 'totalJadwal', 'hariIni', 'menunggu', 'selesai', 'dokters', 'pasiens'
+            'jadwals',
+            'totalJadwal',
+            'hariIni',
+            'menunggu',
+            'selesai',
+            'dokters',
+            'pasiens'
         ));
     }
 

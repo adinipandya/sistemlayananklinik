@@ -93,24 +93,13 @@
                         <td class="p-5">{{ \Carbon\Carbon::parse($jadwal->jam)->format('H:i') }}</td>
                         <td class="p-5">{{ $jadwal->pasien->name }}</td>
                         <td class="p-5">{{ $jadwal->keluhan }}</td>
-                        <td class="p-5">
-                            {{ \Carbon\Carbon::parse($jadwal->jam)->format('H:i') }}
-                        </td>
-
-                        <td class="p-5">
-                            {{ $jadwal->pasien->name }}
-                        </td>
-
-                        <td class="p-5">
-                            {{ $jadwal->keluhan }}
-                        </td>
 
                         <td class="text-center p-5">
 
                             <span class="px-3 py-1 rounded-full text-sm
                                 @if($jadwal->status == 'Selesai') bg-green-100 text-green-700
                                 @elseif($jadwal->status == 'Menunggu') bg-yellow-100 text-yellow-700
-                                @else bg-blue-100 text-blue-700
+                                @else bg-red-100 text-red-700
                                 @endif">
                                 {{ $jadwal->status }}
                             </span>
@@ -183,7 +172,7 @@
                 </span>
 
                 <span class="font-semibold">
-                    {{ $dokter->jam_praktik ?? '08:00 - 16:00' }}
+                    {{ $dokter->jam_praktek ?? '08:00 - 16:00' }}
                 </span>
 
             </div>

@@ -223,7 +223,7 @@
                 $layanan = [
                 ['judul'=>'Pemeriksaan Umum', 'desc'=>'Keluhan demam, batuk, flu, dan penyakit ringan lainnya ditangani langsung oleh dokter.', 'bg'=>'bg-blue-50','fg'=>'text-blue-600','icon'=>'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'],
                 ['judul'=>' Booking Konsultasi', 'desc'=>'Pemesanan jadwal konsultasi secara online dengan mudah dan cepat melalui portal pasien..','bg'=>'bg-green-50', 'fg'=>'text-green-600','icon'=>'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'],
-                ['judul'=>'Rekam Medis',       'desc'=>'Riwayat kesehatan tersimpan digital dan bisa Anda akses kapan saja melalui portal pasien.','bg'=>'bg-purple-50', 'fg'=>'text-purple-600','icon'=>'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'],
+                ['judul'=>'Rekam Medis', 'desc'=>'Riwayat kesehatan tersimpan digital dan bisa Anda akses kapan saja melalui portal pasien.','bg'=>'bg-purple-50', 'fg'=>'text-purple-600','icon'=>'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'],
                 ]
                 @endphp
 
@@ -246,68 +246,191 @@
             </div>
     </section>
 
-    {{-- ─── TESTIMONI ────────────────────────────────────────────── --}}
-    <section id="ulasan" class="py-30 bg-mist">
-        <div class="bg-white rounded-2xl p-6 card-hover border border-gray-100 reveal"
-            data-aos="fade-up">
-            <div class="max-w-6xl mx-auto px-5">
+    <!-- FEEDBACK -->
+    <section class="py-20 bg-white" id="ulasan">
 
-                <div class="mb-12 reveal">
-                    <span class="text-[11px] font-semibold tracking-widest text-ink uppercase">
-                        Kata mereka
-                    </span>
+        <div class="max-w-7xl mx-auto px-6">
 
-                    <h2 class="text-ink font-extrabold text-3xl md:text-4xl mt-2">
-                        Pengalaman Pasien
-                    </h2>
-                </div>
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-800">
+                    Feedback Pasien
+                </h2>
 
-                <div class="grid md:grid-cols-3 gap-5">
-
-                    @forelse($feedback as $i => $item)
-                    <div class="bg-white rounded-2xl p-6 card-hover border border-gray-100 reveal"
-                        style="transition-delay: {{ ($loop->index % 3) * 70 }}ms">
-
-                        {{-- Stars --}}
-                        <div class="flex gap-0.5 mb-4">
-                            @for($s = 1; $s <= 5; $s++)
-                                <svg class="w-4 h-4 {{ $s <= ($item->rating ?? 5) ? 'text-amber' : 'text-gray-200' }}"
-                                fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                @endfor
-                        </div>
-
-                        <p class="text-sm text-gray-700 leading-relaxed mb-5">
-                            "{{ \Illuminate\Support\Str::limit($item->komentar, 130) }}"
-                        </p>
-
-                        <div class="flex items-center gap-3 pt-4 border-t border-gray-100">
-                            <div class="w-8 h-8 rounded-full bg-ink flex items-center justify-center
-                                text-white text-xs font-extrabold flex-shrink-0">
-                                {{ strtoupper(substr($item->user->name ?? 'P', 0, 1)) }}
-                            </div>
-                            <div>
-                                <p class="text-sm font-semibold text-ink">{{ $item->user->name ?? 'Pasien' }}</p>
-                                <p class="text-xs text-slate">{{ $item->created_at->format('d M Y') }}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    @empty
-                    <div class="col-span-3 text-center py-16">
-                        <div class="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                            </svg>
-                        </div>
-                        <p class="text-slate text-sm">Belum ada ulasan dari pasien.</p>
-                    </div>
-                    @endforelse
-
-                </div>
+                <p class="text-slate-500 mt-3">
+                    Beberapa ulasan dari pasien Klinik Polibatam
+                </p>
             </div>
+
+            @if($feedbacks->count() > 0)
+
+            <!-- 3 FEEDBACK UTAMA -->
+            <div class="grid md:grid-cols-3 gap-6">
+
+                @foreach($feedbacks->take(3) as $item)
+
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-lg transition">
+
+                    <div class="flex items-center gap-3 mb-4">
+
+                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                            <span class="font-bold text-blue-600">
+                                {{ strtoupper(substr($item->user->name ?? 'P', 0, 1)) }}
+                            </span>
+                        </div>
+
+                        <div>
+                            <h3 class="font-semibold text-slate-800">
+                                {{ $item->user->name ?? 'Pasien' }}
+                            </h3>
+
+                            <p class="text-sm text-slate-500">
+                                {{ $item->kategori ?? 'Feedback' }}
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="flex gap-1 mb-3">
+
+                        @for($i = 1; $i <= 5; $i++)
+                            @if($i <=$item->rating)
+                            <span class="text-yellow-400">★</span>
+                            @else
+                            <span class="text-slate-300">★</span>
+                            @endif
+                            @endfor
+
+                    </div>
+
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        “{{ $item->komentar }}”
+                    </p>
+
+                </div>
+
+                @endforeach
+
+            </div>
+
+            <!-- TOMBOL LIHAT SEMUA -->
+            @if($feedbacks->count() > 3)
+
+            <div class="text-center mt-10">
+
+                <button
+                    onclick="openFeedbackModal()"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl transition">
+
+                    Lihat Semua Feedback
+
+                </button>
+
+            </div>
+
+            @endif
+
+            @else
+
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-10 text-center text-slate-500">
+                Belum ada feedback pasien.
+            </div>
+
+            @endif
+
+        </div>
+
+        <!-- MODAL SEMUA FEEDBACK -->
+        <div
+            id="feedbackModal"
+            onclick="closeFeedbackModal()"
+            class="hidden fixed inset-0 bg-black/50 z-[999] items-center justify-center p-4">
+
+            <div
+                onclick="event.stopPropagation()"
+                class="bg-white rounded-3xl w-full max-w-4xl max-h-[85vh] overflow-hidden shadow-xl">
+
+                <div class="p-6 border-b flex justify-between items-center">
+
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-800">
+                            Semua Feedback Pasien
+                        </h2>
+
+                        <p class="text-sm text-slate-500 mt-1">
+                            Daftar feedback yang telah diberikan pasien
+                        </p>
+                    </div>
+
+                    <button
+                        onclick="closeFeedbackModal()"
+                        class="text-2xl text-slate-400 hover:text-slate-700">
+
+                        ×
+
+                    </button>
+
+                </div>
+
+                <div class="p-6 overflow-y-auto max-h-[65vh]">
+
+                    <div class="grid md:grid-cols-2 gap-5">
+
+                        @foreach($feedbacks as $item)
+
+                        <div class="border border-slate-200 rounded-2xl p-5 hover:border-blue-400 transition">
+
+                            <div class="flex items-center gap-3 mb-4">
+
+                                <div class="w-11 h-11 rounded-full bg-blue-100 flex items-center justify-center">
+                                    <span class="font-bold text-blue-600">
+                                        {{ strtoupper(substr($item->user->name ?? 'P', 0, 1)) }}
+                                    </span>
+                                </div>
+
+                                <div>
+                                    <h3 class="font-semibold text-slate-800">
+                                        {{ $item->user->name ?? 'Pasien' }}
+                                    </h3>
+
+                                    <p class="text-xs text-slate-500">
+                                        {{ \Carbon\Carbon::parse($item->created_at)->format('d M Y') }}
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="flex gap-1 mb-3">
+
+                                @for($i = 1; $i <= 5; $i++)
+                                    @if($i <=$item->rating)
+                                    <span class="text-yellow-400">★</span>
+                                    @else
+                                    <span class="text-slate-300">★</span>
+                                    @endif
+                                    @endfor
+
+                            </div>
+
+                            <p class="text-sm text-slate-500 mb-2">
+                                {{ $item->kategori ?? 'Feedback' }}
+                            </p>
+
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                “{{ $item->komentar }}”
+                            </p>
+
+                        </div>
+
+                        @endforeach
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </section>
 
     {{-- ─── FAQ ──────────────────────────────────────────────────── --}}
@@ -418,14 +541,40 @@
             offset: 100
         });
 
-        document.getElementById("menuBtn").onclick = function() {
-            document.getElementById("mobileMenu").classList.toggle("hidden");
-        };
+        const menuBtn = document.getElementById("menuBtn");
+        const mobileMenu = document.getElementById("mobileMenu");
+
+        if (menuBtn && mobileMenu) {
+            menuBtn.onclick = function() {
+                mobileMenu.classList.toggle("hidden");
+            };
+        }
+
+        function openFeedbackModal() {
+            const modal = document.getElementById('feedbackModal');
+
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeFeedbackModal() {
+            const modal = document.getElementById('feedbackModal');
+
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
 
         function toggleFaq(id) {
-
             const body = document.getElementById(`faq-body-${id}`);
             const icon = document.getElementById(`faq-icon-${id}`);
+
+            if (!body || !icon) {
+                return;
+            }
 
             const isOpen = body.classList.contains('open');
 
@@ -443,19 +592,6 @@
                 body.style.maxHeight = body.scrollHeight + 'px';
                 icon.classList.add('rotate-180');
             }
-
-            // Obat search
-            document.getElementById('obat-search').addEventListener('input', function() {
-                const q = this.value.toLowerCase().trim();
-                const cards = document.querySelectorAll('.obat-card');
-                let any = false;
-                cards.forEach(c => {
-                    const match = c.dataset.nama.includes(q);
-                    c.classList.toggle('hidden-card', !match);
-                    if (match) any = true;
-                });
-                document.getElementById('obat-empty').classList.toggle('hidden', any);
-            });
         }
     </script>
 

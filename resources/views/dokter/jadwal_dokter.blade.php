@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="flex justify-between items-center mb-8">
+<div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
 
 
     <div>
@@ -130,7 +130,7 @@
 
 </div>
 
-<div class="grid lg:grid-cols-4 gap-6">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
 
     <!-- TABEL ANTREAN -->
     <!-- div class="lg:col-span-2 bg-white rounded-3xl shadow-sm -->
@@ -196,7 +196,7 @@
                     <div class="grid grid-cols-12 gap-4 items-center">
 
                         <!-- RM -->
-                        <div class="col-span-2">
+                        <div class="col-span-1">
 
                             <p class="text-xs text-slate-500">
                                 No RM
@@ -208,8 +208,21 @@
 
                         </div>
 
+                        <!-- NOMOR ANTRIAN -->
+                        <div class="col-span-1">
+
+                            <p class="text-xs text-slate-500">
+                                Antrian
+                            </p>
+
+                            <p class="font-bold text-emerald-600">
+                                {{ $item->nomor_antrian ?? '-' }}
+                            </p>
+
+                        </div>
+
                         <!-- PASIEN -->
-                        <div class="col-span-4">
+                        <div class="col-span-3">
 
                             <h3 class="font-bold text-xl text-slate-800">
                                 {{ $item->pasien->name }}
@@ -253,10 +266,16 @@
                                 Sedang Berjalan
                             </span>
 
-                            @else
+                            @elseif($item->status == 'Selesai')
 
                             <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
                                 Selesai
+                            </span>
+
+                            @elseif($item->status == 'Dibatalkan')
+
+                            <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
+                                Dibatalkan
                             </span>
 
                             @endif

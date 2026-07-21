@@ -1,6 +1,6 @@
 <?php $__env->startSection('content'); ?>
 
-<div class="flex justify-between items-center mb-8">
+<div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
 
     <div>
 

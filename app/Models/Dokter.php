@@ -16,7 +16,9 @@ class Dokter extends Model
         'spesialis',
         'no_hp',
         'password',
-        'status'
+        'status',
+        'hari_praktek',
+        'jam_praktek'
     ];
 
     public function jadwalKonsultasi()

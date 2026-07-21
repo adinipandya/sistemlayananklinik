@@ -49,15 +49,6 @@ class AuthController extends Controller
 
         ]);
 
-        // Notifikasi ke admin
-        $admin = User::where('role', 'admin')->first();
-        if ($admin) {
-            Notification::create([
-                'user_id' => $admin->id,
-                'judul'   => 'Pasien Baru',
-                'pesan'   => $pasienBaru->name . ' baru saja mendaftar dan menunggu verifikasi',
-            ]);
-        }
 
         return redirect('/login');
     }
